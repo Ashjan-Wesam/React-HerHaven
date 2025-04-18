@@ -1,3 +1,5 @@
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
 
 const stores = [
   { id: 1, name: "Store 1", category: "Category 1", img: "/img/intro/1.jpg" },
@@ -14,34 +16,32 @@ const BestStores = () => {
         <h2>Best Stores</h2>
         <p>We recommend</p>
       </div>
-      <div className="intro-slider">
-        <ul className="slidee">
-          {stores.map((store) => (
-            <li key={store.id}>
-              <div className="intro-item">
-                <figure>
-                  <img src={store.img} alt={store.name} />
-                  {store.badge && <div className="bache">{store.badge}</div>}
-                </figure>
-                <div className="product-info">
-                  <h5>{store.name}</h5>
-                  <p>{store.category}</p>
-                  <a href="#" className="site-btn btn-line">
-                    VIEW STORE
-                  </a>
-                </div>
+      <Swiper
+        spaceBetween={30}
+        slidesPerView={3}
+        loop={true}
+        autoplay={{ delay: 3000 }}
+        modules={[Autoplay]}
+        className="intro-slider"
+      >
+        {stores.map((store) => (
+          <SwiperSlide key={store.id}>
+            <div className="intro-item">
+              <figure>
+                <img src={store.img} alt={store.name} />
+                {store.badge && <div className="bache">{store.badge}</div>}
+              </figure>
+              <div className="product-info">
+                <h5>{store.name}</h5>
+                <p>{store.category}</p>
+                <a href="#" className="site-btn btn-line">
+                  VIEW STORE
+                </a>
               </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="container">
-        <div className="scrollbar">
-          <div className="handle">
-            <div className="mousearea"></div>
-          </div>
-        </div>
-      </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </section>
   );
 };

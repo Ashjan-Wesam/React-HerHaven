@@ -1,65 +1,101 @@
+// src/App.js
 
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import Sidebar from "./Owner/Components/Sidebar";
-import Header from "./Owner/Components/Header";
-import Footer from "./Owner/Components/Footer";
-import Dashboard from "./Owner/Pages/Dashboard";
-import ProductsManagement from "./Owner/Pages/Products/ProductsManagement";
-import AddProduct from "./Owner/Pages/Products/AddProduct"; 
-import EditProduct from "./Owner/Pages/Products/EditProduct"; 
-import OrdersManagement from "./Owner/Pages/Orders/OrdersManagement";
-import PendingOrders from "./Owner/Pages/Orders/PendingOrders";
-import CompletedOrders from "./Owner/Pages/Orders/CompletedOrders";
-import DiscountsManagement from "./Owner/Pages/Discounts/DiscountsManagement";
-import ReviewsManagement from "./Owner/Pages/Reviews/ReviewsManagement";
-import StoreSetting from "./Owner/Pages/StoreSetting";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+import 'swiper/css';
+import PublicLayout from "./User/Layout/PublicLayout";
+
+
+
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./AuthContext";
+import ProtectedRoute from "./ProtectedRoute";
+
+import Login from "./components/Login";
+import RegisterCustomer from "./components/RegisterCustomer";
+import RegisterOwner from "./components/RegisterOwner";
 import Home from "./User/Pages/Home";
-import CartPage from "./User/Pages/CartPage";
+import CategoryPage from "./User/Pages/CategoryPage";
 
-function Layout() {
-  const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith("/admin"); // التحقق إذا كان داخل لوحة التحكم
 
+import OwnerLayout from "./Owner/Layout/OwnerLayout"; 
+import AdminLayout from "./Admin/Layout/AdminLayout"; 
+
+
+function RedirectAfterLogin() {
+  const { user } = useAuth();
+
+  if (!user) return <Navigate to="/" />;
+
+  switch (user.role) {
+    case "owner":
+      return <Navigate to="/owner" />;
+    case "customer":
+      return <Navigate to="/" />;
+    case "admin":
+      return <Navigate to="/admin" />;
+    default:
+      return <Navigate to="/" />;
+  }
+}
+
+function AppRoutes() {
   return (
-    <div className="wrapper">
-      {isAdminRoute && <Sidebar />}
-      <div className={isAdminRoute ? "main-panel" : ""}>
-        {isAdminRoute && <Header />}
-        <div className="content">
-          <Routes>
-            {/* راوتات الأدمن */}
-            <Route path="/admin" element={<Dashboard />} />
-            <Route path="/admin/products" element={<ProductsManagement />} />
-            <Route path="/admin/add-product" element={<AddProduct />} />
-            <Route path="/admin/edit-product/:id" element={<EditProduct />} />
-            <Route path="/admin/orders" element={<OrdersManagement />} />
-            <Route path="/admin/pending-orders" element={<PendingOrders />} />
-            <Route path="/admin/completed-orders" element={<CompletedOrders />} />
-            <Route path="/admin/discounts" element={<DiscountsManagement />} />
-            <Route path="/admin/reviews" element={<ReviewsManagement />} />
-            <Route path="/admin/settings" element={<StoreSetting />} />
+    <Routes>
 
-            {/* راوتات المستخدم */}
-            <Route path="/" element={<Home />} />
-            <Route path="/cart" element={<CartPage />} />
-            {/* <Route path="/shop" element={<Shop />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/profile" element={<Profile />} /> */}
-          </Routes>
-        </div>
-        {isAdminRoute && <Footer />}
-      </div>
-    </div>
+      {/* Pages */}
+      <Route element={<PublicLayout />}>
+  <Route path="/" element={<Home />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/register-customer" element={<RegisterCustomer />} />
+  <Route path="/register-owner" element={<RegisterOwner />} />
+  <Route path="/shop" element={<CategoryPage />} />
+</Route>
+
+<Route path="/redirect" element={<RedirectAfterLogin />} />
+
+
+
+      {/* Admin Routes */}
+      <Route path="/admin/*" element={
+          <ProtectedRoute role="admin">
+                 <AdminLayout />
+          </ProtectedRoute>
+       } />
+
+
+      {/* Owner Routes */}
+      <Route path="/owner/*" element={
+          <ProtectedRoute role="owner">
+                 <OwnerLayout />
+          </ProtectedRoute>
+       } />
+
+
+      <Route path="/cart" element={
+        <ProtectedRoute role="customer">
+          <Home />
+        </ProtectedRoute>
+      } />
+      <Route path="/shop" element={
+        <ProtectedRoute role="customer">
+          <CategoryPage />
+        </ProtectedRoute>
+      } />
+
+         
+    
+    </Routes>
   );
 }
 
 function App() {
   return (
-    <Router>
-      <Layout />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <AppRoutes />
+      </Router>
+    </AuthProvider>
   );
 }
 

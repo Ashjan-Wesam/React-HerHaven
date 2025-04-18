@@ -11,7 +11,7 @@ const Header = () => {
   };
 
   const goToProfile = () => {
-    navigate('/owner/edit-profile');
+    navigate('/admin/edit-profile');
   };
 
   return (

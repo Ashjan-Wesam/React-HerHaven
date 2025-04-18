@@ -1,0 +1,56 @@
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  background-color: #fff;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #3d3d3d;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.editInput {
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  transition: 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.editInput:focus {
+  border-color: #c47acf;
+  background-color: #fff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(196, 122, 207, 0.2);
+}
+
+.editBtn {
+  background-color: #c47acf;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.editBtn:hover {
+  background-color: #aa5fc1;
+}

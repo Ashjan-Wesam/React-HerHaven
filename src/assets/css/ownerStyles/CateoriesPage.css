@@ -1,0 +1,208 @@
+/* src/assets/css/ownerStyles/ownerStyles.css */
+
+/* Common Styles */
+.owner-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.owner-header {
+  color: #6a0dad;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #9c27b0;
+  padding-bottom: 0.5rem;
+}
+
+.owner-message {
+  padding: 0.8rem;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #66bb6a;
+}
+
+.owner-message.error {
+  background-color: #ffebee;
+  color: #c62828;
+  border-left-color: #ef5350;
+}
+
+.owner-add-btn {
+  display: inline-block;
+  background-color: #9c27b0;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  margin-bottom: 2rem;
+  transition: background-color 0.3s;
+}
+
+.owner-add-btn:hover {
+  background-color: #7b1fa2;
+}
+
+.owner-back-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: #7e57c2;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.owner-back-link:hover {
+  color: #5e35b1;
+  text-decoration: underline;
+}
+
+/* Categories Page Specific */
+.categories-list {
+  list-style: none;
+  padding: 0;
+}
+
+.category-item {
+  background-color: #f3e5f5;
+  margin-bottom: 1rem;
+  padding: 1.2rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #ab47bc;
+}
+
+.category-name {
+  color: #6a1b9a;
+  font-size: 1.1rem;
+}
+
+.category-description {
+  color: #555;
+  margin-left: 0.5rem;
+}
+
+.category-actions {
+  margin-top: 0.8rem;
+  display: flex;
+  gap: 0.8rem;
+}
+
+/* Products Page Specific */
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.products-table th,
+.products-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e1bee7;
+}
+
+.products-table th {
+  background-color: #f3e5f5;
+  color: #6a1b9a;
+  font-weight: 600;
+}
+
+.products-table tr:hover {
+  background-color: #f8f1fc;
+}
+
+/* Common Action Buttons */
+.owner-edit-btn {
+  color: #7e57c2;
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #7e57c2;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.owner-edit-btn:hover {
+  background-color: #7e57c2;
+  color: white;
+}
+
+.owner-delete-btn {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.owner-delete-btn:hover {
+  background-color: #b71c1c;
+}
+
+/* Form Styles (for create/edit pages) */
+.owner-form {
+  background-color: #f3e5f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ba68c8;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #9c27b0;
+  box-shadow: 0 0 0 2px rgba(156, 39, 176, 0.2);
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ba68c8;
+  border-radius: 4px;
+  font-size: 1rem;
+  min-height: 120px;
+  resize: vertical;
+  transition: border-color 0.3s;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: #9c27b0;
+  box-shadow: 0 0 0 2px rgba(156, 39, 176, 0.2);
+}
+
+.submit-btn {
+  background-color: #9c27b0;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: block;
+  width: 100%;
+}
+
+.submit-btn:hover {
+  background-color: #7b1fa2;
+}
