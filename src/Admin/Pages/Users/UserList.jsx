@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import '../../../assets/css/adminStyles/UserList.css';
-import defaultImg from '../../../assets/img/userImg.jpg'
+import defaultImg from '../../../assets/img/userImg.jpg';
+
+const MySwal = withReactContent(Swal);
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -14,12 +18,24 @@ const UserList = () => {
   const token = localStorage.getItem('token');
 
   const fetchUsers = async () => {
-    const res = await axios.get('http://127.0.0.1:8000/api/admin/users', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setUsers(res.data);
+    try {
+      const res = await axios.get('http://127.0.0.1:8000/api/admin/users', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUsers(res.data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      MySwal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to fetch users',
+        background: '#1e272e',
+        color: '#f5f6fa',
+        confirmButtonColor: '#6c5ce7',
+      });
+    }
   };
 
   useEffect(() => {
@@ -27,13 +43,47 @@ const UserList = () => {
   }, []);
 
   const deleteUser = async (id) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      await axios.delete(`http://127.0.0.1:8000/api/admin/users/${id}` , {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      fetchUsers();
+    const result = await MySwal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#6c5ce7',
+      cancelButtonColor: '#ff7675',
+      confirmButtonText: 'Yes, delete it!',
+      background: '#1e272e',
+      color: '#f5f6fa',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`http://127.0.0.1:8000/api/admin/users/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        await MySwal.fire({
+          title: 'Deleted!',
+          text: 'User has been deleted.',
+          icon: 'success',
+          background: '#1e272e',
+          color: '#f5f6fa',
+          confirmButtonColor: '#6c5ce7',
+        });
+        
+        fetchUsers();
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        MySwal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to delete user',
+          background: '#1e272e',
+          color: '#f5f6fa',
+          confirmButtonColor: '#6c5ce7',
+        });
+      }
     }
   };
 
@@ -59,14 +109,23 @@ const UserList = () => {
           placeholder="Search by name or email"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
         />
-        <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
+        <select 
+          value={filterRole} 
+          onChange={(e) => setFilterRole(e.target.value)}
+          className="filter-select"
+        >
           <option value="">All Roles</option>
           <option value="admin">Admin</option>
           <option value="owner">Owner</option>
           <option value="customer">Customer</option>
         </select>
-        <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+        <select 
+          value={filterStatus} 
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="filter-select"
+        >
           <option value="">All Statuses</option>
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
@@ -78,14 +137,15 @@ const UserList = () => {
         {currentUsers.map((user) => (
           <div className="user-card" key={user.id}>
             <img
-              src={user.profile_picture || defaultImg}
-              alt={user.full_name}
-              className="user-img"
-            />
+  src={user.profile_picture ? `http://127.0.0.1:8000/storage/profile/${user.profile_picture}` : defaultImg}
+  alt={user.full_name}
+  className="user-img"
+/>
+
             <h3>{user.full_name}</h3>
-            <p>{user.email}</p>
-            <p>Role: {user.role}</p>
-            <p>Status: {user.status}</p>
+            <p className="user-email">{user.email}</p>
+            <p className={`user-role ${user.role}`}>Role: {user.role}</p>
+            <p className={`user-status ${user.status}`}>Status: {user.status}</p>
             <div className="actions">
               <Link to={`/admin/users/${user.id}`} className="view">View</Link>
               <Link to={`/admin/users/${user.id}/edit`} className="edit">Edit</Link>
@@ -95,17 +155,19 @@ const UserList = () => {
         ))}
       </div>
 
-      <div className="pagination">
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i}
-            className={currentPage === i + 1 ? 'active' : ''}
-            onClick={() => setCurrentPage(i + 1)}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
+      {totalPages > 1 && (
+        <div className="pagination">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              className={`page-btn ${currentPage === i + 1 ? 'active' : ''}`}
+              onClick={() => setCurrentPage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

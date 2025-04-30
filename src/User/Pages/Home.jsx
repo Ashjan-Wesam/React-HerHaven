@@ -1,13 +1,20 @@
-import Header from "../Components/Header";
+
+import AboutSection from "./AboutSection";
 import BestStores from "./BestStores";
 import HeroSection from "./HeroSection ";
+import ProductSection from "./ProductSection";
+import SiteReviews from "./SiteReviews";
 
 const Home = () => {
   return (
-    <body>
-      <HeroSection />
-      <BestStores />
-    </body>
+      <main>
+          <HeroSection />
+          <BestStores />
+          <AboutSection />
+          <ProductSection />
+          <SiteReviews />
+      </main>
+   
   );
 };
 

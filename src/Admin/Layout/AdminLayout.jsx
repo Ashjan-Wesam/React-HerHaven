@@ -14,6 +14,11 @@ import StoresList from "../Pages/Stores/StoresList";
 import StoreCreate from "../Pages/Stores/StoreCreate";
 import StoreEdit from "../Pages/Stores/StoreEdit";
 import StoreDetails from "../Pages/Stores/StoreDetails";
+import OrderList from "../Pages/Orders/OrderList";
+import ViewOrder from "../Pages/Orders/ViewOrder";
+import EditOrder from "../Pages/Orders/EditOrder";
+import ReviewCards from "../Components/ReviewCards";
+import ReviewDetails from "../Pages/Reviews/ReviewDetails";
 
 
 
@@ -47,6 +52,16 @@ const AdminLayout = () => {
               <Route path="/stores/create" element={<StoreCreate />} />
               <Route path="/stores/edit/:id" element={<StoreEdit />} />
               <Route path="/stores/:id" element={<StoreDetails />} />
+
+              {/* Orders Management */}
+              <Route path="/orders" element={<OrderList />} />
+              <Route path="/orders/:id" element={<ViewOrder />} />
+              <Route path="/orders/:id/edit" element={<EditOrder />} />
+
+              {/* Reviews Management */}
+              <Route path="/reviews" element={<ReviewCards />} />
+              <Route path="/reviews/:type" element={<ReviewDetails />} />
+
              
 
           </Routes>

@@ -16,7 +16,7 @@ const Header = () => {
 
   return (
     <nav className="navbar navbar-default navbar-fixed header">
-      <div className="container-fluid">
+      <div className="container-fluid" >
         <div className="navbar-header">
           <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
             <span className="sr-only">Toggle navigation</span>

@@ -1,62 +1,102 @@
 
 .container {
-    max-width: 60%;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  width: 50%;
+}
+
+.form-title {
+  text-align: center;
+  color: #343a40;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-input {
+  padding: 12px 15px;
+  border: 2px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #444 !important;
+}
+
+.form-input:focus {
+  border-color: #b67fea;
+  outline: none;
+  box-shadow: 0 0 0 2px #ddc8f0;
+}
+
+/* Estilos للقوائم المنسدلة */
+.form-select {
+  padding: 12px 15px;
+  border: 2px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 1.8rem;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-select:focus {
+  border-color: #b67fea;
+  outline: none;
+  box-shadow: 0 0 0 2px #ddc8f0;
+}
+
+/* Estilos للزر */
+.form-button {
+  padding: 12px 20px;
+  background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-button:hover {
+  transform: translateY(-2px);
+}
+
+.form-button:active {
+  transform: translateY(0);
+}
+
+/* Estilos لأخطاء التحقق */
+.error-text {
+  color: #dc3545;
+  font-size: 1.5rem;
+  margin-top: -1rem;
+  margin-bottom: 0.5rem;
+}
+
+.general-error {
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* تأثيرات إضافية */
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem;
+    margin: 1rem;
   }
   
   .form-title {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    text-align: center;
-    font-weight: bold;
+    font-size: 1.5rem;
   }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-  }
-  
-  .form-input,
-  .form-select,
-  .form-button {
-    width: 70%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-  }
-
-  .form-select{
-
-    background-color: #444;
-    padding: 12px !important;
-    color: white;
-    font-size: 1.6rem !important;
-  }
-  
-  .form-input:focus,
-  .form-select:focus,
-  .form-button:focus {
-    border-color: #9758c2;
-  }
-  
-  .form-button {
-    background-color: #a766d2;
-    color: white;
-    font-size: 1.6rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .form-button:hover {
-    background-color: #8645a0;
-  }
-  
+}

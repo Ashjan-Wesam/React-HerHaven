@@ -1,134 +1,117 @@
-/* storelist.css */
-
-.stores-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.page-title {
-    color: #6a0dad; /* Dark purple */
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2.2rem;
-    font-weight: 600;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
-
-.add-store-btn {
-    display: inline-block;
-    background-color: #8a2be2; /* Medium purple */
+/* حاوية المتاجر */
+.stores-list-container {
+    padding: 20px;
+  }
+  
+  /* العنوان الخاص بالقائمة */
+  .stores-list-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* زر إضافة متجر جديد */
+  .add-store-btn {
+    background-color: #b67fea;
     color: white;
-    padding: 0.7rem 1.5rem;
-    border-radius: 5px;
+    padding: 8px 12px;
+    border-radius: 6px;
     text-decoration: none;
-    font-weight: 500;
-    margin-bottom: 2rem;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.add-store-btn:hover {
-    background-color: #6a0dad; /* Darker purple */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.store-grid {
+    font-weight: bold;
+  }
+  
+  .add-store-btn:hover {
+    background-color: #a15ee0;
+    color: white;
+  }
+  
+  /* الشبكة لعرض بطاقات المتاجر */
+  .card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1rem;
-}
-
-.store-card {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(106, 13, 173, 0.1); /* Purple tint shadow */
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  
+  /* تنسيق بطاقة المتجر */
+  .store-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid #e6d5ff; /* Light purple border */
-}
-
-.store-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(106, 13, 173, 0.15);
-}
-
-.store-header {
-    background-color: #8a2be2; /* Medium purple */
-    padding: 1rem;
-    color: white;
-}
-
-.store-header h3 {
-    margin: 0;
-    font-size: 1.3rem;
-}
-
-.store-desc {
-    padding: 1rem;
-    color: #555;
-    line-height: 1.5;
-    min-height: 60px;
-    border-bottom: 1px solid #f0e6ff;
-}
-
-.store-actions {
-    padding: 1rem;
-    display: flex;
-    gap: 0.8rem;
-}
-
-.btn-view, .btn-edit, .btn-delete {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 5px;
     cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
+  }
+  
+  .store-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+  
+  /* تنسيق العنوان الخاص بالمتجر */
+  .store-header h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  
+  /* تنسيق الوصف الخاص بالمتجر */
+  .store-desc {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 15px;
+  }
+  
+  /* حاوية الأزرار (عرض، تعديل، حذف) */
+  .store-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  /* تنسيق الأزرار الخاصة بالأفعال (عرض، تعديل، حذف) */
+  .store-actions a,
+  .store-actions button {
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
     text-decoration: none;
-    font-size: 0.9rem;
-}
-
-.btn-view {
-    background-color: #9370db; /* Lighter purple */
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* زر عرض المتجر */
+  .view {
+    background-color: #a15ee0;
     color: white;
-}
-
-.btn-view:hover {
-    background-color: #7b5cb7;
-}
-
-.btn-edit {
-    background-color: #ba55d3; /* Orchid purple */
+  }
+  
+  .view:hover {
+    background-color: #7c46af;
     color: white;
-}
-
-.btn-edit:hover {
-    background-color: #9932cc;
-}
-
-.btn-delete {
-    background-color: #d8bfd8; /* Thistle color */
-    color: #8b008b; /* Dark magenta */
-}
-
-.btn-delete:hover {
-    background-color: #dda0dd;
-    color: #6a0dad;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .store-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
-    
-    .stores-container {
-        padding: 1rem;
-    }
-}
+  }
+  
+  /* زر تعديل المتجر */
+  .edit {
+    background-color: #313131;
+    color: white;
+  }
+  
+  .edit:hover {
+    background-color: #191919;
+    color: white;
+  }
+  
+  /* زر حذف المتجر */
+  .delete {
+    background-color: #af67a2;
+    color: white;
+  }
+  
+  .delete:hover {
+    background-color: #793f6e;
+    color: white;
+  }
+  

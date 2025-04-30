@@ -1,0 +1,265 @@
+/* Main Section Container */
+.ps-discovery-section {
+    padding: 4rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Header Styles */
+  .ps-header-wrapper {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .ps-main-title {
+    font-size: 3.5rem;
+    color: rgb(65, 65, 65);
+    margin-bottom: 10px;
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+}
+  
+  
+  .ps-title-underline {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%) !important;
+    border-radius: 3px;
+  }
+  
+  .ps-subtitle {
+    color: rgb(119, 119, 119);
+    font-size: 1.8rem;
+    margin-top: 15px;
+}
+  
+  
+  /* Filter Navigation */
+  .ps-filter-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .ps-filter-btn {
+    padding: 1.2rem 2.2rem;
+    border: none;
+    background-color: #edf2f7;
+    color: #4a5568;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.6rem;
+  }
+  
+  .ps-filter-btn:hover {
+    background-color: #e2e8f0;
+  }
+  
+  .ps-active-filter {
+    background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%) !important;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Product Grid */
+  .ps-product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+  
+  /* Product Card */
+  .ps-product-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+  
+  .ps-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ps-product-media {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .ps-product-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  
+  .ps-product-card:hover .ps-product-image {
+    transform: scale(1.05);
+  }
+  
+  .ps-badge-group {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .ps-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+  }
+  
+  .ps-new-badge {
+    background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%) !important;
+  }
+  
+  .ps-discount-badge {
+    background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%) !important;
+  }
+  
+  .ps-top-badge {
+    background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%) !important;
+  }
+  
+  .ps-action-buttons {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    transition: bottom 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+    
+  }
+  
+  .ps-product-card:hover .ps-action-buttons {
+    bottom: 0;
+  }
+  
+  .ps-action-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(5px);
+    border-radius: 50px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  
+  .ps-action-btn:hover {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ps-product-details {
+    padding: 1.5rem;
+  }
+  
+  .ps-product-title {
+    font-size: 1.9rem;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .ps-store-name {
+    color: #718096;
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .ps-price-tag {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 1rem;
+  }
+  
+  .ps-add-to-cart {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%) !important;
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .ps-add-to-cart:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+  
+  /* Loading State */
+  .ps-loading-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+  }
+  
+  .ps-loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(102, 126, 234, 0.2);
+    border-radius: 50%;
+    border-top-color: #667eea;
+    animation: ps-spin 1s linear infinite;
+  }
+  
+  @keyframes ps-spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .ps-main-title {
+      font-size: 2.2rem;
+    }
+    
+    .ps-product-grid {
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .ps-filter-nav {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .ps-filter-btn {
+      width: 100%;
+      max-width: 250px;
+    }
+  }

@@ -4,14 +4,13 @@ import img2 from "../../assets/img/sidebar7.jpg"
 
 const Sidebar = () => {
   const { user } = useAuth();
-  console.log("Sidebar user:", user);
 
   return (
     <div className="sidebar" data-color="purple" data-image={img2}>
       <div className="sidebar-wrapper">
         <div className="logo">
-          <a href="#" className="simple-text">
-            {user.full_name }
+          <a href="#" className="simple-text" style={{ fontWeight: "bold" , textAlign: "center" }}>
+            Welcome {user.name }
           </a>
         </div>
         <ul className="nav">

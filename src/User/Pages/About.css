@@ -1,0 +1,23 @@
+.about-section {
+    padding: 60px 20px;
+    background-color: #fef8f4;
+    text-align: center;
+  }
+  
+  .about-container {
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  .about-container h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #e6738f;
+  }
+  
+  .about-container p {
+    font-size: 18px;
+    color: #444;
+    line-height: 1.7;
+  }
+  

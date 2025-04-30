@@ -7,7 +7,6 @@ import OwnerDashboard from "../Pages/OwnerDashboard";
 import OwnerProfile from "../Pages/OwnerProfile";
 import Product from "../Pages/Products/Product";
 import OrdersManagement from "../Pages/Orders/OrdersManagement";
-import DiscountsManagement from "../Pages/Discounts/DiscountsManagement";
 import ReviewsManagement from "../Pages/Reviews/ReviewsManagement";
 import StoreSetting from "../Pages/StoreSetting";
 import CategoriesPage from "../Pages/Categories/CategoriesPage";
@@ -15,6 +14,10 @@ import CreateCategory from "../Pages/Categories/CreateCategory";
 import CreateProduct from "../Pages/Products/CreateProduct";
 import EditCategory from "../Pages/Categories/EditCategory";
 import ShowCategory from "../Pages/Categories/ShowCategory";
+import ProductShow from "../Pages/Products/ProductShow";
+import EditProduct from "../Pages/Products/EditProduct";
+import DiscountsPage from "../Pages/Discounts/DiscountsPage";
+import DiscountForm from "../Pages/Discounts/DiscountForm";
 
 
 const OwnerLayout = () => {
@@ -36,18 +39,22 @@ const OwnerLayout = () => {
 
             <Route path="products" element={<Product />} />
             <Route path="products/create" element={<CreateProduct />} />
+            <Route path="products/show/:id" element={<ProductShow />} />
+            <Route path="products/edit/:id" element={<EditProduct />} />
             
             <Route path="orders" element={<OrdersManagement />} />
-            <Route path="discounts" element={<DiscountsManagement />} />
+            
             <Route path="reviews" element={<ReviewsManagement />} />
             <Route path="settings" element={<StoreSetting />} />
-            <Route path="categories" element={<CategoriesPage />} />
 
+            <Route path="categories" element={<CategoriesPage />} />
             <Route path="categories/create" element={<CreateCategory />} />
             <Route path="categories/edit/:id" element={<EditCategory />} />
             <Route path="categories/show/:id" element={<ShowCategory />} />
 
-
+            <Route path="discounts" element={<DiscountsPage />} />
+            <Route path="discounts/create" element={<DiscountForm />} />
+            <Route path="discounts/edit/:id" element={<DiscountForm />} />
 
 
           </Routes>

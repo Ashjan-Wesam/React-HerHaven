@@ -1,0 +1,171 @@
+/* Category Page Main */
+.category-page {
+    padding: 40px 0;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  /* Header Section */
+  .category-page-header {
+    background: linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%);
+    color: #fff;
+    padding: 60px 0;
+    text-align: center;
+    margin-bottom: 40px;
+    margin-top: -50px !important;
+
+  }
+  
+  .category-page-header h2 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  
+  .category-page-header .site-breadcrumb {
+    font-size: 16px;
+    color: #ddd;
+  }
+  
+  .category-page-header .site-breadcrumb a {
+    color: #fff;
+    text-decoration: underline;
+  }
+  
+  /* Filters Section */
+  .filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto 30px;
+    max-width: 1200px;
+    padding: 0 20px;
+    
+  }
+  
+  .search-filter {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .search-input, .category-select {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    min-width: 220px;
+    font-size: 16px;
+  }
+  
+  .stores-count {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  /* Store Cards Section */
+  .stores-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .stores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  
+  .store-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+  
+  .store-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .store-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: 15px;
+  }
+  
+  .store-name-cat {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333 !important;
+  }
+  
+  .store-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+    height: 40px;
+    overflow: hidden;
+  }
+  
+  .store-owner {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 15px;
+  }
+  
+  .store-card .btn {
+    background: linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  /* No stores found */
+  .no-stores {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .no-stores p {
+    font-size: 18px;
+    color: #555;
+  }
+  
+  /* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 10px;
+  }
+  
+  .pagination-button {
+    background-color: #eee;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s;
+  }
+  
+  .pagination-button:hover {
+    background-color: #2575fc;
+    color: white;
+  }
+  
+  .pagination-button.active {
+    background-color: #6a11cb;
+    color: white;
+  }
+  

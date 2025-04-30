@@ -326,10 +326,11 @@ input:focus {
 
 .sidebar .nav li > a {
     color: #FFFFFF;
-    margin: 5px 134px;
+    /* margin: 5px 134px; */
     opacity: .86;
     border-radius: 4px;
     display: block;
+    padding: 15px;
 }
 
 .sidebar .nav li.active > a {
@@ -350,7 +351,7 @@ input:focus {
 .sidebar .nav p {
     margin: 0;
     line-height: 30px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     text-transform: uppercase;
     margin-left: 45px;

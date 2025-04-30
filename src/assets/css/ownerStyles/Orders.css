@@ -1,59 +1,681 @@
-/* تنسيق عام للصفحة */
-.container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    text-align: center;
-}
+/* Orders.css */
 
-/* تنسيق الإحصائيات */
-.stats {
+:root {
+    --primary: #aa7ad0;
+    --secondary: #a29bfe;
+    --success: #00b894;
+    --warning: #fdcb6e;
+    --danger: #d63031;
+    --light: #f5f6fa;
+    --dark: #444;
+    --text: #636e72;
+  }
+  
+  .orders-container {
+    font-family: 'Poppins', sans-serif;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--light);
+    min-height: 100vh;
+  }
+  
+  .orders-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  .stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
     display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-.stats div {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 200px;
-    text-align: center;
-}
-.stats h3 {
+    align-items: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .stat-card i {
+    font-size: 5.5rem ;
+    margin-right: 1.5rem;
+    z-index: 1;
+    color: var(--primary);
+  }
+  
+  .stat-card-content {
+    z-index: 1;
+  }
+  
+  .stat-card h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: var(--text);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    font-size: 2rem;
+  }
+  
+  .stat-card p {
     margin: 0;
-    color: #333;
-}
-.stats p {
-    font-size: 24px;
-    font-weight: bold;
-    color: #007bff;
-}
-
-/* تنسيق بطاقات الطلبات */
-.orders-cards {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
-}
-.order-card {
-    background: #fff;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 250px;
-    transition: 0.3s;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dark);
+  }
+  
+  .tab-buttons {
+    display: inline-flex;
+    margin-bottom: 2rem;
+    background: white;
+    border-radius: 12px;
+    padding: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  .tab-buttons button {
+    padding: 0.8rem 1.5rem;
+    margin-right: 0.5rem;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--secondary-color);
     cursor: pointer;
-}
-.order-card:hover {
-    transform: scale(1.05);
-}
-.order-card h3 {
-    margin-bottom: 10px;
+    position: relative;
+    transition: var(--transition);
+  }
+  
+  .tab-buttons button:hover {
+    color: var(--primary);
+  }
+  
+  .tab-buttons button.active {
+    color: white;
+    background: var(--primary);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+  }
+  .tab-buttons button.active::after {
+
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background:none !important
+  }
+
+  
+  .order-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border-left: 6px solid var(--primary);
+  }
+  
+  .order-card:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .order-card h3 {
+    margin-top: 0;
+    color: var(--primary);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+  }
+  
+  .order-card h3::before {
+    content: '📦';
+    margin-right: 0.75rem;
+    font-size: 1.2em;
+  }
+  
+  .order-card p {
+    margin: 0.5rem 0;
+    color: var(--text);
+  }
+  
+  .product-item {
+    background: rgba(108, 92, 231, 0.05);
+    padding: 1rem;
+    border-radius: 12px;
+    margin: 1rem 0;
+    border-left: 3px solid var(--secondary);
+    transition: all 0.3s ease;
+  }
+  
+  .product-item:hover {
+    background: rgba(108, 92, 231, 0.1);
+  }
+  
+  .product-item h4 {
+    margin: 0 0 0.5rem 0;
+    color: var(--dark);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+  
+  .product-item h4::before {
+    content: '🛍️';
+    margin-right: 0.5rem;
+  }
+  
+  .order-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .order-card button {
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .order-card button i {
+    margin-right: 0.5rem;
+  }
+  
+  .order-card button:first-child {
+    background: var(--success);
+    color: white;
+  }
+  
+  .order-card button:first-child:hover {
+    background: #00a884;
+    box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
+  }
+  
+  .order-card button:last-child {
+    background: var(--danger);
+    color: white;
+  }
+  
+  .order-card button:last-child:hover {
+    background: #c0392b;
+    box-shadow: 0 4px 12px rgba(214, 48, 49, 0.3);
+  }
+  
+  .design-request {
+    background: rgba(253, 203, 110, 0.1);
+    padding: 1rem;
+    border-radius: 12px;
+    margin: 1rem 0;
+    border-left: 3px solid var(--warning);
+  }
+  
+  .design-request strong {
+    color: var(--dark);
+  }
+  
+  .request-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .orders-container {
+      padding: 1.5rem;
+    }
+    
+    .orders-stats {
+      grid-template-columns: 1fr;
+    }
+    
+    .tab-buttons {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .tab-buttons button {
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .order-actions, .request-actions {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .order-card button {
+      width: 100%;
+    }
+  }
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .order-card {
+    animation: fadeIn 0.5s ease forwards;
+  }
+  
+  .order-card:nth-child(2) { animation-delay: 0.1s; }
+  .order-card:nth-child(3) { animation-delay: 0.2s; }
+  .order-card:nth-child(4) { animation-delay: 0.3s; }
+
+  /* Modal background overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  
+  /* Modal box */
+  .modal-content {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  
+  .modal-content h3 {
+    margin-bottom: 1rem;
     color: #333;
-}
-.order-card p {
+  }
+  
+  .modal-content .product-item {
+    margin: 0.5rem 0;
+    padding: 1rem;
+    background: #f8f8f8;
+    border-radius: 8px;
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #888;
+  }
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal-content {
+    background: white;
+    width: 700px; /* حجم ثابت */
+    max-height: 80vh; /* أقصى ارتفاع */
+    overflow-y: auto; /* سكرول عند الحاجة */
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+  }
+  
+  /* يمكنك تحسين شكل الأزرار داخل المودال */
+  .modal-actions button {
+    margin-right: 10px;
+  }
+  
+  /* التنسيق العام */
+  .orders-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* إحصائيات الطلبات */
+  .orders-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .tab-buttons {
+    display: flex;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #eee;
+  }
+  
+  
+  
+  /* بطاقات الطلبات */
+  .order-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .order-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .order-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--primary-color);
+  }
+  
+  .order-card h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 1.3rem;
+  }
+  
+  .order-card p {
+    margin: 0.5rem 0;
+    color: var(--dark-color);
+  }
+  
+  .order-card button {
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .order-card button:hover {
+    background: var(--secondary-color);
+  }
+  
+  .order-card button.view-btn {
+    background: white;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+  }
+  
+  .order-card button.view-btn:hover {
+    background: var(--primary-color);
+    color: white;
+  }
+  
+  /* المودال */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: white;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 2rem;
+    box-shadow: var(--box-shadow);
+    animation: modalFadeIn 0.3s ease-out;
+  }
+  
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .modal-content h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1rem;
+  }
+  
+  .modal-product-block {
+    margin-bottom: 1.5rem;
+    border: 1px solid #eee;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+  }
+  
+  .modal-product-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .modal-product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 1.5rem;
+    border: 1px solid #eee;
+  }
+  
+  .modal-product-text {
+    flex: 1;
+  }
+  
+  .modal-product-text p {
+    margin: 0.3rem 0;
+  }
+  
+  .modal-design-request {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .modal-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  
+  .modal-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .modal-actions button:first-child {
+    background: var(--success-color);
+    color: white;
+  }
+  
+  .modal-actions button:first-child:hover {
+    background: #218838;
+  }
+  
+  .modal-actions button:last-child {
+    background: var(--danger-color);
+    color: white;
+  }
+  
+  .modal-actions button:last-child:hover {
+    background: #c82333;
+  }
+  
+  .modal-content > button {
+    margin-top: 1.5rem;
+    padding: 0.7rem 1.5rem;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .modal-content > button:hover {
+    background: #ff6b4a;
+  }
+  
+  /* تأثيرات للطلبات حسب الحالة */
+  .order-card[data-status="completed"]::before {
+    background: var(--success-color);
+  }
+  
+  .order-card[data-status="pending"]::before {
+    background: var(--warning-color);
+  }
+  
+  /* تصميم متجاوب */
+  @media (max-width: 768px) {
+    .orders-stats {
+      grid-template-columns: 1fr;
+    }
+    
+    .modal-product-info {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .modal-product-image {
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+  }  
+
+  .orders-div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: flex-start;
+    padding: 24px;
+  }
+  
+  .order-card {
+    width: 350px;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+  }
+  
+  .order-card:hover {
+    transform: translateY(-6px);
+  }
+  
+  .order-card h3 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #222;
+  }
+  
+  .order-card p {
+    margin: 10px 0;
     font-size: 16px;
     color: #555;
-}
+  }
+  
+  .order-card button {
+    margin-right: 12px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary) !important;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+  }
+  
+  .order-card button:hover {
+    background-color: #0056b3;
+  }
+  
+  .order-card .view-btn {
+    background-color: var(--dark) !important;
+    color: white !important;
+    width: 100% !important;
+  }
+  
+  .order-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 400px; /* تأكد من أن جميع الكاردات تأخذ نفس الارتفاع */
+    border: 1px solid #ddd; /* إضافة حدود لجعل الكاردات مرئية */
+    padding: 15px;
+    box-sizing: border-box;
+  }
+  
+  .view-btn {
+    margin-top: auto; /* يجعل الزر في أسفل الكارد */
+  }
+  
+  .modal-actions {
+    display: flex;
+  }
+  
+  .order-card > * {
+    flex-grow: 0; /* لا نريد أن تنمو العناصر داخل الكارد أكثر من الحجم المطلوب */
+  }
+  

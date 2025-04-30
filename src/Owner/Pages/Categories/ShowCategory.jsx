@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-// import '../../../assets/css/ownerStyles/ShowCategory.css';
+import '../../../assets/css/ownerStyles/CateoriesPage.css';
 
 const ShowCategory = () => {
   const { id } = useParams();
@@ -49,7 +49,13 @@ const ShowCategory = () => {
             {filteredProducts && filteredProducts.length > 0 ? (
               filteredProducts.map(prod => (
                 <li key={prod.id} className="product-item">
-                  <strong>{prod.name}</strong> - ${prod.price}
+                  <div className="product-image">
+                    <img src={`http://127.0.0.1:8000/${prod.image_url}`} alt={prod.name} className="product-img" />
+                  </div>
+                  <div className="product-details">
+                    <strong>{prod.name}</strong>
+                    <p>${prod.price}</p>
+                  </div>
                 </li>
               ))
             ) : (

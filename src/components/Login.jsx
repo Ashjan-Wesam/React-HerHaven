@@ -20,6 +20,8 @@ const Login = () => {
             password,
           });
           
+          console.log("Login response:", response.data);
+
           const userData = {
             id: response.data.user.id,
             name: response.data.user.name,
@@ -33,7 +35,7 @@ const Login = () => {
             localStorage.setItem("store", JSON.stringify(response.data.store));
           }
           
-          
+          console.log("Ashjan" ,userData);
           login(userData); 
           
           switch (userData.role) {

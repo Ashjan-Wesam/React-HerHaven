@@ -1,208 +1,315 @@
-/* src/assets/css/ownerStyles/ownerStyles.css */
-
-/* Common Styles */
-.owner-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Styles for Categories Page */
+.categories-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f4f4f4;
 }
 
-.owner-header {
-  color: #6a0dad;
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid #9c27b0;
-  padding-bottom: 0.5rem;
+.categories-header {
+  text-align: center;
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 20px;
 }
 
-.owner-message {
-  padding: 0.8rem;
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border-radius: 4px;
-  margin-bottom: 1.5rem;
-  border-left: 4px solid #66bb6a;
+.categories-message {
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 1em;
+  margin-bottom: 20px;
 }
 
-.owner-message.error {
-  background-color: #ffebee;
-  color: #c62828;
-  border-left-color: #ef5350;
+.categories-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
-.owner-add-btn {
-  display: inline-block;
-  background-color: #9c27b0;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border-radius: 4px;
-  text-decoration: none;
-  margin-bottom: 2rem;
+.categories-message.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.category-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.category-form h3 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.category-form button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
   transition: background-color 0.3s;
 }
 
-.owner-add-btn:hover {
-  background-color: #7b1fa2;
+.category-form button:hover {
+  background-color: #0056b3;
 }
 
-.owner-back-link {
-  display: inline-block;
-  margin-top: 1.5rem;
-  color: #7e57c2;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.owner-back-link:hover {
-  color: #5e35b1;
-  text-decoration: underline;
-}
-
-/* Categories Page Specific */
 .categories-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
   list-style: none;
   padding: 0;
 }
 
 .category-item {
-  background-color: #f3e5f5;
-  margin-bottom: 1rem;
-  padding: 1.2rem;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-left: 4px solid #ab47bc;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.category-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .category-name {
-  color: #6a1b9a;
-  font-size: 1.1rem;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
 }
 
 .category-description {
-  color: #555;
-  margin-left: 0.5rem;
+  font-size: 1em;
+  color: #777;
+  margin-top: 10px;
 }
 
 .category-actions {
-  margin-top: 0.8rem;
   display: flex;
-  gap: 0.8rem;
+  justify-content: space-between;
+  margin-top: 15px;
 }
 
-/* Products Page Specific */
-.products-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.products-table th,
-.products-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #e1bee7;
-}
-
-.products-table th {
-  background-color: #f3e5f5;
-  color: #6a1b9a;
-  font-weight: 600;
-}
-
-.products-table tr:hover {
-  background-color: #f8f1fc;
-}
-
-/* Common Action Buttons */
-.owner-edit-btn {
-  color: #7e57c2;
-  text-decoration: none;
-  padding: 0.4rem 0.8rem;
-  border: 1px solid #7e57c2;
-  border-radius: 4px;
-  transition: all 0.3s;
-}
-
-.owner-edit-btn:hover {
-  background-color: #7e57c2;
-  color: white;
-}
-
-.owner-delete-btn {
-  background-color: #d32f2f;
-  color: white;
+.edit-category-btn,
+.show-category-btn,
+.delete-category-btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 8px 12px;
   border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.owner-delete-btn:hover {
-  background-color: #b71c1c;
+.edit-category-btn:hover,
+.show-category-btn:hover,
+.delete-category-btn:hover {
+  background-color: #0056b3;
 }
 
-/* Form Styles (for create/edit pages) */
-.owner-form {
-  background-color: #f3e5f5;
-  padding: 1.5rem;
+.edit-category-btn {
+  background-color: #ffc107;
+}
+
+.delete-category-btn {
+  background-color: #dc3545;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+.modal-content button {
+  width: 48%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modal-content button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.modal-content button[type="button"] {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+/* حاوية الصفحة الرئيسية */
+.show-category-container {
+  padding: 20px;
+  background-color: #f9f9f9;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
+  max-width: 1200px;
   margin: 0 auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
+/* عنوان الفئة */
+.category-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
 }
 
-.form-input {
+/* وصف الفئة */
+.category-description {
+  font-size: 1.1rem;
+  color: #777;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* حقل البحث */
+.search-input {
   width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ba68c8;
-  border-radius: 4px;
+  padding: 10px;
   font-size: 1rem;
-  transition: border-color 0.3s;
-}
-
-.form-input:focus {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 20px;
   outline: none;
-  border-color: #9c27b0;
-  box-shadow: 0 0 0 2px rgba(156, 39, 176, 0.2);
 }
 
-.form-textarea {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ba68c8;
-  border-radius: 4px;
+.search-input:focus {
+  border-color: #007BFF;
+}
+
+/* قائمة المنتجات */
+.product-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.product-item {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.product-item:hover {
+  transform: translateY(-5px);
+}
+
+.product-item strong {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.product-item span {
   font-size: 1rem;
-  min-height: 120px;
-  resize: vertical;
-  transition: border-color 0.3s;
+  color: #555;
+  font-weight: 500;
 }
 
-.form-textarea:focus {
-  outline: none;
-  border-color: #9c27b0;
-  box-shadow: 0 0 0 2px rgba(156, 39, 176, 0.2);
-}
-
-.submit-btn {
-  background-color: #9c27b0;
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 4px;
+/* في حالة عدم وجود منتجات مطابقة */
+.product-list li {
   font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  display: block;
-  width: 100%;
+  color: #777;
+  padding: 10px;
+  text-align: center;
 }
 
-.submit-btn:hover {
-  background-color: #7b1fa2;
+/* تحسين المظهر عند التحميل */
+.show-category-container p {
+  font-size: 1.2rem;
+  text-align: center;
+  color: #007BFF;
+}
+/* حاوية كل منتج */
+.product-item {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.product-item:hover {
+  transform: translateY(-5px);
+}
+
+/* تنسيق صورة المنتج */
+.product-image {
+  margin-right: 20px;
+}
+
+.product-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* تفاصيل المنتج مثل الاسم والسعر */
+.product-details {
+  flex-grow: 1;
+}
+
+.product-details strong {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.product-details p {
+  font-size: 1rem;
+  color: #555;
 }

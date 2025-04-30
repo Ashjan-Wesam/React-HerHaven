@@ -1,80 +1,177 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import "./CategoryPage.css";
 
 const CategoryPage = () => {
   const [stores, setStores] = useState([]);
+  const [filteredStores, setFilteredStores] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const storesPerPage = 8;
 
   useEffect(() => {
-    const fetchStores = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/stores'); // Laravel route
-        setStores(response.data);
+        setIsLoading(true);
+        const [storesRes, categoriesRes] = await Promise.all([
+          axios.get("http://127.0.0.1:8000/api/stores"),
+          axios.get("http://127.0.0.1:8000/api/owner/categories"),
+        ]);
+        setStores(storesRes.data);
+        setFilteredStores(storesRes.data);
+        setCategories(categoriesRes.data);
       } catch (error) {
-        console.error("Failed to fetch stores:", error);
+        console.error("Failed to fetch data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchStores();
+    fetchData();
   }, []);
 
+  useEffect(() => {
+    let results = stores;
+
+    if (selectedCategory) {
+      results = results.filter((store) =>
+        store.categories?.some(
+          (category) => category.id === parseInt(selectedCategory)
+        )
+      );
+    }
+
+    if (search) {
+      results = results.filter((store) =>
+        store.store_name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    setFilteredStores(results);
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [search, selectedCategory, stores]);
+
+  // Pagination logic
+  const indexOfLastStore = currentPage * storesPerPage;
+  const indexOfFirstStore = indexOfLastStore - storesPerPage;
+  const currentStores = filteredStores.slice(indexOfFirstStore, indexOfLastStore);
+  const totalPages = Math.ceil(filteredStores.length / storesPerPage);
+
+  if (isLoading) {
+    return (
+      <div className="category-page-header">
+        <div className="container text-center">
+          <h2>Loading Stores...</h2>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <div className="page-info-section page-info-big">
-        <div className="container">
+    <div className="category-page">
+      {/* Header Section */}
+      <div className="category-page-header">
+        <div className="container text-center store-div">
           <h2>Women Stores</h2>
           <div className="site-breadcrumb">
-            <a href="#">Home</a> / <span>Stores</span>
+            <Link to="/">Home</Link> / <span>Stores</span>
           </div>
-          <img src="img/categorie-page-top.png" alt="" className="cata-top-pic" />
         </div>
       </div>
 
-      <div className="page-area categorie-page spad">
-        <div className="container">
-          <div className="categorie-filter-warp">
-            <p>Showing {stores.length} stores</p>
-            <div className="cf-right">
-              <div className="cf-layouts">
-                <a href="#"><img src="img/icons/layout-1.png" alt="" /></a>
-                <a className="active" href="#"><img src="img/icons/layout-2.png" alt="" /></a>
-              </div>
-              <form action="#">
-                <select><option>Color</option></select>
-                <select><option>Brand</option></select>
-                <select><option>Sort by</option></select>
-              </form>
-            </div>
-          </div>
+      {/* Filters */}
+      <div className="filters-container">
+        <div className="search-filter-cat">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search by store name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
-          <div className="row">
-            {stores.map((store) => (
-              <div className="col-lg-4 col-md-6 mb-4" key={store.id}>
-                <div className="store-card" style={{
-                  border: '1px solid #ddd',
-                  borderRadius: '10px',
-                  padding: '20px',
-                  textAlign: 'center',
-                  backgroundColor: '#fff'
-                }}>
+          <select
+            className="category-select"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">All Categories</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="stores-count">
+          Showing {filteredStores.length} {filteredStores.length === 1 ? "store" : "stores"}
+        </div>
+      </div>
+
+      {/* Store Cards */}
+      <div className="stores-container">
+        {currentStores.length > 0 ? (
+          <div className="stores-grid">
+            {currentStores.map((store) => (
+              <Link to={`/store/${store.id}`} key={store.id} className="store-link">
+                <div className="store-card">
                   {store.logo_url && (
                     <img
-                      src={store.logo_url}
+                      src={`http://127.0.0.1:8000/storage/logo/${store.logo_url}`}
                       alt={store.store_name}
-                      style={{ maxHeight: "120px", objectFit: "contain", marginBottom: "10px" }}
+                      className="store-logo"
                     />
                   )}
-                  <h5>{store.store_name}</h5>
-                  <p>{store.description || "No description provided."}</p>
-                  <p style={{ fontSize: '14px', color: '#999' }}>
+                  <h5 className="store-name-cat">{store.store_name}</h5>
+                  <p className="store-description-cat" style={{ color: "#444" }}>
+                    {store.description?.slice(0, 100) || "No description provided."}
+                    {store.description?.length > 100 && "..."}
+                  </p>
+                  <p className="store-owner">
                     Owner: {store.owner?.full_name || "Unknown"}
                   </p>
+                  <button className="btn btn-primary">View Store</button>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
-
-        </div>
+        ) : (
+          <div className="no-stores">
+            <p>No stores found matching your criteria.</p>
+            <button
+              onClick={() => {
+                setSearch("");
+                setSelectedCategory("");
+              }}
+              className="btn btn-outline-secondary mt-3"
+            >
+              Clear Filters
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="pagination">
+          {[...Array(totalPages)].map((_, index) => (
+            <button
+              key={index}
+              className={`pagination-button ${currentPage === index + 1 ? "active" : ""}`}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

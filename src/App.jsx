@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import 'swiper/css';
 import PublicLayout from "./User/Layout/PublicLayout";
+import UserLayout from "./User/Layout/UserLayout";
 
 
 
@@ -20,6 +21,10 @@ import CategoryPage from "./User/Pages/CategoryPage";
 
 import OwnerLayout from "./Owner/Layout/OwnerLayout"; 
 import AdminLayout from "./Admin/Layout/AdminLayout"; 
+import StoreDetail from "./User/Pages/StoreDetail";
+import SingleProductPage from "./User/Pages/SingleProductPage";
+import About from "./User/Pages/About";
+import Contact from "./User/Pages/Contact";
 
 
 function RedirectAfterLogin() {
@@ -41,18 +46,24 @@ function RedirectAfterLogin() {
 
 function AppRoutes() {
   return (
+
     <Routes>
 
-      {/* Pages */}
+      {/*General Routes */}
       <Route element={<PublicLayout />}>
-  <Route path="/" element={<Home />} />
-  <Route path="/login" element={<Login />} />
-  <Route path="/register-customer" element={<RegisterCustomer />} />
-  <Route path="/register-owner" element={<RegisterOwner />} />
-  <Route path="/shop" element={<CategoryPage />} />
-</Route>
+             <Route path="/" element={<Home />} />
+             <Route path="/login" element={<Login />} />
+             <Route path="/register-customer" element={<RegisterCustomer />} />
+             <Route path="/register-owner" element={<RegisterOwner />} />
+             <Route path="/shop" element={<CategoryPage />} />
+             <Route path="/store/:storeId" element={<StoreDetail />} />
+             <Route path="/Products/:productId" element={<SingleProductPage />} />
+             <Route path="/about-us" element={<About />} />
+             <Route path="/contact" element={<Contact />} />
 
-<Route path="/redirect" element={<RedirectAfterLogin />} />
+      </Route>
+
+      <Route path="/redirect" element={<RedirectAfterLogin />} />
 
 
 
@@ -70,32 +81,29 @@ function AppRoutes() {
                  <OwnerLayout />
           </ProtectedRoute>
        } />
+       
+      {/* Customer Routes */}
+      <Route path="/customer/*" element={
+          <ProtectedRoute role="customer">
+                 <UserLayout />
+          </ProtectedRoute>
+       } />
 
-
-      <Route path="/cart" element={
-        <ProtectedRoute role="customer">
-          <Home />
-        </ProtectedRoute>
-      } />
-      <Route path="/shop" element={
-        <ProtectedRoute role="customer">
-          <CategoryPage />
-        </ProtectedRoute>
-      } />
-
-         
     
     </Routes>
+
   );
 }
 
 function App() {
   return (
+
     <AuthProvider>
       <Router>
         <AppRoutes />
       </Router>
     </AuthProvider>
+
   );
 }
 

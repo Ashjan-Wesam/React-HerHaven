@@ -1,115 +1,227 @@
-import Header from "../Components/Header";
-import cartImg from "../../userTemplate/img/product/cart.jpg"
-import cartImg2 from "../../userTemplate/img/page-info-art.png"
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import "./cart.css";
+import Swal from "sweetalert2";
 
 const CartPage = () => {
-  return (
-    <div>
-      {/* Header Section */}
-      <Header />
+  const [cart, setCart] = useState(null);
+  const navigate = useNavigate();
 
-      {/* Page Info */}
-      <div className="page-info-section page-info">
-        <div className="container">
-          <div className="site-breadcrumb">
-            <a href="/">Home</a> / <a href="#">Sales</a> / <a href="#">Bags</a> /
-            <span>Cart</span>
-          </div>
-          <img src={cartImg2} alt="" className="page-info-art" />
+  const handleContinueShopping = () => {
+    if (cart && cart.cart_products && cart.cart_products.length > 0) {
+      const storeId = cart.cart_products[0].product.store_id;
+      if (storeId) {
+        navigate(`/store/${storeId}`);
+        return;
+      }
+    }
+
+    navigate("/"); 
+  };
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  const fetchCart = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/cart", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setCart(response.data.cart);
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+      if (error.response?.status === 401) {
+        navigate("/login");
+      }
+    }
+  };
+
+  const handleRemove = async (productId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This item will be removed from your cart!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, remove it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`http://127.0.0.1:8000/api/cart/remove/${productId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        fetchCart();
+        Swal.fire("Removed!", "Product has been removed.", "success");
+      } catch (error) {
+        console.error("Error removing product:", error);
+      }
+    }
+  };
+
+  const handleQuantityChange = async (item, newQuantity) => {
+    const originalQuantity = item.quantity;
+    const productId = item.product.id;
+
+    try {
+      if (newQuantity > originalQuantity) {
+        const diff = newQuantity - originalQuantity;
+        await axios.post("http://127.0.0.1:8000/api/cart/add", {
+          product_id: productId,
+          quantity: diff,
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+      } else if (newQuantity < originalQuantity) {
+        await axios.delete(`http://127.0.0.1:8000/api/cart/remove/${productId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        await axios.post("http://127.0.0.1:8000/api/cart/add", {
+          product_id: productId,
+          quantity: newQuantity,
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+      }
+
+      fetchCart();
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+    }
+  };
+
+  const handleClearCart = async () => {
+    const result = await Swal.fire({
+      title: "Clear entire cart?",
+      text: "This will remove all items!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, clear it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axios.delete("http://127.0.0.1:8000/api/cart/clear", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        fetchCart();
+        Swal.fire("Cleared!", "Your cart is now empty.", "success");
+      } catch (error) {
+        console.error("Error clearing cart:", error);
+      }
+    }
+  };
+
+  if (!cart) {
+    return <div className="loading-spinner"></div>; // عرض دائرة التحميل
+  }
+
+  if (cart.cart_products?.length === 0) {
+    return <div className="p-4 text-center">Your cart is empty 🛒</div>;
+  }
+
+  const calculateTotal = (price, qty) => (price * qty).toFixed(2);
+
+  return (
+    <div className="cart-page p-6">
+      <h2 className="text-2xl font-bold mb-6">Your Shopping Cart</h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-left border">
+          <thead className="cart-head">
+            <tr>
+              <th className="p-3">Product</th>
+              <th className="p-3">Price</th>
+              <th className="p-3">Quantity</th>
+              <th className="p-3">Total</th>
+              <th className="p-3">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cart.cart_products.map((item) => (
+              <tr key={item.id} className="border-t text-center">
+                <td className="p-4 flex items-center gap-4">
+                  <img
+                    src={`http://127.0.0.1:8000/${item.product.image_url}`}
+                    alt={item.product.name}
+                    className="w-24 h-24 object-cover"
+                  />
+                  <p className="font-medium">{item.product.name}</p>
+                </td>
+                <td className="p-4">${item.price}</td>
+                <td className="p-4">
+                  <input
+                    type="number"
+                    value={item.quantity}
+                    min="1"
+                    onChange={(e) =>
+                      handleQuantityChange(item, parseInt(e.target.value))
+                    }
+                  />
+                </td>
+                <td className="p-4">${calculateTotal(item.price, item.quantity)}</td>
+                <td className="p-4">
+                  <button
+                    className="text-red-600 underline"
+                    onClick={() => handleRemove(item.product.id)}
+                  >
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="cart-actions">
+        <button className="continue-btn" onClick={handleContinueShopping}>
+          Continue shopping
+        </button>
+
+        <div className="clear-update">
+          <button onClick={handleClearCart} className="clear-btn">
+            Clear cart
+          </button>
         </div>
       </div>
 
-      {/* Cart Page */}
-      <div className="page-area cart-page spad">
-        <div className="container">
-          <div className="cart-table">
-            <table>
-              <thead>
-                <tr>
-                  <th className="product-th">Product</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th className="total-th">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="product-col">
-                    <img src={cartImg} alt="Product" />
-                    <div className="pc-title">
-                      <h4>Black Shoulder Bag</h4>
-                      <a href="#">Edit Product</a>
-                    </div>
-                  </td>
-                  <td className="price-col">$59.90</td>
-                  <td className="quy-col">
-                    <div className="quy-input">
-                      <span>Qty</span>
-                      <input type="number" defaultValue="1" />
-                    </div>
-                  </td>
-                  <td className="total-col">$59.90</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className="row cart-buttons">
-            <div className="col-lg-5 col-md-5">
-              <div className="site-btn btn-continue">Continue Shopping</div>
-            </div>
-            <div className="col-lg-7 col-md-7 text-lg-right text-left">
-              <div className="site-btn btn-clear">Clear Cart</div>
-              <div className="site-btn btn-line btn-update">Update Cart</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Shipping & Checkout */}
-        <div className="card-warp">
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-4">
-                <div className="shipping-info">
-                  <h4>Shipping Method</h4>
-                  <p>Select the one you want</p>
-                  <div className="shipping-chooes">
-                    <div className="sc-item">
-                      <input type="radio" name="sc" id="one" />
-                      <label htmlFor="one">Next day delivery<span>$4.99</span></label>
-                    </div>
-                    <div className="sc-item">
-                      <input type="radio" name="sc" id="two" />
-                      <label htmlFor="two">Standard delivery<span>$1.99</span></label>
-                    </div>
-                    <div className="sc-item">
-                      <input type="radio" name="sc" id="three" />
-                      <label htmlFor="three">Personal Pickup<span>Free</span></label>
-                    </div>
-                  </div>
-                  <h4>Coupon Code</h4>
-                  <p>Enter your coupon code</p>
-                  <div className="cupon-input">
-                    <input type="text" />
-                    <button className="site-btn">Apply</button>
-                  </div>
-                </div>
-              </div>
-              <div className="offset-lg-2 col-lg-6">
-                <div className="cart-total-details">
-                  <h4>Cart Total</h4>
-                  <p>Final Info</p>
-                  <ul className="cart-total-card">
-                    <li>Subtotal<span>$59.90</span></li>
-                    <li>Shipping<span>Free</span></li>
-                    <li className="total">Total<span>$59.90</span></li>
-                  </ul>
-                  <a className="site-btn btn-full" href="/checkout">Proceed to Checkout</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> {/* End of Cart Page */}
+      <div className="checkout-section">
+        <h3>Order Summary</h3>
+        <p>
+          Total Items:{" "}
+          {cart.cart_products.reduce((sum, item) => sum + item.quantity, 0)}
+        </p>
+        <p>
+          Total Price: $
+          {cart.cart_products
+            .reduce((sum, item) => sum + item.price * item.quantity, 0)
+            .toFixed(2)}
+        </p>
+        <button
+          className="checkout-btn"
+          onClick={() => navigate("/customer/checkout")}
+        >
+          Proceed to Checkout
+        </button>
+      </div>
     </div>
   );
 };

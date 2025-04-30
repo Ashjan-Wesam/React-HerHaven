@@ -13,7 +13,6 @@ h2 {
   font-weight: 600;
   color: #3d3d3d;
   margin-bottom: 25px;
-  border-bottom: 2px solid #eee;
   padding-bottom: 10px;
 }
 
@@ -40,7 +39,7 @@ form {
 }
 
 .editBtn {
-  background-color: #c47acf;
+  background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%);
   color: white;
   padding: 12px 20px;
   font-size: 16px;
