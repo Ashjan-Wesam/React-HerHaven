@@ -78,7 +78,6 @@ const SingleProductPage = () => {
     if (!token) return navigate("/login");
   
     try {
-      // 1. تحقق من المتجر
       const matchResponse = await axios.get(
         `http://127.0.0.1:8000/api/cart/check-store/${product.id}`,
         {
@@ -89,10 +88,8 @@ const SingleProductPage = () => {
       const isMatch = matchResponse.data.match;
   
       if (isMatch) {
-        // ✅ نفس المتجر، أضف المنتج
         return await addProductToCart();
       } else {
-        // ❌ متجر مختلف، اعرض خيارات للمستخدم
         const result = await Swal.fire({
           title: "Different Store Detected",
           text: "Your cart has items from another store. What would you like to do?",

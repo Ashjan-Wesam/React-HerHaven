@@ -1,6 +1,5 @@
 import '../assets/css/Login.css'; 
-import LoginImg from "../assets/img/login2.jpg";
-import Header from '../User/Components/Header';
+import LoginImg from "../assets/img/download (30).jpg";
 import { useNavigate } from 'react-router-dom';
 
 const RegisterSelect = () => {
@@ -12,20 +11,26 @@ const RegisterSelect = () => {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <div className="login-box">
         <div className="login-image">
           <img src={LoginImg} alt="Register Illustration" />
         </div>
         <div className="login-form">
           <h2 className="logo">Her<span>Haven</span></h2>
-          <p>Select your registration type</p>
+          <p className="register-prompt">Select your registration type</p>
 
           <div className="register-options">
-            <button className='loginBtn' onClick={() => handleSelect("customer")}>
+            <button 
+              className='loginBtn customer-btn' 
+              onClick={() => handleSelect("customer")}
+            >
               I'm a Customer
             </button>
-            <button className='loginBtn' onClick={() => handleSelect("owner")}>
+            <button 
+              className='loginBtn owner-btn' 
+              onClick={() => handleSelect("owner")}
+            >
               I'm a Store Owner
             </button>
           </div>

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
+import './UserOrders.css';
 
 const UserOrders = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchOrders();
@@ -11,9 +14,15 @@ const UserOrders = () => {
 
   const fetchOrders = async () => {
     try {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       if (!token) {
-        alert("Token not found, please log in again.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Authentication Required',
+          text: 'Please log in to view your orders',
+          confirmButtonText: 'OK'
+        });
         return;
       }
 
@@ -25,11 +34,31 @@ const UserOrders = () => {
       setOrders(res.data.orders);
     } catch (error) {
       console.error("Error fetching orders", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to load orders. Please try again later.',
+        confirmButtonText: 'OK'
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this order?")) return;
+    const result = await Swal.fire({
+      title: 'Confirm Order Cancellation',
+      text: "Are you sure you want to cancel this order?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, cancel it!',
+      cancelButtonText: 'No, keep it'
+    });
+
+    if (!result.isConfirmed) return;
+
     try {
       const token = localStorage.getItem("token");
       await axios.delete(`http://127.0.0.1:8000/api/orders/${id}`, {
@@ -38,13 +67,25 @@ const UserOrders = () => {
         },
       });
       setOrders((prev) => prev.filter((order) => order.id !== id));
+      
+      Swal.fire(
+        'Cancelled!',
+        'Your order has been cancelled.',
+        'success'
+      );
     } catch (error) {
-      alert("Failed to delete the order.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to cancel the order. Please try again.',
+        confirmButtonText: 'OK'
+      });
     }
   };
 
   const handleShowDetails = async (id) => {
     try {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       const res = await axios.get(`http://127.0.0.1:8000/api/orders/${id}`, {
         headers: {
@@ -53,7 +94,14 @@ const UserOrders = () => {
       });
       setSelectedOrder(res.data.order);
     } catch (error) {
-      alert("Failed to fetch order details.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to load order details. Please try again.',
+        confirmButtonText: 'OK'
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -61,47 +109,106 @@ const UserOrders = () => {
     setSelectedOrder(null);
   };
 
+  if (isLoading) {
+    return (
+      <div className="user-orders__loading">
+        <div className="user-orders__spinner"></div>
+        <p className="user-orders__loading-text">Loading your orders...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="user-orders">
-      <h2>My Orders</h2>
+      <h2 className="user-orders__title">My Orders</h2>
 
-      <table className="orders-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Total Price</th>
-            <th>Status</th>
-            <th>Payment Method</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order, index) => (
-            <tr key={order.id}>
-              <td>{index + 1}</td>
-              <td>{order.total_price} JD</td>
-              <td>{order.status}</td>
-              <td>{order.payment?.method}</td>
-              <td>
-                <button onClick={() => handleShowDetails(order.id)}>View</button>
-                {order.status === "pending" && order.payment?.method === "cod" && (
-                  <button onClick={() => handleDelete(order.id)}>Delete</button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {orders.length === 0 ? (
+        <div className="user-orders__empty">
+          <p className="user-orders__empty-text">You don't have any orders yet.</p>
+        </div>
+      ) : (
+        <div className="user-orders__table-container">
+          <table className="user-orders__table">
+            <thead className="user-orders__table-header">
+              <tr>
+                <th className="user-orders__table-th">#</th>
+                <th className="user-orders__table-th">Total Price</th>
+                <th className="user-orders__table-th">Status</th>
+                <th className="user-orders__table-th">Payment Method</th>
+                <th className="user-orders__table-th">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="user-orders__table-body">
+              {orders.map((order, index) => (
+                <tr key={order.id} className="user-orders__table-row">
+                  <td className="user-orders__table-td">{index + 1}</td>
+                  <td className="user-orders__table-td">{order.total_price} JD</td>
+                  <td className="user-orders__table-td">
+                    <span className={`user-orders__status user-orders__status--${order.status.toLowerCase()}`}>
+                      {order.status}
+                    </span>
+                  </td>
+                  <td className="user-orders__table-td">{order.payment?.method || 'N/A'}</td>
+                  <td className="user-orders__table-td user-orders__actions">
+                    <button 
+                      className="user-orders__button user-orders__button--view"
+                      onClick={() => handleShowDetails(order.id)}
+                    >
+                      View Details
+                    </button>
+                    {order.status === "pending" && order.payment?.method === "cod" && (
+                      <button 
+                        className="user-orders__button user-orders__button--cancel"
+                        onClick={() => handleDelete(order.id)}
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {selectedOrder && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="close-button" onClick={closeModal}>&times;</button>
-            <h3>Order Details #{selectedOrder.id}</h3>
-            <ul>
+        <div className="user-orders__modal-overlay" onClick={closeModal}>
+          <div className="user-orders__modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="user-orders__modal-close" onClick={closeModal}>&times;</button>
+            <h3 className="user-orders__modal-title">Order Details #{selectedOrder.id}</h3>
+            
+            <div className="user-orders__modal-summary">
+              <div className="user-orders__modal-summary-item">
+                <span className="user-orders__modal-summary-label">Total Amount:</span>
+                <span className="user-orders__modal-summary-value">{selectedOrder.total_price} JD</span>
+              </div>
+              <div className="user-orders__modal-summary-item">
+                <span className="user-orders__modal-summary-label">Status:</span>
+                <span className={`user-orders__status user-orders__status--${selectedOrder.status.toLowerCase()}`}>
+                  {selectedOrder.status}
+                </span>
+              </div>
+              <div className="user-orders__modal-summary-item">
+                <span className="user-orders__modal-summary-label">Payment Method:</span>
+                <span className="user-orders__modal-summary-value">
+                  {selectedOrder.payment?.method || 'Not specified'}
+                </span>
+              </div>
+            </div>
+
+            <h4 className="user-orders__modal-subtitle">Order Items</h4>
+            <ul className="user-orders__modal-items">
               {selectedOrder.order_details.map((item) => (
-                <li key={item.id}>
-                  Product ID: {item.product_id} — Quantity: {item.quantity} — Total: {item.total_price} JD
+                <li key={item.id} className="user-orders__modal-item">
+                  <div className="user-orders__modal-item-info">
+                  <span className="user-orders__modal-item-product">
+                         Product: {item.product?.name || 'N/A'}
+                  </span>
+
+                    <span className="user-orders__modal-item-quantity">Qty: {item.quantity}</span>
+                  </div>
+                  <div className="user-orders__modal-item-price">{item.total_price} JD</div>
                 </li>
               ))}
             </ul>

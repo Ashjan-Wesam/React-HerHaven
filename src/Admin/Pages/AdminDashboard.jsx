@@ -105,7 +105,7 @@ const Dashboard = () => {
     style={{
       background: `linear-gradient(135deg, ${purpleTheme.light} 0%, white 100%)`
     }}>
-    <div className="card-icon" style={{ background: purpleTheme.primary }}>
+    <div className="card-icon" >
       <i className="fas fa-box-open"></i>
     </div>
     <h3 style={{ color: purpleTheme.text }}>Products</h3>
@@ -119,7 +119,7 @@ const Dashboard = () => {
     style={{
       background: `linear-gradient(135deg, ${purpleTheme.light} 0%, white 100%)`
     }}>
-    <div className="card-icon" style={{ background: purpleTheme.success }}>
+    <div className="card-icon">
       <i className="fas fa-shopping-cart"></i>
     </div>
     <h3 style={{ color: purpleTheme.text }}>Orders</h3>
@@ -133,7 +133,7 @@ const Dashboard = () => {
     style={{
       background: `linear-gradient(135deg, ${purpleTheme.light} 0%, white 100%)`
     }}>
-    <div className="card-icon" style={{ background: purpleTheme.warning }}>
+    <div className="card-icon" >
       <i className="fas fa-dollar-sign"></i>
     </div>
     <h3 style={{ color: purpleTheme.text }}>Revenue</h3>
@@ -147,7 +147,7 @@ const Dashboard = () => {
     style={{
       background: `linear-gradient(135deg, ${purpleTheme.light} 0%, white 100%)`
     }}>
-    <div className="card-icon" style={{ background: purpleTheme.info }}>
+    <div className="card-icon">
       <i className="fas fa-user-friends"></i>
     </div>
     <h3 style={{ color: purpleTheme.text }}>Customers</h3>
@@ -161,7 +161,7 @@ const Dashboard = () => {
     style={{
       background: `linear-gradient(135deg, ${purpleTheme.light} 0%, white 100%)`
     }}>
-    <div className="card-icon" style={{ background: purpleTheme.info }}>
+    <div className="card-icon" >
       <i className="fas fa-star"></i>
     </div>
     <h3 style={{ color: purpleTheme.text }}>Reviews</h3>
@@ -175,7 +175,7 @@ const Dashboard = () => {
     style={{
       background: `linear-gradient(135deg, ${purpleTheme.light} 0%, white 100%)`
     }}>
-    <div className="card-icon" style={{ background: purpleTheme.info }}>
+    <div className="card-icon" >
       <i className="fas fa-user-tie"></i>
     </div>
     <h3 style={{ color: purpleTheme.text }}>Owners</h3>

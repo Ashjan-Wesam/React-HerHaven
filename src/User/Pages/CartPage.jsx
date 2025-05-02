@@ -131,7 +131,7 @@ const CartPage = () => {
   };
 
   if (!cart) {
-    return <div className="loading-spinner"></div>; // عرض دائرة التحميل
+    return <div className="loading-spinner"></div>; 
   }
 
   if (cart.cart_products?.length === 0) {

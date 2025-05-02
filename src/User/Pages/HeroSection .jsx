@@ -33,7 +33,7 @@ const HeroSection = () => {
         From your home to the business world!<br /><br />
         We're here to support you
       </h2>
-      <a href="" className="site-btn">JOIN US NOW</a>
+      <a href="/register-owner" className="site-btn">JOIN US NOW</a>
     </div>
   </div>
 </section>
@@ -48,7 +48,7 @@ const HeroSection = () => {
       <h2 style={{ fontSize: "40px", color: "white" , paddingRight: "80px"}}>
       <span>Support Women’s Projects,<br /></span>Start Here
       </h2>
-      <a href="" className="site-btn">JOIN US NOW</a>
+      <a href="/register-customer" className="site-btn">SHOP NOW</a>
     </div>
   </div>
 </section>

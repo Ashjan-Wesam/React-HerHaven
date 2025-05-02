@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../AuthContext"; 
 import "../assets/css/Login.css"; 
-import LoginImg from "../assets/img/login2.jpg";
+import LoginImg from "../assets/img/download (30).jpg";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -67,7 +67,7 @@ const Login = () => {
             Her<span>Haven</span>
           </h2>
           <p>Sign into your account</p>
-          <form onSubmit={handleLogin}>
+          <form className="loginForm" onSubmit={handleLogin}>
             <input
               type="email"
               placeholder="Email address"

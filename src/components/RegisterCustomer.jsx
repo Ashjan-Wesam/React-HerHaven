@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import '../assets/css/Login.css';
-import LoginImg from "../assets/img/login2.jpg";
-import Header from '../User/Components/Header';
+import LoginImg from "../assets/img/download (30).jpg";
 
 const RegisterCustomer = () => {
   const [formData, setFormData] = useState({
@@ -48,8 +47,11 @@ const RegisterCustomer = () => {
           <img src={LoginImg} alt="Register Illustration" />
         </div>
         <div className="login-form">
-          <h2 className="logo">Shop unique home products</h2>
-          <form onSubmit={handleRegister}>
+        <h2 className="logo">
+            Her<span>Haven</span>
+          </h2>
+          <p  className="register-prompt">Shop unique home products</p>
+          <form className="loginForm" onSubmit={handleRegister}>
             <input type="text" name="full_name" placeholder="Full Name" value={formData.full_name} onChange={handleChange} required />
             <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} required />
             <input type="text" name="phone_number" placeholder="Phone Number" value={formData.phone_number} onChange={handleChange} required />

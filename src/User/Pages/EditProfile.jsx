@@ -91,7 +91,7 @@ const EditProfile = () => {
         },
       });
 
-      console.log('Update Response:', res); // عرض استجابة التحديث في الـ console
+      console.log('Update Response:', res); 
       Swal.fire('Success', 'Profile updated successfully!', 'success');
       fetchUserProfile();
     } catch (error) {
@@ -101,7 +101,7 @@ const EditProfile = () => {
   };
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>; // عرض رسالة الخطأ إذا كانت موجودة
+  if (error) return <div>{error}</div>; 
 
   return (
     <div className="edit-profile-page" style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>

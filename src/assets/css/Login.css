@@ -18,11 +18,11 @@ body {
   .login-box {
     display: flex;
     background: #333;
-    border-radius: 8px;
+    border:7px solid rgb(170,122,208);
     overflow: hidden;
     width: 60%;
-    margin: 2% auto;
-    height: 600px;
+    margin: 10% auto;
+    border-radius: 30px;
   }
   
   .login-image {
@@ -42,16 +42,18 @@ body {
     flex-direction: column;
     justify-content: center;
     color: white;
+    background-color: #333;
   }
-  
+  .loginForm{
+    gap: 0;
+  }  
   .logo {
-    font-size: 24px;
+    font-size: 3rem;
     font-weight: bold;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: white;
+    color: rgb(170,122,208);
   }
   .logo span{
     color: #7d4a89;
@@ -63,23 +65,26 @@ body {
     margin: 10px 0;
     border: none;
     border-radius: 5px;
-    background: #444;
-    color: white;
+    background: white;
+    color: #333;
+  }
+  .catOption{
+    color: #333;
   }
   
   .loginBtn{
-    background: #7d4a89;
+    background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%);
     color: white;
     padding: 10px;
     border: none;
     width: 100%;
     cursor: pointer;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 1.5rem !important;
   }
   
   .loginBtn:hover {
-    background: #65366f;
+    background: rgb(170, 122, 208) !important;
   }
   
   .register-link {
@@ -88,7 +93,7 @@ body {
   }
   
   .register-link a {
-    color: #7d4a89;
+    color: rgb(170, 122, 208) !important;
     text-decoration: none;
   }
   
@@ -99,3 +104,139 @@ body {
 
     font-size: 18px !important;
   }
+
+
+  /* Main container */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 20px;
+  margin: auto;
+}
+
+/* Login box */
+.login-box {
+  display: flex;
+  max-width: 900px;
+  width: 100%;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Image section */
+.login-image {
+  flex: 1;
+}
+
+.login-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Form section */
+.login-form {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo {
+  font-size: 3.8rem;
+  color: white;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.logo span {
+  color: rgb(170,122,208);
+  font-weight: bold;
+}
+
+.register-prompt {
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+}
+.forgot-password {
+  color: rgb(170,122,208) !important;
+}
+.login-form p{
+  color: white;
+  font-size: 1.5rem;
+}
+
+/* Register options */
+.register-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.loginBtn {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.customer-btn {
+  
+  font-size: 1.5rem
+}
+
+.customer-btn:hover {
+  
+  transform: translateY(-2px);
+}
+
+.owner-btn {
+  font-size: 1.5rem
+}
+
+.owner-btn:hover {
+  background-color: #e9ecef;
+  transform: translateY(-2px);
+}
+
+/* Register link */
+.register-link {
+  color: white !important;
+  margin-top: 20px;
+}
+
+.register-link a {
+  color: rgb(170, 122, 208);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .login-box {
+    flex-direction: column;
+  }
+  
+  .login-image {
+    display: none;
+  }
+  
+  .login-form {
+    padding: 30px;
+  }
+}

@@ -101,7 +101,7 @@
 .edit-category-btn,
 .show-category-btn,
 .delete-category-btn {
-  background-color: #007bff;
+  background-color: #ae3cc5;
   color: #fff;
   padding: 8px 12px;
   border: none;
@@ -113,7 +113,7 @@
 .edit-category-btn:hover,
 .show-category-btn:hover,
 .delete-category-btn:hover {
-  background-color: #0056b3;
+  background-color: #b369b3;
 }
 
 .edit-category-btn {
@@ -183,7 +183,6 @@
 .modal-content button:hover {
   background-color: #0056b3;
 }
-/* حاوية الصفحة الرئيسية */
 .show-category-container {
   padding: 20px;
   background-color: #f9f9f9;
@@ -201,7 +200,6 @@
   margin-bottom: 10px;
 }
 
-/* وصف الفئة */
 .category-description {
   font-size: 1.1rem;
   color: #777;
@@ -209,7 +207,6 @@
   line-height: 1.6;
 }
 
-/* حقل البحث */
 .search-input {
   width: 100%;
   padding: 10px;
@@ -224,7 +221,6 @@
   border-color: #007BFF;
 }
 
-/* قائمة المنتجات */
 .product-list {
   list-style-type: none;
   padding: 0;
@@ -257,7 +253,6 @@
   font-weight: 500;
 }
 
-/* في حالة عدم وجود منتجات مطابقة */
 .product-list li {
   font-size: 1rem;
   color: #777;
@@ -265,13 +260,11 @@
   text-align: center;
 }
 
-/* تحسين المظهر عند التحميل */
 .show-category-container p {
   font-size: 1.2rem;
   text-align: center;
   color: #007BFF;
 }
-/* حاوية كل منتج */
 .product-item {
   display: flex;
   align-items: center;
@@ -287,7 +280,6 @@
   transform: translateY(-5px);
 }
 
-/* تنسيق صورة المنتج */
 .product-image {
   margin-right: 20px;
 }
@@ -299,7 +291,6 @@
   border-radius: 8px;
 }
 
-/* تفاصيل المنتج مثل الاسم والسعر */
 .product-details {
   flex-grow: 1;
 }

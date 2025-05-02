@@ -45,18 +45,20 @@
     
   }
   
-  .search-filter {
+  .search-filter-cat {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+    align-items: center;
   }
   
   .search-input, .category-select {
-    padding: 10px 15px;
+    padding: 10px 15px !important;
     border-radius: 8px;
     border: 1px solid #ccc;
     min-width: 220px;
     font-size: 16px;
+    margin: 0 !important;
   }
   
   .stores-count {
@@ -98,6 +100,7 @@
     height: 100px;
     object-fit: contain;
     margin-bottom: 15px;
+    border-color: #aa7ad0 !important;
   }
   
   .store-name-cat {
@@ -159,13 +162,10 @@
     transition: background-color 0.3s;
   }
   
-  .pagination-button:hover {
-    background-color: #2575fc;
-    color: white;
-  }
+  
   
   .pagination-button.active {
-    background-color: #6a11cb;
+    background: linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%);
     color: white;
   }
   

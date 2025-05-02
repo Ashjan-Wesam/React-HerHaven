@@ -1,7 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect  } from 'react';
+import { Link } from "react-router-dom";
 import axios from 'axios';
 import '../assets/css/Login.css';
-import LoginImg from "../assets/img/login2.jpg";
+import LoginImg from "../assets/img/download (30).jpg";
+import CreatableSelect from 'react-select/creatable';
+
 
 const RegisterOwner = () => {
   const [formData, setFormData] = useState({
@@ -118,9 +121,11 @@ const RegisterOwner = () => {
 
   const renderStep1 = () => (
     <div>
-      <h2 className="logo">Grow your home business with us</h2>
-      <p>Personal Information</p>
-      <form>
+       <h2 className="logo">
+            Her<span>Haven</span>
+          </h2>
+      <p  className="register-prompt">Personal Information</p>
+      <form className="loginForm">
         <input type="text" name="full_name" placeholder="Full Name" value={formData.full_name} onChange={handleChange} required />
         <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} required />
         <input type="text" name="phone_number" placeholder="Phone Number" value={formData.phone_number} onChange={handleChange} required />
@@ -135,50 +140,59 @@ const RegisterOwner = () => {
 
   const renderStep2 = () => (
     <div>
-      <h2 className="logo">Grow your home business with us</h2>
-      <p>Store Information</p>
-      <form onSubmit={handleRegister}>
+        <h2 className="logo">
+            Her<span>Haven</span>
+          </h2>
+      <p  className="register-prompt">Store Information</p>
+      <form  className="loginForm"  onSubmit={handleRegister}>
         <input type="text" name="store_name" placeholder="Store Name" value={formData.store_name} onChange={handleChange} required />
-        <textarea name="description" placeholder="Store Description" value={formData.description} onChange={handleChange}></textarea>
+        <textarea style={{ color: 'black' }} name="description" placeholder="Store Description" value={formData.description} onChange={handleChange}></textarea>
         <p>Store Logo</p>
         <input type="file" name="logo_url" onChange={handleFileChange} accept="image/*" />
 
-        <p>Select Categories (you can choose multiple)</p>
-<select
-  name="category_ids"
-  multiple
-  value={formData.category_ids}
-  onChange={(e) => {
-    const selectedValues = Array.from(e.target.selectedOptions).map(option => option.value);
-    setFormData({ ...formData, category_ids: selectedValues });
+        <p>Select or Add Categories</p>
+<CreatableSelect 
+  isMulti
+  options={categories.map(cat => ({ value: String(cat.id), label: cat.name }))}
+  onChange={(selectedOptions) => {
+    const values = selectedOptions.map(opt => opt.value);
+    setFormData({ ...formData, category_ids: values });
   }}
->
-  {categories.map((category) => (
-    <option key={category.id} value={category.id}>{category.name}</option>
-  ))}
-</select>
+  onCreateOption={async (inputValue) => {
+    try {
+      const token = localStorage.getItem('token');
 
-<hr />
+const response = await axios.post('http://127.0.0.1:8000/api/owner/categories', {
+  categories: [{ name: inputValue, description: '' }]
+}, {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+});
 
-<h4>Add New Categories</h4>
-<div className="new-category">
-  <input
-    type="text"
-    placeholder="New Category Name"
-    value={newCategoryName}
-    onChange={(e) => setNewCategoryName(e.target.value)}
-  />
-  <textarea
-    placeholder="Category Description"
-    value={newCategoryDesc}
-    onChange={(e) => setNewCategoryDesc(e.target.value)}
-  ></textarea>
-  <button type="button" onClick={handleAddCategory} className="loginBtn">Add Category</button>
-</div>
+      const newCategory = response.data.category;
+      const updatedCategories = [...categories, newCategory];
+      setCategories(updatedCategories);
 
-        <button type="submit" className="loginBtn">Register Store</button>
+      setFormData((prevData) => ({
+        ...prevData,
+        category_ids: [...prevData.category_ids, String(newCategory.id)]
+      }));
+
+      setMessage('New category added and selected');
+    } catch (error) {
+      setMessage('Failed to create category');
+    }
+  }}
+/>
+
+
+        <button type="submit" className="loginBtn" style={{ margin: "16px 0" }}>Register Store</button>
       </form>
       <button type="button" className="loginBtn" onClick={handleBackStep}>Back</button>
+      <p className="register-link">
+            Already have an account? <Link to="/login">Login</Link>
+          </p>
     </div>
   );
 

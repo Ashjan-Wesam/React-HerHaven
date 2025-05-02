@@ -88,6 +88,7 @@ const Header = () => {
                 <>
                   <li><Link to="/customer/edit-profile">Your Profile</Link></li>
                   <li><Link to="/customer/my-orders">My Orders</Link></li>
+                  <li><Link to="/customer/order-requests">Request Order</Link></li>
                   <li><button onClick={logout}>Logout</button></li>
                 </>
               )}

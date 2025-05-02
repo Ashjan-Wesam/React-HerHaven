@@ -15,6 +15,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Login from "./components/Login";
 import RegisterCustomer from "./components/RegisterCustomer";
 import RegisterOwner from "./components/RegisterOwner";
+import RegisterSelect from "./components/RegisterSelect";
 import Home from "./User/Pages/Home";
 import CategoryPage from "./User/Pages/CategoryPage";
 
@@ -55,6 +56,7 @@ function AppRoutes() {
              <Route path="/login" element={<Login />} />
              <Route path="/register-customer" element={<RegisterCustomer />} />
              <Route path="/register-owner" element={<RegisterOwner />} />
+             <Route path="/register" element={<RegisterSelect />} />
              <Route path="/shop" element={<CategoryPage />} />
              <Route path="/store/:storeId" element={<StoreDetail />} />
              <Route path="/Products/:productId" element={<SingleProductPage />} />
