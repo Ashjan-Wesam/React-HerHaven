@@ -2467,11 +2467,7 @@ ol {
 	align-items: center;
   }
   
-  .product-card p:last-child::before {
-	content: '💰';
-	margin-right: 8px;
-	font-size: 1rem;
-  }
+
   
   /* Empty State */
   .product-list:empty::after {
@@ -2535,7 +2531,7 @@ ol {
   .single-product-content {
 	display: flex;
 	gap: 40px;
-	align-items: flex-start;
+	align-items: center;
   }
   
   .product-image-section img {
@@ -2664,7 +2660,7 @@ ol {
   }
   
   .product-info-section h2 {
-	font-size: 2rem;
+	font-size: 3rem;
 	margin-bottom: 1rem;
 	color: #222;
   }

@@ -6,6 +6,7 @@ import CheckoutPage from "../Pages/CheckoutPage";
 import UserOrders from "../Pages/UserOrders";
 import OrderRequests from "../Pages/OrderRequests";
 import EditProfile from "../Pages/EditProfile";
+import WishlistPage from "../Pages/WishlistPage";
 
 const UserLayout = () => {
   return (
@@ -22,6 +23,7 @@ const UserLayout = () => {
           <Route path="my-orders" element={<UserOrders />} />
           <Route path="order-requests" element={<OrderRequests />} />
           <Route path="edit-profile" element={<EditProfile />} />
+          <Route path="wishlist" element={<WishlistPage />} />
  
 
         </Routes>

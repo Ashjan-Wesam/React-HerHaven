@@ -65,7 +65,7 @@ const Header = () => {
         </ul>
 
         <div className="header-icons">
-          <Link to="/wishlist" className="icon-btn">
+          <Link to="/customer/wishlist" className="icon-btn">
             <i className="fa fa-heart"></i>
           </Link>
 

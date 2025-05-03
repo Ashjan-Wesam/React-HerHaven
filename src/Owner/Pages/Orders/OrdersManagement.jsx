@@ -4,7 +4,10 @@ import axios from "axios";
 
 const OrdersManagement = () => {
   const [orders, setOrders] = useState([]);
+  const [allOrders, setAllOrders] = useState([]);
   const [view, setView] = useState("orders");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [stats, setStats] = useState({
     completed: 0,
     notCompleted: 0,
@@ -13,7 +16,6 @@ const OrdersManagement = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedRequest, setSelectedRequest] = useState(null);
-  
 
   const token = localStorage.getItem("token");
 
@@ -24,14 +26,19 @@ const OrdersManagement = () => {
           axios.get("http://127.0.0.1:8000/api/owner/orders", {
             headers: { Authorization: `Bearer ${token}` },
           }),
+
           axios.get("http://127.0.0.1:8000/api/owner/orders-with-designs", {
+            
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
 
+        
         const ordersData = ordersRes.data;
         const designOrders = designsRes.data;
+        console.log(designOrders);
 
+        setAllOrders(view === "orders" ? ordersData : designOrders);
         setOrders(view === "orders" ? ordersData : designOrders);
 
         let completed = 0;
@@ -58,7 +65,23 @@ const OrdersManagement = () => {
     };
 
     fetchOrdersAndRequests();
-  }, [view, token]);
+  }, [view, showModal, token]);
+
+  useEffect(() => {
+    let filtered = [...allOrders];
+
+    if (searchTerm) {
+      filtered = filtered.filter((order) =>
+        order.user.full_name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (statusFilter) {
+      filtered = filtered.filter((order) => order.status === statusFilter);
+    }
+
+    setOrders(filtered);
+  }, [searchTerm, statusFilter, allOrders]);
 
   const updateOrderStatus = async (orderId, status) => {
     await axios.post(
@@ -142,83 +165,107 @@ const OrdersManagement = () => {
       <div className="tab-buttons">
         <button
           className={view === "orders" ? "active" : ""}
-          onClick={() => setView("orders")}
+          onClick={() => {
+            setView("orders");
+            setSearchTerm("");
+            setStatusFilter("");
+          }}
         >
           Orders
         </button>
         <button
           className={view === "requests" ? "active" : ""}
-          onClick={() => setView("requests")}
+          onClick={() => {
+            setView("requests");
+            setSearchTerm("");
+            setStatusFilter("");
+          }}
         >
           Pending Requests
         </button>
       </div>
 
+      {view === "orders" && (
+        <div className="filters">
+          <input
+            type="text"
+            placeholder="Search by customer name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="">All Statuses</option>
+            <option value="completed">Completed</option>
+            <option value="not completed">Not Completed</option>
+          </select>
+        </div>
+      )}
+
       <div className="orders-div">
+        {view === "orders" &&
+          orders.map((order) => (
+            <div key={order.id} className="order-card">
+              <h3>Order #{order.id}</h3>
+              <p>Customer: {order.user.full_name}</p>
+              <p>Status: {order.status}</p>
 
-      {view === "orders" &&
-        orders.map((order) => (
-          <div key={order.id} className="order-card">
-            <h3>Order #{order.id}</h3>
-            <p>Customer: {order.user.full_name}</p>
-            <p>Status: {order.status}</p>
-
-            {order.status !== "completed" && (
-              <button onClick={() => updateOrderStatus(order.id, "completed")}>
-                Mark as Completed
-              </button>
-            )}
-
-            <button className="view-btn" onClick={() => openModal(order)}>
-              View
-            </button>
-          </div>
-        ))}
-    </div>
-    <div className="orders-div">
-      {view === "requests" &&
-        orders
-          .flatMap((order) =>
-            order.order_details.flatMap((detail) =>
-              (detail.product.design_requests || []).map((dr) => ({
-                designRequest: dr,
-                product: detail.product,
-                quantity: detail.quantity,
-              }))
-            )
-          )
-          .map(({ designRequest, product, quantity }) => (
-            <div key={designRequest.id} className="order-card">
-              <h3>{product.name}</h3>
-              <div>
-              <p>
-                <strong>Quantity:</strong> {quantity}
-              </p>
-              <p>
-                <strong>Design:</strong> {designRequest.design_details}
-              </p>
-              <p>Status: {designRequest.status}</p>
-</div>
-              {designRequest.status === "pending" && (
-                <div>
-                  <button onClick={() => updateDesignStatus(designRequest.id, "approved")}>
-                    Approve
-                  </button>
-                  <button onClick={() => updateDesignStatus(designRequest.id, "rejected")}>
-                    Reject
-                  </button>
-                </div>
+              {order.status !== "completed" && (
+                <button onClick={() => updateOrderStatus(order.id, "completed")}>
+                  Mark as Completed
+                </button>
               )}
 
-              <button
-                className="view-btn"
-                onClick={() => openRequestModal(product, designRequest, quantity)}
-              >
+              <button className="view-btn" onClick={() => openModal(order)}>
                 View
               </button>
             </div>
           ))}
+      </div>
+
+      <div className="orders-div">
+      {view === "requests" && orders && orders.length > 0 &&
+  orders
+    .flatMap((order) =>
+      order.order_details.flatMap((detail) =>
+        (detail.product.design_requests || []).map((dr) => ({
+          designRequest: dr,
+          product: detail.product,
+          quantity: detail.quantity,
+        }))
+      )
+    )
+    .map(({ designRequest, product, quantity }) => (
+      <div key={designRequest.id} className="order-card">
+        <h3>{product.name}</h3>
+        <p><strong>Quantity:</strong> {quantity}</p>
+        <p><strong>Design:</strong> {designRequest.design_details}</p>
+        <p>Status: {designRequest.status}</p>
+
+        {designRequest.status === "pending" && (
+          <div>
+            <button onClick={() => updateDesignStatus(designRequest.id, "approved")}>
+              Approve
+            </button>
+            <button onClick={() => updateDesignStatus(designRequest.id, "rejected")}>
+              Reject
+            </button>
           </div>
+        )}
+
+        <button
+          className="view-btn"
+          onClick={() => openRequestModal(product, designRequest, quantity)}
+        >
+          View
+        </button>
+      </div>
+    ))}
+
+
+      </div>
 
       {showModal && (selectedOrder || selectedRequest) && (
         <div className="modal-overlay" onClick={closeModal}>

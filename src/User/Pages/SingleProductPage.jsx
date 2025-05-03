@@ -11,10 +11,14 @@ const SingleProductPage = () => {
   const [customDesign, setCustomDesign] = useState("");
   const [reviewComment, setReviewComment] = useState("");
   const [reviewRating, setReviewRating] = useState(5);
+  const [charsRemaining, setCharsRemaining] = useState(150); 
   const navigate = useNavigate();
   const [reviews, setReviews] = useState([]);
   const [canReview, setCanReview] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [inWishlist, setInWishlist] = useState(false);
+  const [currentReviewPage, setCurrentReviewPage] = useState(1);
+  const reviewsPerPage = 6;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -22,7 +26,7 @@ const SingleProductPage = () => {
         const response = await axios.get(`http://127.0.0.1:8000/api/owner/products/${productId}`);
         setProduct(response.data);
 
-        const related = await axios.get(`http://127.0.0.1:8000/api/related-products/${response.data.category_id}/${response.data.store_id}`);
+        const related = await axios.get(`http://127.0.0.1:8000/api/related-products/${response.data.category_id}/${response.data.store_id}/${productId}`);
         setRelatedProducts(related.data);
 
         const resReviews = await axios.get(`http://127.0.0.1:8000/api/reviews/${productId}`);
@@ -33,16 +37,66 @@ const SingleProductPage = () => {
           const check = await axios.get(`http://127.0.0.1:8000/api/can-review/${productId}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
-          console.log("Can Review Status:", check.data.allowed);
-
           setCanReview(check.data.allowed);
+        
+          const wishlistCheck = await axios.get(`http://127.0.0.1:8000/api/wishlist`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const isInWishlist = wishlistCheck.data.some(item => item.product.id === response.data.id);
+          setInWishlist(isInWishlist);
         }
+        
       } catch (error) {
         console.error("Error loading product details:", error);
       }
     };
     fetchProduct();
   }, [productId]);
+
+  // حساب المراجعات للصفحة الحالية
+  const indexOfLastReview = currentReviewPage * reviewsPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+  const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
+  const totalReviewPages = Math.ceil(reviews.length / reviewsPerPage);
+
+  const handleReviewPageChange = (pageNumber) => {
+    setCurrentReviewPage(pageNumber);
+  };
+
+  const handleReviewChange = (e) => {
+    const value = e.target.value;
+    if (value.length <= 150) {
+      setReviewComment(value);
+      setCharsRemaining(150 - value.length);
+    }
+  };
+
+  const toggleWishlist = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return navigate("/login");
+  
+    try {
+      if (inWishlist) {
+        await axios.delete(`http://127.0.0.1:8000/api/wishlist/${product.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        Swal.fire({ icon: "success", title: "Removed", text: "Product removed from wishlist" });
+      } else {
+        await axios.post(
+          "http://127.0.0.1:8000/api/wishlist",
+          { product_id: product.id },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        Swal.fire({ icon: "success", title: "Added", text: "Product added to wishlist" });
+      }
+  
+      setInWishlist(!inWishlist);
+    } catch (error) {
+      console.error("Wishlist error:", error);
+      Swal.fire({ icon: "error", title: "Error", text: "Something went wrong." });
+    }
+  };
+  
 
   const sendDesignRequest = async (same = false) => {
     const token = localStorage.getItem("token");
@@ -115,8 +169,6 @@ const SingleProductPage = () => {
     }
   };
   
-  
-  
   const addProductToCart = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -147,7 +199,9 @@ const SingleProductPage = () => {
       Swal.fire({ icon: "error", title: "Oops...", text: "Failed to add the product to the cart." });
     }
   };
+
   if (!product) return <div>Loading...</div>;
+  
   return (
     <div className="single-product-wrapper">
       <div className="single-product-content">
@@ -194,32 +248,11 @@ const SingleProductPage = () => {
               ORDER NOW
             </button>
           )}
-        </div>
-      </div>
+          <button onClick={toggleWishlist} className="wishlist-button">
+  {inWishlist ? "Remove from Wishlist ❤️" : "Add to Wishlist 🤍"}
+</button>
 
-      <div className="product-reviews-section">
-        <h3>Customer Reviews</h3>
-        {reviews.length === 0 ? (
-          <p>No reviews yet.</p>
-        ) : (
-          <div className="reviews-list">
-            {reviews.map((review) => (
-              <div key={review.id} className="review-card">
-                <div className="review-header">
-                  <strong>{review.user.full_name}</strong>
-                  <div className="review-stars">
-                    {Array.from({ length: 5 }, (_, index) => (
-                      <span key={index} style={{ color: index < review.rating ? "#ffc107" : "#e4e5e9" }}>
-                        ★
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <p className="review-comment">{review.review_text}</p>
-              </div>
-            ))}
-          </div>
-        )}
+        </div>
       </div>
 
       {canReview && (
@@ -227,9 +260,13 @@ const SingleProductPage = () => {
           <h4>Leave a Review</h4>
           <textarea
             value={reviewComment}
-            onChange={(e) => setReviewComment(e.target.value)}
-            placeholder="Write your review..."
+            onChange={handleReviewChange}
+            placeholder="Write your review (max 150 characters)..."
+            maxLength={150}
           ></textarea>
+          <small className={`chars-counter ${charsRemaining === 0 ? 'chars-limit' : ''}`}>
+            {charsRemaining} characters remaining
+          </small>
           <div className="rating-stars">
             {Array.from({ length: 5 }, (_, index) => (
               <span
@@ -252,15 +289,10 @@ const SingleProductPage = () => {
               const token = localStorage.getItem("token");
               if (!token) return navigate("/login");
 
-              const user = JSON.parse(localStorage.getItem("user"));
-              if (!user || !user.id) return navigate("/login");
-
-              if (!token) {
-                console.log("Token not found");
-                return navigate("/login");
+              if (reviewComment.trim().length === 0) {
+                Swal.fire("Error", "Please write your review before submitting.", "error");
+                return;
               }
-
-              console.log("Sending review with token:", token);
 
               try {
                 await axios.post(
@@ -279,24 +311,72 @@ const SingleProductPage = () => {
                 Swal.fire("Thank you!", "Your review was submitted.", "success");
                 setReviewComment("");
                 setReviewRating(5);
+                setCharsRemaining(150);
               } catch (err) {
                 console.error("Error Submitting review:", err);
                 Swal.fire("Error", "There was an error submitting your review.", "error");
               }
             }}
+            disabled={reviewComment.trim().length === 0}
           >
             Submit Review
           </button>
         </div>
       )}
+
+      <div className="product-reviews-section">
+        <h3>Customer Reviews</h3>
+        {reviews.length === 0 ? (
+          <p>No reviews yet.</p>
+        ) : (
+          <div className="reviews-list" style={{width: "100%"}}>
+            {currentReviews.map((review) => (
+              <div key={review.id} className="review-card-oo">
+                <div className="review-header">
+                  <strong>{review.user.full_name}</strong>
+                  <div className="review-stars">
+                    {Array.from({ length: 5 }, (_, index) => (
+                      <span key={index} style={{ color: index < review.rating ? "#ffc107" : "#e4e5e9" }}>
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <p className="review-comment">{review.review_text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {reviews.length > reviewsPerPage && (
+          <div className="reviews-pagination">
+            {Array.from({ length: totalReviewPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => handleReviewPageChange(i + 1)}
+                className={`pagination-number ${currentReviewPage === i + 1 ? "active" : ""}`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
       <div className="related-products-section">
         <h3>Related Products</h3>
-        <div className="related-products-list">
+        <div className="product-grid">
           {relatedProducts.slice(0, 4).map((p) => (
-            <div key={p.id} className="related-product-card">
-              <img src={`http://127.0.0.1:8000/${p.image_url}`} alt={p.name} />
-              <p>{p.name}</p>
-              <span>${p.price}</span>
+            <div key={p.id} className="producr-card">
+              <div className="product-info">
+                <div className="product-image-container">
+                  <img src={`http://127.0.0.1:8000/${p.image_url}`} alt={p.name} className="product-image"/>
+                </div> 
+                <h3 className="product-name">{p.name}</h3>
+                <p className="product-price">JD{p.price}</p>
+                <p className="product-category">{p.category}</p>
+                <p className="product-description">{p.description}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -307,4 +387,5 @@ const SingleProductPage = () => {
     </div>
   );
 };
+
 export default SingleProductPage;

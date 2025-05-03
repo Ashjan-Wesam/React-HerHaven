@@ -42,7 +42,7 @@ const SiteReviews = () => {
 
   return (
     <section className="site-reviews">
-      <div className="reviews-container">
+      <div className="reviews-container-site">
         <h2 className="site-reviews-title">
           <span className="title-decoration">❝</span>
           Voices Of Satisfaction

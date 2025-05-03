@@ -18,6 +18,7 @@ import ProductShow from "../Pages/Products/ProductShow";
 import EditProduct from "../Pages/Products/EditProduct";
 import DiscountsPage from "../Pages/Discounts/DiscountsPage";
 import DiscountForm from "../Pages/Discounts/DiscountForm";
+import DesignRequests from "../Pages/Orders/DesignRequests";
 
 
 const OwnerLayout = () => {
@@ -43,6 +44,7 @@ const OwnerLayout = () => {
             <Route path="products/edit/:id" element={<EditProduct />} />
             
             <Route path="orders" element={<OrdersManagement />} />
+            <Route path="orders-req" element={<DesignRequests />} />
             
             <Route path="reviews" element={<ReviewsManagement />} />
             <Route path="settings" element={<StoreSetting />} />

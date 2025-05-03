@@ -22,8 +22,7 @@ const OwnerDashboard = () => {
     top_selling_products: [],
     recent_orders: [],
     products_per_category: [],
-    // monthly_revenue: [],
-    // sales_data: []
+  
   });
 
   const store = JSON.parse(localStorage.getItem("store"));
