@@ -1,216 +1,199 @@
 import "../../../assets/css/ownerStyles/Orders.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const OrdersManagement = () => {
   const [orders, setOrders] = useState([]);
-  const [allOrders, setAllOrders] = useState([]);
-  const [view, setView] = useState("orders");
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [stats, setStats] = useState({
     completed: 0,
     notCompleted: 0,
-    pendingRequests: 0,
   });
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [selectedRequest, setSelectedRequest] = useState(null);
-
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const fetchOrdersAndRequests = async () => {
+    const fetchOrders = async () => {
       try {
-        const [ordersRes, designsRes] = await Promise.all([
-          axios.get("http://127.0.0.1:8000/api/owner/orders", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
+        const ordersRes = await axios.get("http://127.0.0.1:8000/api/owner/orders", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-          axios.get("http://127.0.0.1:8000/api/owner/orders-with-designs", {
-            
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-
-        
         const ordersData = ordersRes.data;
-        const designOrders = designsRes.data;
-        console.log(designOrders);
-
-        setAllOrders(view === "orders" ? ordersData : designOrders);
-        setOrders(view === "orders" ? ordersData : designOrders);
+        setOrders(ordersData);
+        setFilteredOrders(ordersData);
 
         let completed = 0;
         let notCompleted = 0;
-        let pendingRequests = 0;
 
         ordersData.forEach((order) => {
           if (order.status === "completed") completed++;
           else notCompleted++;
         });
 
-        designOrders.forEach((order) => {
-          order.order_details.forEach((detail) => {
-            detail.product.design_requests?.forEach((dr) => {
-              if (dr.status === "pending") pendingRequests++;
-            });
-          });
-        });
-
-        setStats({ completed, notCompleted, pendingRequests });
+        setStats({ completed, notCompleted });
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
     };
 
-    fetchOrdersAndRequests();
-  }, [view, showModal, token]);
+    fetchOrders();
+  }, [token]);
 
   useEffect(() => {
-    let filtered = [...allOrders];
+    // Apply filters whenever searchTerm or statusFilter changes
+    let result = orders;
 
+    // Apply status filter
+    if (statusFilter !== "all") {
+      result = result.filter(order => order.status === statusFilter);
+    }
+
+    // Apply search filter
     if (searchTerm) {
-      filtered = filtered.filter((order) =>
-        order.user.full_name.toLowerCase().includes(searchTerm.toLowerCase())
+      const term = searchTerm.toLowerCase();
+      result = result.filter(order => 
+        order.id.toString().includes(term) ||
+        order.user.full_name.toLowerCase().includes(term)
       );
     }
 
-    if (statusFilter) {
-      filtered = filtered.filter((order) => order.status === statusFilter);
-    }
-
-    setOrders(filtered);
-  }, [searchTerm, statusFilter, allOrders]);
+    setFilteredOrders(result);
+  }, [searchTerm, statusFilter, orders]);
 
   const updateOrderStatus = async (orderId, status) => {
-    await axios.post(
-      `http://127.0.0.1:8000/api/owner/orders/${orderId}/complete`,
-      { status },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to mark this order as completed!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, mark as completed!",
+      });
 
-    setOrders((prev) =>
-      prev.map((order) => (order.id === orderId ? { ...order, status } : order))
-    );
-  };
+      if (result.isConfirmed) {
+        await axios.post(
+          `http://127.0.0.1:8000/api/owner/orders/${orderId}/complete`,
+          { status },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-  const updateDesignStatus = async (id, status) => {
-    await axios.post(
-      `http://127.0.0.1:8000/api/owner/design-requests/${id}/update`,
-      { status },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+        const updatedOrders = orders.map((order) => 
+          order.id === orderId ? { ...order, status } : order
+        );
 
-    setOrders((prev) =>
-      prev.map((order) => ({
-        ...order,
-        order_details: order.order_details.map((detail) => ({
-          ...detail,
-          product: {
-            ...detail.product,
-            design_requests: detail.product.design_requests.map((dr) =>
-              dr.id === id ? { ...dr, status } : dr
-            ),
-          },
-        })),
-      }))
-    );
+        setOrders(updatedOrders);
+        
+        // Update stats
+        setStats({
+          completed: status === "completed" ? stats.completed + 1 : stats.completed - 1,
+          notCompleted: status === "completed" ? stats.notCompleted - 1 : stats.notCompleted + 1,
+        });
+
+        Swal.fire(
+          "Completed!",
+          "The order has been marked as completed.",
+          "success"
+        );
+      }
+    } catch (error) {
+      Swal.fire(
+        "Error!",
+        "There was an error updating the order status.",
+        "error"
+      );
+      console.error("Failed to update order status:", error);
+    }
   };
 
   const openModal = (order) => {
     setSelectedOrder(order);
-    setSelectedRequest(null);
-    setShowModal(true);
-  };
-
-  const openRequestModal = (product, request, quantity) => {
-    setSelectedRequest({ product, request, quantity });
-    setSelectedOrder(null);
     setShowModal(true);
   };
 
   const closeModal = () => {
     setSelectedOrder(null);
-    setSelectedRequest(null);
     setShowModal(false);
+  };
+
+  const handleNavigateToDesignRequests = () => {
+    navigate("/owner/orders-req"); 
   };
 
   return (
     <div className="orders-container">
-      <div className="orders-stats">
-        <div className="stat-card completed">
-          <i className="fas fa-check-circle"></i>
-          <div>
-            <h4>Completed Orders</h4>
-            <p>{stats.completed}</p>
+      <div className="orders-header">
+        <div className="search-filter-container">
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="Search by order ID or customer name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <i className="fas fa-search"></i>
+          </div>
+          
+          <div className="status-filter">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="all">All Statuses</option>
+              <option value="completed">Completed</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              {/* Add other status options as needed */}
+            </select>
           </div>
         </div>
-        <div className="stat-card not-completed">
-          <i className="fas fa-hourglass-half"></i>
-          <div>
-            <h4>Not Completed Orders</h4>
-            <p>{stats.notCompleted}</p>
+
+        <div className="orders-stats">
+          <div className="stat-card completed">
+            <i className="fas fa-check-circle"></i>
+            <div>
+              <h4>Completed Orders</h4>
+              <p>{stats.completed}</p>
+            </div>
           </div>
-        </div>
-        <div className="stat-card pending">
-          <i className="fas fa-palette"></i>
-          <div>
-            <h4>Pending Requests</h4>
-            <p>{stats.pendingRequests}</p>
+          <div className="stat-card not-completed">
+            <i className="fas fa-hourglass-half"></i>
+            <div>
+              <h4>Not Completed Orders</h4>
+              <p>{stats.notCompleted}</p>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="tab-buttons">
-        <button
-          className={view === "orders" ? "active" : ""}
-          onClick={() => {
-            setView("orders");
-            setSearchTerm("");
-            setStatusFilter("");
-          }}
-        >
+        <button className="active">
           Orders
         </button>
-        <button
-          className={view === "requests" ? "active" : ""}
-          onClick={() => {
-            setView("requests");
-            setSearchTerm("");
-            setStatusFilter("");
-          }}
-        >
+        <button onClick={handleNavigateToDesignRequests}>
           Pending Requests
         </button>
       </div>
 
-      {view === "orders" && (
-        <div className="filters">
-          <input
-            type="text"
-            placeholder="Search by customer name"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="">All Statuses</option>
-            <option value="completed">Completed</option>
-            <option value="not completed">Not Completed</option>
-          </select>
-        </div>
-      )}
-
       <div className="orders-div">
-        {view === "orders" &&
-          orders.map((order) => (
+        {filteredOrders.length > 0 ? (
+          filteredOrders.map((order) => (
             <div key={order.id} className="order-card">
               <h3>Order #{order.id}</h3>
               <p>Customer: {order.user.full_name}</p>
-              <p>Status: {order.status}</p>
+              <p>Status: 
+                <span className={`status-badge ${order.status}`}>
+                  {order.status}
+                </span>
+              </p>
 
               {order.status !== "completed" && (
                 <button onClick={() => updateOrderStatus(order.id, "completed")}>
@@ -222,116 +205,34 @@ const OrdersManagement = () => {
                 View
               </button>
             </div>
-          ))}
-      </div>
-
-      <div className="orders-div">
-      {view === "requests" && orders && orders.length > 0 &&
-  orders
-    .flatMap((order) =>
-      order.order_details.flatMap((detail) =>
-        (detail.product.design_requests || []).map((dr) => ({
-          designRequest: dr,
-          product: detail.product,
-          quantity: detail.quantity,
-        }))
-      )
-    )
-    .map(({ designRequest, product, quantity }) => (
-      <div key={designRequest.id} className="order-card">
-        <h3>{product.name}</h3>
-        <p><strong>Quantity:</strong> {quantity}</p>
-        <p><strong>Design:</strong> {designRequest.design_details}</p>
-        <p>Status: {designRequest.status}</p>
-
-        {designRequest.status === "pending" && (
-          <div>
-            <button onClick={() => updateDesignStatus(designRequest.id, "approved")}>
-              Approve
-            </button>
-            <button onClick={() => updateDesignStatus(designRequest.id, "rejected")}>
-              Reject
-            </button>
+          ))
+        ) : (
+          <div className="no-orders-found">
+            <p>No orders found matching your criteria</p>
           </div>
         )}
-
-        <button
-          className="view-btn"
-          onClick={() => openRequestModal(product, designRequest, quantity)}
-        >
-          View
-        </button>
-      </div>
-    ))}
-
-
       </div>
 
-      {showModal && (selectedOrder || selectedRequest) && (
+      {showModal && selectedOrder && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            {selectedOrder && (
-              <>
-                <h3>Order #{selectedOrder.id} - Design Requests</h3>
-                {selectedOrder.order_details.map((detail) => (
-                  <div key={detail.id} className="modal-product-block">
-                    <div className="modal-product-info">
-                      <img
-                        src={`http://127.0.0.1:8000/${detail.product.image_url}`}
-                        alt={detail.product.name}
-                        className="modal-product-image"
-                      />
-                      <div className="modal-product-text">
-                        <p><strong>Product:</strong> {detail.product.name}</p>
-                        <p><strong>Price:</strong> ${detail.product.price}</p>
-                        <p><strong>Quantity:</strong> {detail.quantity}</p>
-                      </div>
-                    </div>
-                    {detail.product.design_requests?.map((dr) => (
-                      <div key={dr.id} className="modal-design-request">
-                        <p><strong>Design Details:</strong> {dr.design_details}</p>
-                        <p><strong>Status:</strong> {dr.status}</p>
-                        {dr.status === "pending" && (
-                          <div className="modal-actions">
-                            <button onClick={() => updateDesignStatus(dr.id, "approved")}>Approve</button>
-                            <button onClick={() => updateDesignStatus(dr.id, "rejected")}>Reject</button>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </>
-            )}
-
-            {selectedRequest && (
-              <>
-                <h3>Design Request - {selectedRequest.product.name}</h3>
-                <div className="modal-product-block">
-                  <div className="modal-product-info">
-                    <img
-                      src={`http://127.0.0.1:8000/${selectedRequest.product.image_url}`}
-                      alt={selectedRequest.product.name}
-                      className="modal-product-image"
-                    />
-                    <div className="modal-product-text">
-                      <p><strong>Product:</strong> {selectedRequest.product.name}</p>
-                      <p><strong>Price:</strong> ${selectedRequest.product.price}</p>
-                      <p><strong>Quantity:</strong> {selectedRequest.quantity}</p>
-                      <p><strong>Design Details:</strong> {selectedRequest.request.design_details}</p>
-                      <p><strong>Status:</strong> {selectedRequest.request.status}</p>
-                      {selectedRequest.request.status === "pending" && (
-                        <div className="modal-actions">
-                          <button onClick={() => updateDesignStatus(selectedRequest.request.id, "approved")}>Approve</button>
-                          <button onClick={() => updateDesignStatus(selectedRequest.request.id, "rejected")}>Reject</button>
-                        </div>
-                      )}
-                    </div>
+            <h3>Order #{selectedOrder.id}</h3>
+            {selectedOrder.order_details.map((detail) => (
+              <div key={detail.id} className="modal-product-block">
+                <div className="modal-product-info">
+                  <img
+                    src={`http://127.0.0.1:8000/${detail.product.image_url}`}
+                    alt={detail.product.name}
+                    className="modal-product-image"
+                  />
+                  <div className="modal-product-text">
+                    <p><strong>Product:</strong> {detail.product.name}</p>
+                    <p><strong>Price:</strong> ${detail.product.price}</p>
+                    <p><strong>Quantity:</strong> {detail.quantity}</p>
                   </div>
                 </div>
-              </>
-            )}
-
+              </div>
+            ))}
             <button onClick={closeModal}>Close</button>
           </div>
         </div>

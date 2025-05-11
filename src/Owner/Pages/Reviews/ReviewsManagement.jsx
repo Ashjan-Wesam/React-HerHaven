@@ -1,19 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import "../../../assets/css/ownerStyles/Reviews.css";
 
 const ReviewsManagement = () => {
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [siteReviews, setSiteReviews] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 3;
+
+  const token = localStorage.getItem("token");
+
+  const fetchReviews = async () => {
+    try {
+      const res = await axios.get("http://127.0.0.1:8000/api/owner/site-reviews", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setSiteReviews(res.data);
+    } catch (error) {
+      console.error("Failed to fetch reviews", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
-  
+
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/owner/site-reviews", 
+        "http://127.0.0.1:8000/api/owner/site-reviews",
         {
           rating,
           review_text: reviewText,
@@ -25,29 +48,92 @@ const ReviewsManagement = () => {
           },
         }
       );
-  
+
       setSuccessMessage(res.data.message);
       setReviewText("");
       setRating(0);
       setErrorMessage("");
-      
-      // Log success
-      console.log('Review submitted:', res.data);
-      
+      fetchReviews();
     } catch (error) {
-      console.error('Submission error:', error.response?.data || error.message);
+      console.error("Submission error:", error.response?.data || error.message);
       setErrorMessage(
-        error.response?.data?.error || 
-        error.response?.data?.message || 
+        error.response?.data?.error ||
+        error.response?.data?.message ||
         "Failed to submit review. Please try again."
       );
     }
   };
-  
+
+  // Pagination logic
+  const indexOfLastReview = currentPage * reviewsPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+  const currentReviews = siteReviews.slice(indexOfFirstReview, indexOfLastReview);
+  const totalPages = Math.ceil(siteReviews.length / reviewsPerPage);
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="review-management">
-      <h2>Write a Review About Our Website</h2>
+      <h2>Your Website Reviews</h2>
+      <div className="site-reviews">
+        {currentReviews.length === 0 ? (
+          <p>You haven't written any reviews yet.</p>
+        ) : (
+          currentReviews.map((review) => (
+            <div key={review.id} className="review-card-oo">
+              <div className="review-rating">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    style={{
+                      color: star <= review.rating ? "#FFD700" : "#ccc",
+                      fontSize: "1.5rem",
+                      marginRight: "2px",
+                    }}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+              <div className="review-text">{review.review_text}</div>
+              <div className="review-date">
+                {new Date(review.created_at).toLocaleDateString()}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
 
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="pagination-controls">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={currentPage === index + 1 ? "active-page" : ""}
+            >
+              {index + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      )}
+
+      <h2>Write a Review About Our Website</h2>
       <form onSubmit={handleSubmit} className="review-form">
         <div className="rating">
           <label>Rating:</label>
@@ -89,3 +175,4 @@ const ReviewsManagement = () => {
 };
 
 export default ReviewsManagement;
+

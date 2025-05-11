@@ -79,9 +79,7 @@ const OwnerDashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h1 className="dashboard-title">Store Dashboard</h1>
-      </div>
+   
 
       {/* First Row - Key Metrics */}
       <div className="dashboard-row">

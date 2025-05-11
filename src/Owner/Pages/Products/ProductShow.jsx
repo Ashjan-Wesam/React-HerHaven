@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
+import '../../../assets/css/ownerStyles/Products.css';
+
 
 const ProductShow = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchProduct = async () => {
     try {
@@ -17,6 +20,8 @@ const ProductShow = () => {
       setProduct(res.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Error fetching product details');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -24,22 +29,65 @@ const ProductShow = () => {
     fetchProduct();
   }, [id]);
 
-  if (error) return <p className="text-red-500">{error}</p>;
-  if (!product) return <p>Loading...</p>;
+  if (isLoading) return (
+    <div className="owner-product-loading">
+      <div className="owner-loading-spinner"></div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="owner-product-error">
+      <div className="owner-error-message">{error}</div>
+      <Link to="/owner/products" className="owner-error-back-link">
+        Back to Products
+      </Link>
+    </div>
+  );
 
   return (
-    <div className="p-6 max-w-2xl mx-auto bg-white shadow rounded">
-      <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
-      {product.image_url && (
-        <img src={product.image_url} alt={product.name} className="w-64 h-64 object-cover mb-4" />
-      )}
-      <p><strong>Description:</strong> {product.description}</p>
-      <p><strong>Price:</strong> ${product.price}</p>
-      <p><strong>Stock:</strong> {product.stock_quantity}</p>
-      <p><strong>Category:</strong> {product.category?.name || 'N/A'}</p>
-      <p><strong>Store:</strong> {product.store?.name || 'N/A'}</p>
-
-      <Link to="/owner/products" className="mt-4 inline-block text-blue-600">Back to Products</Link>
+    <div className="owner-product-show-container">
+      <div className="owner-product-card-show">
+        <div className="owner-product-header">
+          <h1 className="owner-product-title">{product.name}</h1>
+          <span className="owner-product-category">{product.category?.name || 'N/A'}</span>
+        </div>
+        
+        {product.image_url && (
+          <div className="owner-product-image-container">
+            <img 
+              src={product.image_url} 
+              alt={product.name} 
+              className="owner-product-image" 
+            />
+             <img src={`http://127.0.0.1:8000/${p.image_url}`} alt={p.name} className="product-image" />
+          </div>
+        )}
+        
+        <div className="owner-product-details">
+          <p className="owner-product-description">{product.description}</p>
+          
+          <div className="owner-product-meta">
+            <div className="owner-meta-item">
+              <span className="owner-meta-label">Price</span>
+              <span className="owner-meta-value">${product.price}</span>
+            </div>
+            <div className="owner-meta-item">
+              <span className="owner-meta-label">Stock</span>
+              <span className="owner-meta-value">{product.stock_quantity}</span>
+            </div>
+            <div className="owner-meta-item">
+              <span className="owner-meta-label">Store</span>
+              <span className="owner-meta-value">{product.store?.name || 'N/A'}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="owner-product-actions">
+          <Link to="/owner/products" className="owner-back-button">
+            &larr; Back to Products
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };

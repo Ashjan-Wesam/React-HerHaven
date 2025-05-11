@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./CategoryPage.css";
+import noStore from "../../userTemplate/img/no-store.jpg"
 
 const CategoryPage = () => {
   const [stores, setStores] = useState([]);
@@ -123,11 +124,12 @@ const CategoryPage = () => {
               <Link to={`/store/${store.id}`} key={store.id} className="store-link">
                 <div className="store-card">
                   {store.logo_url && (
-                    <img
-                      src={`http://127.0.0.1:8000/storage/logo/${store.logo_url}`}
-                      alt={store.store_name}
-                      className="store-logo"
-                    />
+                  <img
+                  src={store.logo_url ? `http://127.0.0.1:8000/storage/logo/${store.logo_url}` : noStore}
+                  alt={store.store_name}
+                  className="store-logo"
+                />
+                
                   )}
                   <h5 className="store-name-cat">{store.store_name}</h5>
                   <p className="store-description-cat" style={{ color: "#444" }}>

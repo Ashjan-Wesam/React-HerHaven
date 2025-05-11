@@ -1,4 +1,4 @@
-/* assets/css/ownerStyles/dashboard.css */
+
 
 .dashboard-container {
   padding: 20px;
@@ -164,7 +164,7 @@
 }
 
 .dashboard-title {
-  font-size: 2.5rem;  /* تكبير الخط */
+  font-size: 2.5rem;
   font-weight: bold;
   color: #333;
 }
@@ -172,13 +172,13 @@
 .dashboard-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;  /* توسيع الفجوة بين الكروت */
+  gap: 2rem; 
   margin-bottom: 2rem;
 }
 
 .dashboard-card {
   flex: 1;
-  min-width: 240px;  /* توسيع الكروت */
+  min-width: 240px;
   background-color: white;
   border-radius: 12px;
   padding: 1.5rem;
@@ -191,7 +191,7 @@
 }
 
 .card-icon {
-  font-size: 2rem;  /* تكبير الأيقونات */
+  font-size: 2rem;
   margin-bottom: 0.5rem;
   color: white;
   width: 50px;
@@ -203,19 +203,19 @@
 
 .card-content h4 {
   margin: 0;
-  font-size: 1.5rem;  /* تكبير الخط */
+  font-size: 1.5rem; 
   color: #555;
 }
 
 .card-content p {
-  font-size: 1.8rem;  /* تكبير الخط */
+  font-size: 1.8rem; 
   font-weight: bold;
   margin: 0.3rem 0;
   color: #333;
 }
 
 .card-subtext {
-  font-size: 1rem;  /* تكبير الخط */
+  font-size: 1rem; 
   color: #888;
 }
 
@@ -239,12 +239,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem  !important;  /* توسيع الفواصل */
+  padding: 1rem  !important; 
   border-bottom: 1px solid #eee;
 }
 
 .status-badge {
-  padding:  0.7rem 1rem !important;  /* تكبير البادجات */
+  padding:  0.7rem 1rem !important; 
   border-radius: 0.5rem;
   color: white;
   text-transform: capitalize;
@@ -266,23 +266,23 @@
 
 /* Colors for each status */
 .status-badge.pending {
-  background-color: #f1c40f; /* أصفر للطلبات المعلقة */
+  background-color: #f1c40f; 
 }
 
 .status-badge.processing {
-  background-color: #e67e22; /* برتقالي للطلبات قيد المعالجة */
+  background-color: #e67e22; 
 }
 
 .status-badge.completed {
-  background-color: #27ae60; /* أخضر للطلبات المكتملة */
+  background-color: #27ae60;
 }
 
 .status-badge.cancelled {
-  background-color: #c0392b; /* أحمر للطلبات المرفوضة */
+  background-color: #c0392b;
 }
 
 .status-badge.shipped {
-  background-color: #3498db; /* أزرق للطلبات التي تم شحنها */
+  background-color: #3498db; 
 }
 /* Dashboard Container */
 .dashboard-container {

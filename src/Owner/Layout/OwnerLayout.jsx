@@ -10,15 +10,14 @@ import OrdersManagement from "../Pages/Orders/OrdersManagement";
 import ReviewsManagement from "../Pages/Reviews/ReviewsManagement";
 import StoreSetting from "../Pages/StoreSetting";
 import CategoriesPage from "../Pages/Categories/CategoriesPage";
-import CreateCategory from "../Pages/Categories/CreateCategory";
 import CreateProduct from "../Pages/Products/CreateProduct";
-import EditCategory from "../Pages/Categories/EditCategory";
 import ShowCategory from "../Pages/Categories/ShowCategory";
 import ProductShow from "../Pages/Products/ProductShow";
 import EditProduct from "../Pages/Products/EditProduct";
 import DiscountsPage from "../Pages/Discounts/DiscountsPage";
 import DiscountForm from "../Pages/Discounts/DiscountForm";
 import DesignRequests from "../Pages/Orders/DesignRequests";
+import OwnerReviewsPage from "../Pages/Reviews/OwnerReviewsPage";
 
 
 const OwnerLayout = () => {
@@ -47,11 +46,10 @@ const OwnerLayout = () => {
             <Route path="orders-req" element={<DesignRequests />} />
             
             <Route path="reviews" element={<ReviewsManagement />} />
+            <Route path="reviewsStore" element={<OwnerReviewsPage />} />
             <Route path="settings" element={<StoreSetting />} />
 
             <Route path="categories" element={<CategoriesPage />} />
-            <Route path="categories/create" element={<CreateCategory />} />
-            <Route path="categories/edit/:id" element={<EditCategory />} />
             <Route path="categories/show/:id" element={<ShowCategory />} />
 
             <Route path="discounts" element={<DiscountsPage />} />
