@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import Loading from "../../Components/Loading";
+import notfound from '../../../assets/img/nofound.jpg';
 
 const OrdersManagement = () => {
   const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -15,11 +18,14 @@ const OrdersManagement = () => {
   });
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ordersPerPage] = useState(9);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchOrders = async () => {
+      setIsLoading(true);
       try {
         const ordersRes = await axios.get("http://127.0.0.1:8000/api/owner/orders", {
           headers: { Authorization: `Bearer ${token}` },
@@ -40,6 +46,8 @@ const OrdersManagement = () => {
         setStats({ completed, notCompleted });
       } catch (error) {
         console.error("Failed to fetch data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -47,15 +55,12 @@ const OrdersManagement = () => {
   }, [token]);
 
   useEffect(() => {
-    // Apply filters whenever searchTerm or statusFilter changes
     let result = orders;
 
-    // Apply status filter
     if (statusFilter !== "all") {
       result = result.filter(order => order.status === statusFilter);
     }
 
-    // Apply search filter
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       result = result.filter(order => 
@@ -65,7 +70,14 @@ const OrdersManagement = () => {
     }
 
     setFilteredOrders(result);
+    setCurrentPage(1); // Reset to first page when filters change
   }, [searchTerm, statusFilter, orders]);
+
+  // Get current orders
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
   const updateOrderStatus = async (orderId, status) => {
     try {
@@ -92,7 +104,6 @@ const OrdersManagement = () => {
 
         setOrders(updatedOrders);
         
-        // Update stats
         setStats({
           completed: status === "completed" ? stats.completed + 1 : stats.completed - 1,
           notCompleted: status === "completed" ? stats.notCompleted - 1 : stats.notCompleted + 1,
@@ -128,32 +139,22 @@ const OrdersManagement = () => {
     navigate("/owner/orders-req"); 
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="orders-container">
       <div className="orders-header">
-        <div className="search-filter-container">
-          <div className="search-box">
-            <input
-              type="text"
-              placeholder="Search by order ID or customer name..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <i className="fas fa-search"></i>
-          </div>
-          
-          <div className="status-filter">
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="all">All Statuses</option>
-              <option value="completed">Completed</option>
-              <option value="pending">Pending</option>
-              <option value="processing">Processing</option>
-              {/* Add other status options as needed */}
-            </select>
-          </div>
+        <div className="cat-search-container">
+          <input
+            type="text"
+            placeholder="Search by order ID or customer name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="cat-search-input"
+          />
+          <i className="fas fa-search cat-search-icon"></i>
         </div>
 
         <div className="orders-stats">
@@ -174,18 +175,31 @@ const OrdersManagement = () => {
         </div>
       </div>
 
-      <div className="tab-buttons">
-        <button className="active">
-          Orders
-        </button>
-        <button onClick={handleNavigateToDesignRequests}>
-          Pending Requests
-        </button>
+      <div className="tab-buttons" style={{ display: "flex", justifyContent: 'space-between' }}>
+        <div>
+          <button className="active">
+            Orders
+          </button>
+          <button onClick={handleNavigateToDesignRequests}>
+            Pending Requests
+          </button>
+        </div>
+        <div className="filters-group">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="input-filter"
+          >
+            <option value="all">All Statuses</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
       </div>
 
       <div className="orders-div">
-        {filteredOrders.length > 0 ? (
-          filteredOrders.map((order) => (
+        {currentOrders.length > 0 ? (
+          currentOrders.map((order) => (
             <div key={order.id} className="order-card">
               <h3>Order #{order.id}</h3>
               <p>Customer: {order.user.full_name}</p>
@@ -207,11 +221,42 @@ const OrdersManagement = () => {
             </div>
           ))
         ) : (
-          <div className="no-orders-found">
-            <p>No orders found matching your criteria</p>
+         
+          <div style={{ margin: "auto" }} className="cat-no-products">
+                <img src={notfound} alt="No products" className="cat-no-products-img" />
+                 <p>No orders found matching your criteria</p>
           </div>
         )}
       </div>
+
+      {filteredOrders.length > ordersPerPage && (
+        <div className="owner-pagination">
+          <button 
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="pagination-button"
+          >
+            <i className="fas fa-chevron-left"></i>
+          </button>
+          
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
+            <button
+              key={number}
+              onClick={() => setCurrentPage(number)}
+              className={`${currentPage === number ? 'active' : ''}`}
+            >
+              {number}
+            </button>
+          ))}
+          
+          <button 
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            <i className="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      )}
 
       {showModal && selectedOrder && (
         <div className="modal-overlay" onClick={closeModal}>

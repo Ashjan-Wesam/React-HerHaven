@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import '../../../assets/css/ownerStyles/Products.css';
+import Loading from '../../Components/Loading';
 
 
 const ProductShow = () => {
@@ -30,9 +31,7 @@ const ProductShow = () => {
   }, [id]);
 
   if (isLoading) return (
-    <div className="owner-product-loading">
-      <div className="owner-loading-spinner"></div>
-    </div>
+   <Loading />
   );
 
   if (error) return (
@@ -55,11 +54,10 @@ const ProductShow = () => {
         {product.image_url && (
           <div className="owner-product-image-container">
             <img 
-              src={product.image_url} 
+              src={`http://127.0.0.1:8000/${product.image_url}`}
               alt={product.name} 
               className="owner-product-image" 
             />
-             <img src={`http://127.0.0.1:8000/${p.image_url}`} alt={p.name} className="product-image" />
           </div>
         )}
         
@@ -77,7 +75,7 @@ const ProductShow = () => {
             </div>
             <div className="owner-meta-item">
               <span className="owner-meta-label">Store</span>
-              <span className="owner-meta-value">{product.store?.name || 'N/A'}</span>
+              <span className="owner-meta-value">{product.request || 'N/A'}</span>
             </div>
           </div>
         </div>

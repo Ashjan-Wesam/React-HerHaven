@@ -1,11 +1,4 @@
-/* Main Container Styles */
-.review-management {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #444;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
+
   
   .review-container {
     background: white;
@@ -174,12 +167,9 @@
     }
   }
   .review-management {
-    max-width: 800px;
     margin: 2rem auto;
     padding: 2rem;
-    background-color: #fefefe;
     border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
   .review-management h2 {
@@ -347,7 +337,7 @@
   }
   
   .review-table .rating {
-    color: #f59e0b; /* Gold color for stars */
+    color: #f59e0b; 
     font-weight: bold;
   }
   
@@ -358,3 +348,93 @@
     font-style: italic;
   }
   
+  .reviews-layout {
+  display: flex;
+  gap: 40px;
+  justify-content: space-between;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.site-reviews {
+  flex: 1;
+  min-width: 300px;
+}
+
+.review-form-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.review-card-oo {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review-rating {
+  margin-bottom: 5px;
+}
+
+.review-date {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 8px;
+}
+
+.review-form {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+}
+
+.review-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.review-form textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  resize: none;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.review-form .submit-button {
+  margin-top: 15px;
+  background-color: #6a1b9a;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.review-form .submit-button:hover {
+  background-color: #4a148c;
+}
+
+.form-title-owner {
+  margin-bottom: 15px;
+  color: #444;
+  font-weight: 600;
+  font-size: 2.2rem !important;
+}
+
+.success-message {
+  color: green;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+

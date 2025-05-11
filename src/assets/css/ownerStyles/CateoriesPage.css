@@ -136,6 +136,9 @@ color: white;
 .edit-category-btn {
   background-color: #444;
 }
+.edit-category-btn:hover {
+  color: white;
+}
 
 .delete-category-btn {
   background-color: #c57288;

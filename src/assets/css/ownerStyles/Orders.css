@@ -656,8 +656,6 @@
   .order-card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 400px; /* تأكد من أن جميع الكاردات تأخذ نفس الارتفاع */
     border: 1px solid #ddd; /* إضافة حدود لجعل الكاردات مرئية */
     padding: 15px;
     box-sizing: border-box;

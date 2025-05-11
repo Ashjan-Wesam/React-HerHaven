@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import '../../../assets/css/ownerStyles/Products.css';
 import notfound from '../../../assets/img/nofound.jpg';
+import Loading from '../../Components/Loading';
 
 const Product = () => {
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [stockFilter, setStockFilter] = useState('all');
   const [discountActive, setDiscountActive] = useState(false); 
@@ -31,6 +33,7 @@ const Product = () => {
 
   const fetchProducts = async () => {
     try {
+      setIsLoading(true);
       const res = await axios.get('http://127.0.0.1:8000/api/owner/products', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -39,6 +42,9 @@ const Product = () => {
       setProducts(res.data);
     } catch (error) {
       console.error('Error fetching products:', error.response?.data || error.message);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -121,6 +127,11 @@ const Product = () => {
   const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
+  if (isLoading) {
+    return (
+      <Loading />
+    );
+  }
   return (
     <div className="owner-container" style={{ padding: "30px" }}>
       <div className="filter-bar">
