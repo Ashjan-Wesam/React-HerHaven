@@ -6,7 +6,7 @@
   background: none;
 }
 
-.cart-page h2 {
+.page-user-title {
   font-size: 2.5rem;
   margin-bottom: 5rem;
   color: #333;
@@ -15,7 +15,7 @@
   position: relative;
 }
 
-.cart-page h2::after {
+.page-user-title::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -23,7 +23,7 @@
   transform: translateX(-50%);
   width: 100px;
   height: 4px;
-  background: linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%);
+  background: linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%) !important;
 }
 
 .cart-table {
@@ -179,7 +179,7 @@
       margin: 20px auto;
   }
   
-  .cart-page h2 {
+  .page-user-title {
       font-size: 1.5rem;
   }
   
@@ -233,7 +233,7 @@
 }
 
 @media (max-width: 480px) {
-  .cart-page h2 {
+  .page-user-title {
       font-size: 1.3rem;
   }
   

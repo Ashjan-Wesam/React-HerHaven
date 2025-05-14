@@ -745,3 +745,11 @@
   font-size: 16px;
   color: #666;
 }
+.design-request-details {
+  background-color: #f9f1e7;
+  border-left: 4px solid orange;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+}

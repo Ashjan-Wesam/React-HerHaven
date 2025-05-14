@@ -5,12 +5,14 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import '../../../assets/css/adminStyles/UserView.css';
 import defaultImg from '../../../assets/img/userImg.jpg';
+import Loading from  "../../../Owner/Components/Loading"
 
 const MySwal = withReactContent(Swal);
 
 const UserView = () => {
   const { id } = useParams();
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Added loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +25,7 @@ const UserView = () => {
           },
         });
         setUser(res.data);
+        setLoading(false); // Set loading to false after data is fetched
       } catch (error) {
         console.error('Error fetching user:', error);
         MySwal.fire({
@@ -33,6 +36,7 @@ const UserView = () => {
           color: '#f5f6fa',
           confirmButtonColor: '#6c5ce7',
         });
+        setLoading(false); // Set loading to false in case of an error
       }
     };
     fetchUser();
@@ -84,45 +88,48 @@ const UserView = () => {
     }
   };
 
-  if (!user) return <div className="loading">Loading...</div>;
+  if (loading) {
+    return <Loading />; // Show loading component while data is being fetched
+  }
 
   return (
-    <div className="container">
-      <h2 className="title">User Details</h2>
-      <div className="details">
+    <div className="admin-container">
+      <h2 className="admin-title"> 
         <img 
           src={user.profile_picture ? `http://127.0.0.1:8000/storage/profile/${user.profile_picture}` : defaultImg} 
           alt="User" 
-          className="profile-image"
+          className="admin-profile-image"
         />
-        <div className="user-info">
-          <p><strong>Name:</strong> {user.full_name}</p>
+        <h3>{user.full_name}</h3>
+      </h2>
+      <div className="admin-details">
+        <div className="admin-user-info">
           <p><strong>Email:</strong> {user.email}</p>
           <p><strong>Phone:</strong> {user.phone_number}</p>
-          <p className={`role ${user.role}`}><strong>Role:</strong> {user.role}</p>
-          <p className={`status ${user.status}`}><strong>Status:</strong> {user.status}</p>
+          <p className={`admin-role ${user.role}`}><strong>Role:</strong> {user.role}</p>
+          <p className={`admin-status ${user.status}`}><strong>Status:</strong> {user.status}</p>
 
           {user.role === 'owner' && user.store && (
-            <div className="store-info">
+            <div className="admin-store-info">
               <h3>Store Details</h3>
               <p><strong>Store Name:</strong> {user.store.store_name}</p>
               <p><strong>Store Description:</strong> {user.store.description}</p>
               {user.store.logo_url && (
-                <div className="store-logo-container">
+                <div className="admin-store-logo-container">
                   <strong>Store Logo:</strong>
                   <img 
                     src={`http://127.0.0.1:8000/storage/profile/${user.store.logo_url}`} 
                     alt="Store Logo" 
-                    className="store-logo"
+                    className="admin-store-logo"
                   />
                 </div>
               )}
             </div>
           )}
 
-          <div className="button-container">
-            <Link to={`/admin/users/${id}/edit`} className="button button-edit">Edit</Link>
-            <button onClick={handleDelete} className="button button-delete">Delete</button>
+          <div className="admin-button-container">
+            <Link to={`/admin/users/${id}/edit`} className="admin-button admin-button-edit">Edit</Link>
+            <button onClick={handleDelete} className="admin-button admin-button-delete">Delete</button>
           </div>
         </div>
       </div>

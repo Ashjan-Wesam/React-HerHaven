@@ -19,6 +19,8 @@ import ViewOrder from "../Pages/Orders/ViewOrder";
 import EditOrder from "../Pages/Orders/EditOrder";
 import ReviewCards from "../Components/ReviewCards";
 import ReviewDetails from "../Pages/Reviews/ReviewDetails";
+import CategoriesPage from "../Pages/categories/CategoriesPage";
+import ProductAdminPage from "../Pages/Products/ProductAdminPage";
 
 
 
@@ -52,6 +54,12 @@ const AdminLayout = () => {
               <Route path="/stores/create" element={<StoreCreate />} />
               <Route path="/stores/edit/:id" element={<StoreEdit />} />
               <Route path="/stores/:id" element={<StoreDetails />} />
+
+              {/* Categories Management */}
+              <Route path="/categories" element={<CategoriesPage />} />
+
+              {/* Products Management */}
+               <Route path="/products" element={<ProductAdminPage />} />
 
               {/* Orders Management */}
               <Route path="/orders" element={<OrderList />} />

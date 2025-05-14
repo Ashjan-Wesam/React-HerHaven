@@ -1,9 +1,5 @@
 .order-requests {
-  max-width: 800px;
   margin: 40px auto;
-  padding: 20px 30px;
-  background-color: #fefefe;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

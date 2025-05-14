@@ -30,9 +30,15 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/admin/stores" className={({ isActive }) => isActive ? "active" : ""}>
+            <NavLink to="/admin/categories" className={({ isActive }) => isActive ? "active" : ""}>
               <i className="pe-7s-user"></i>
               <p>Categories Management</p>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/admin/products" className={({ isActive }) => isActive ? "active" : ""}>
+              <i className="pe-7s-user"></i>
+              <p>Products Management</p>
             </NavLink>
           </li>
           <li>

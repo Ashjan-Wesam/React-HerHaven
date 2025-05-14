@@ -262,22 +262,31 @@ const OrdersManagement = () => {
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>Order #{selectedOrder.id}</h3>
-            {selectedOrder.order_details.map((detail) => (
-              <div key={detail.id} className="modal-product-block">
-                <div className="modal-product-info">
-                  <img
-                    src={`http://127.0.0.1:8000/${detail.product.image_url}`}
-                    alt={detail.product.name}
-                    className="modal-product-image"
-                  />
-                  <div className="modal-product-text">
-                    <p><strong>Product:</strong> {detail.product.name}</p>
-                    <p><strong>Price:</strong> ${detail.product.price}</p>
-                    <p><strong>Quantity:</strong> {detail.quantity}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+           {selectedOrder.order_details.map((detail) => (
+  <div key={detail.id} className="modal-product-block">
+    <div className="modal-product-info">
+      <img
+        src={`http://127.0.0.1:8000/${detail.product.image_url}`}
+        alt={detail.product.name}
+        className="modal-product-image"
+      />
+      <div className="modal-product-text">
+        <p><strong>Product:</strong> {detail.product.name}</p>
+        <p><strong>Price:</strong> ${detail.product.price}</p>
+        <p><strong>Quantity:</strong> {detail.quantity}</p>
+      </div>
+    </div>
+
+    {/* Show design request if available */}
+    {detail.design_request && (
+      <div className="design-request-details">
+        <p><strong>Design Request:</strong> {detail.design_request.design_details}</p>
+        <p><strong>Status:</strong> {detail.design_request.status}</p>
+      </div>
+    )}
+  </div>
+))}
+
             <button onClick={closeModal}>Close</button>
           </div>
         </div>

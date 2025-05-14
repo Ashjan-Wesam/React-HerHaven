@@ -2,15 +2,28 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import './UserOrders.css';
+import Loading from "../../Owner/Components/Loading";
+import no_order from  "../../userTemplate/img/noOrder.jpg"
 
 const UserOrders = () => {
   const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [orders, searchTerm, statusFilter]);
 
   const fetchOrders = async () => {
     try {
@@ -31,7 +44,7 @@ const UserOrders = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setOrders(res.data.orders);
+      setOrders(res.data.orders || []);
     } catch (error) {
       console.error("Error fetching orders", error);
       Swal.fire({
@@ -43,6 +56,27 @@ const UserOrders = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const applyFilters = () => {
+    let filtered = [...orders];
+
+    // Search by product name
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(order =>
+        order.order_details?.some(detail =>
+          detail.product?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    }
+
+    // Filter by status
+    if (statusFilter !== "All") {
+      filtered = filtered.filter(order => order.status === statusFilter);
+    }
+
+    setFilteredOrders(filtered);
+    setCurrentPage(1); // Reset to first page after filtering
   };
 
   const handleShowDetails = async (id) => {
@@ -68,102 +102,128 @@ const UserOrders = () => {
     setSelectedOrder(null);
   };
 
-  if (isLoading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading your orders...</p>
-      </div>
-    );
-  }
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+  const paginatedOrders = filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="user-orders">
-      <h2 className="user-orders__title">My Orders</h2>
+      <h2 className="text-2xl font-bold mb-4 page-user-title">My Orders</h2>
 
-      {orders.length === 0 ? (
-        <div className="user-orders__empty">
-          <p className="user-orders__empty-text">You don't have any orders yet.</p>
-        </div>
+      <div className="user-orders__controls">
+          <div className="cat-search-container">
+        <input
+          type="text"
+          placeholder="Search by product name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+           className="cat-search-input"
+          />
+          <i className="fas fa-search cat-search-icon"></i>
+</div>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="input-filter"
+        >
+          <option value="All">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="completed">Approved</option>
+        </select>
+      </div>
+
+      {filteredOrders.length === 0 ? (
+         <div style={{ margin: "auto" }} className="cat-no-products">
+                        <img src={no_order} alt="No products" className="cat-no-products-img" />
+                        <p>No Orders Found.</p>
+                      </div>
       ) : (
-        <div className="user-orders__table-container">
-          <table className="user-orders__table">
-            <thead className="user-orders__table-header">
-              <tr>
-                <th className="user-orders__table-th">#</th>
-                <th className="user-orders__table-th">Total Price</th>
-                <th className="user-orders__table-th">Status</th>
-                <th className="user-orders__table-th">Payment Method</th>
-                <th className="user-orders__table-th">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="user-orders__table-body">
-              {orders.map((order, index) => (
-                <tr key={order.id} className="user-orders__table-row">
-                  <td className="user-orders__table-td">{index + 1}</td>
-                  <td className="user-orders__table-td">{order.total_price} JD</td>
-                  <td className="user-orders__table-td">
-                    <span className={`user-orders__status user-orders__status--${order.status.toLowerCase()}`}>
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="user-orders__table-td">{order.payment?.method || 'N/A'}</td>
-                  <td className="user-orders__table-td user-orders__actions">
-                    <button 
-                      className="user-orders__button user-orders__button--view"
-                      onClick={() => handleShowDetails(order.id)}
-                    >
-                      View Details
-                    </button>
-                  </td>
+        <>
+          <div className="user-orders__table-container">
+            <table className="user-orders__table">
+              <thead className="orderr-thead">
+                <tr>
+                  <th>#</th>
+                  <th>Total Price</th>
+                  <th>Status</th>
+                  <th>Payment</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {paginatedOrders.map((order, index) => (
+                  <tr key={order.id}>
+                    <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                    <td>{order.total_price} JD</td>
+                    <td>
+                      <span className={`user-orders__status user-orders__status--${order.status.toLowerCase()}`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td>{order.payment?.method || 'N/A'}</td>
+                    <td>
+                      <button className="user-orders__button user-orders__button--view" onClick={() => handleShowDetails(order.id)}>
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+          <div className="owner-pagination">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              <i className="fas fa-chevron-left"></i>
+            </button>
+           <div className='div-nums'>
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={currentPage === i + 1 ? 'active' : ''}
+            >
+              {i + 1}
+            </button>
+          ))}</div>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
+               <i className="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        )}
+        </>
       )}
 
       {selectedOrder && (
         <div className="user-orders__modal-overlay" onClick={closeModal}>
           <div className="user-orders__modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="user-orders__modal-close" onClick={closeModal}>&times;</button>
-            <h3 className="user-orders__modal-title">Order Details #{selectedOrder.id}</h3>
-            
+            <h3 className="user-orders__modal-title">Order #{selectedOrder.id}</h3>
+
             <div className="user-orders__modal-summary">
-              <div className="user-orders__modal-summary-item">
-                <span className="user-orders__modal-summary-label">Total Amount:</span>
-                <span className="user-orders__modal-summary-value">{selectedOrder.total_price} JD</span>
-              </div>
-              <div className="user-orders__modal-summary-item">
-                <span className="user-orders__modal-summary-label">Status:</span>
-                <span className={`user-orders__status user-orders__status--${selectedOrder.status.toLowerCase()}`}>
-                  {selectedOrder.status}
-                </span>
-              </div>
-              <div className="user-orders__modal-summary-item">
-                <span className="user-orders__modal-summary-label">Payment Method:</span>
-                <span className="user-orders__modal-summary-value">
-                  {selectedOrder.payment?.method || 'Not specified'}
-                </span>
-              </div>
+              <p>Total: {selectedOrder.total_price} JD</p>
+              <p>Status: <span className={`user-orders__status user-orders__status--${selectedOrder.status.toLowerCase()}`}>{selectedOrder.status}</span></p>
+              <p>Payment Method: {selectedOrder.payment?.method || 'Not specified'}</p>
             </div>
 
-            <h4 className="user-orders__modal-subtitle">Order Items</h4>
-            <ul className="user-orders__modal-items">
+            <h4>Order Items</h4>
+            <ul>
               {selectedOrder.order_details.map((item) => (
                 <li key={item.id} className="user-orders__modal-item">
-                  <div className="user-orders__modal-item-info">
-                    <span className="user-orders__modal-item-product">
-                      Product: {item.product?.name || 'N/A'}
-                    </span>
-                    <span className="user-orders__modal-item-quantity">Qty: {item.quantity}</span>
-                  </div>
-                  <div className="user-orders__modal-item-price">{item.total_price} JD</div>
-
+                  <p>Product: {item.product?.name || 'N/A'} (x{item.quantity})</p>
+                  <p>Total: {item.total_price} JD</p>
                   {item.design_request && (
                     <div className="user-orders__modal-design">
-                      <p><strong>Design Request:</strong></p>
-                      <p>Details: {item.design_request.design_details}</p>
+                      <p><strong>Design Request:</strong> {item.design_request.design_details}</p>
                       <p>Status: <span className={`user-orders__status user-orders__status--${item.design_request.status.toLowerCase()}`}>{item.design_request.status}</span></p>
                     </div>
                   )}

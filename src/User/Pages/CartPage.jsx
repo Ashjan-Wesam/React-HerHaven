@@ -192,7 +192,7 @@ const finalPrice = discount ? totalPrice * (1 - discount / 100) : totalPrice;
 
   return (
     <div className="cart-page p-6">
-      <h2 className="text-2xl font-bold mb-6">Your Shopping Cart</h2>
+      <h2 className="text-2xl font-bold mb-6 page-user-title">Your Shopping Cart</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full text-left border">
           <thead className="cart-head">

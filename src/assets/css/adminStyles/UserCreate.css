@@ -1,102 +1,68 @@
+/* UserCreate.css */
 
-.container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #f8f9fa;
+.admin-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  width: 50%;
+  background-color: #f8f9fa;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-.form-title {
+.admin-form-title {
   text-align: center;
-  color: #343a40;
-  margin-bottom: 2rem;
-  font-size: 2.5rem;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #333;
 }
-.form {
+
+.admin-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
-.form-input {
+.admin-form-input,
+.admin-form-select {
   padding: 12px 15px;
-  border: 2px solid #dee2e6;
+  margin-bottom: 15px;
   border-radius: 6px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background-color: #444 !important;
+  border: 1px solid #ccc;
+  font-size: 16px;
 }
 
-.form-input:focus {
-  border-color: #b67fea;
+.admin-form-input:focus,
+.admin-form-select:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #ddc8f0;
+  border-color: #007bff;
+  box-shadow: 0 0 4px #007bff66;
 }
 
-/* Estilos للقوائم المنسدلة */
-.form-select {
-  padding: 12px 15px;
-  border: 2px solid #dee2e6;
-  border-radius: 6px;
-  font-size: 1.8rem;
-  background-color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.admin-error-text {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
 
-.form-select:focus {
-  border-color: #b67fea;
-  outline: none;
-  box-shadow: 0 0 0 2px #ddc8f0;
+.admin-general-error {
+  color: #c0392b;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 15px;
 }
 
-/* Estilos للزر */
-.form-button {
-  padding: 12px 20px;
-  background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%);
+.admin-form-button {
+  padding: 12px;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 1.6rem;
-  font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
-.form-button:hover {
-  transform: translateY(-2px);
-}
-
-.form-button:active {
-  transform: translateY(0);
-}
-
-/* Estilos لأخطاء التحقق */
-.error-text {
-  color: #dc3545;
-  font-size: 1.5rem;
-  margin-top: -1rem;
-  margin-bottom: 0.5rem;
-}
-
-.general-error {
-  text-align: center;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-}
-
-/* تأثيرات إضافية */
-@media (max-width: 768px) {
-  .container {
-    padding: 1.5rem;
-    margin: 1rem;
-  }
-  
-  .form-title {
-    font-size: 1.5rem;
-  }
+.admin-form-button:hover {
+  background-color: #0056b3;
 }
