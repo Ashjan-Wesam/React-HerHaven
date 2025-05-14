@@ -72,7 +72,7 @@ const Sidebar = () => {
           <li>
               <NavLink to="/owner/reviews" className={({ isActive }) => isActive ? "active" : ""} onClick={() => {
               setShowReviewsSubMenu(!showReviewsSubMenu);
-              setShowOrdersSubMenu(false); // لإغلاق الآخر
+              setShowOrdersSubMenu(false); 
             }}>
                 <i className="pe-7s-star"></i>
                 <p>Reviews Management</p>
@@ -92,13 +92,14 @@ const Sidebar = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/owner/reviewsStore" className={({ isActive }) => isActive ? "active" : ""}>
-                    Store Reviews
+                  <NavLink to="/owner/productsStore" className={({ isActive }) => isActive ? "active" : ""}>
+                    Products Reviews
                   </NavLink>
                 </li>
               </ul>
             )}
           </li>
+
 
           <li>
             <NavLink to="/owner/settings" className={({ isActive }) => isActive ? "active" : ""}>

@@ -177,3 +177,16 @@
   border-color: #aa7ad0;
   box-shadow: 0 0 0 2px rgba(170, 122, 208, 0.2);
 }
+.wishlist-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 3.4rem;
+  color:rgb(170, 122, 208) ;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.wishlist-button:hover {
+  transform: scale(1.2);
+  color: #a074c4; 
+}

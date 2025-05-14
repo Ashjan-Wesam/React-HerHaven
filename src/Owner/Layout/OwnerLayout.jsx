@@ -17,7 +17,8 @@ import EditProduct from "../Pages/Products/EditProduct";
 import DiscountsPage from "../Pages/Discounts/DiscountsPage";
 import DiscountForm from "../Pages/Discounts/DiscountForm";
 import DesignRequests from "../Pages/Orders/DesignRequests";
-import OwnerReviewsPage from "../Pages/Reviews/OwnerReviewsPage";
+import StoreReviews from "../Pages/Reviews/StoreReviews";
+import ProductReviews from "../Pages/Reviews/ProductReviews";
 
 
 const OwnerLayout = () => {
@@ -46,8 +47,11 @@ const OwnerLayout = () => {
             <Route path="orders-req" element={<DesignRequests />} />
             
             <Route path="reviews" element={<ReviewsManagement />} />
-            <Route path="reviewsStore" element={<OwnerReviewsPage />} />
+            <Route path="reviewsStore" element={<StoreReviews />} />
+            <Route path="productsStore" element={<ProductReviews />} />
+
             <Route path="settings" element={<StoreSetting />} />
+
 
             <Route path="categories" element={<CategoriesPage />} />
             <Route path="categories/show/:id" element={<ShowCategory />} />

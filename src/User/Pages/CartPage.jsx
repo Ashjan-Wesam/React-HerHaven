@@ -3,14 +3,19 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./cart.css";
 import Swal from "sweetalert2";
+import empty from "../../userTemplate/img/empty-cart.png"
+import { div } from "framer-motion/client";
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);
   const navigate = useNavigate();
+  const [discount, setDiscount] = useState(null);
+
 
   const handleContinueShopping = () => {
     if (cart && cart.cart_products && cart.cart_products.length > 0) {
       const storeId = cart.cart_products[0].product.store_id;
+      
       if (storeId) {
         navigate(`/store/${storeId}`);
         return;
@@ -21,8 +26,41 @@ const CartPage = () => {
   };
 
   useEffect(() => {
-    fetchCart();
-  }, []);
+  fetchCart();
+}, []);
+
+useEffect(() => {
+  
+  if (cart && cart.cart_products && cart.cart_products.length > 0) {
+    const storeId = cart.cart_products[0].product.store_id;
+    if (storeId) {
+      checkStoreDiscount(storeId);
+    }
+  }
+}, [cart]);
+
+
+  const checkStoreDiscount = async (storeId) => {
+  try {
+    const res = await axios.get(
+      `http://127.0.0.1:8000/api/cart/check-discount/${storeId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (res.data.active) {
+      setDiscount(res.data.discount_percentage);
+    } else {
+      setDiscount(null);
+    }
+  } catch (err) {
+    console.error("Error fetching discount:", err);
+    setDiscount(null);
+  }
+};
+
 
   const fetchCart = async () => {
     try {
@@ -134,11 +172,23 @@ const CartPage = () => {
     return <div className="loading-spinner"></div>; 
   }
 
-  if (cart.cart_products?.length === 0) {
-    return <div className="p-4 text-center">Your cart is empty 🛒</div>;
-  }
+ if (cart.cart_products?.length === 0) {
+    return (
+        <div className="empty-cart">
+            <img src={empty} alt="Empty Cart" className="empty-cart-image" />
+            <h2 className="empty-cart-message">Your cart is empty!</h2>
+            <p className="empty-cart-instruction">Add something to make me happy</p>
+        </div>
+    );
+}
+
 
   const calculateTotal = (price, qty) => (price * qty).toFixed(2);
+  const totalPrice = cart.cart_products
+  .reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+const finalPrice = discount ? totalPrice * (1 - discount / 100) : totalPrice;
+
 
   return (
     <div className="cart-page p-6">
@@ -165,7 +215,7 @@ const CartPage = () => {
                   />
                   <p className="font-medium">{item.product.name}</p>
                 </td>
-                <td className="p-4">${item.price}</td>
+                <td className="p-4">JOD {item.price}</td>
                 <td className="p-4">
                   <input
                     type="number"
@@ -176,10 +226,10 @@ const CartPage = () => {
                     }
                   />
                 </td>
-                <td className="p-4">${calculateTotal(item.price, item.quantity)}</td>
+                <td className="p-4">JOD {calculateTotal(item.price, item.quantity)}</td>
                 <td className="p-4">
                   <button
-                    className="text-red-600 underline"
+                    className="cart-remove-btn"
                     onClick={() => handleRemove(item.product.id)}
                   >
                     Remove
@@ -205,16 +255,31 @@ const CartPage = () => {
 
       <div className="checkout-section">
         <h3>Order Summary</h3>
-        <p>
+        <p className="discount-text">
           Total Items:{" "}
           {cart.cart_products.reduce((sum, item) => sum + item.quantity, 0)}
         </p>
-        <p>
-          Total Price: $
-          {cart.cart_products
-            .reduce((sum, item) => sum + item.price * item.quantity, 0)
-            .toFixed(2)}
-        </p>
+      <p className="discount-text">Total Price: JOD {totalPrice.toFixed(2)}</p>
+{discount && (
+  <div>
+
+    <div className="discount-texts-div">
+      <p className="discount-text">
+          Discount Applied:
+      </p>
+      <span>{discount}%</span>
+      </div>
+
+   <div className="discount-texts-div">
+      <p className="discount-text">
+         Total Price after discount:
+      </p>
+      <span> JOD {finalPrice.toFixed(2)}</span>
+  </div>
+
+  </div>
+)}
+
         <button
           className="checkout-btn"
           onClick={() => navigate("/customer/checkout")}

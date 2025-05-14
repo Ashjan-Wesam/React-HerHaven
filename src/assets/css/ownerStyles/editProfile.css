@@ -1,0 +1,229 @@
+.owner-profile {
+  max-width: 800px;
+  margin: 60px auto;
+  background: linear-gradient(135deg, #f9f9f9, #ffffff);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.owner-profile h2 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #2c3e50;
+  position: relative;
+}
+
+
+.profile-details {
+  text-align: center;
+}
+
+.profile-details img {
+  border: 5px solid rgb(170, 122, 208) ;
+  transition: transform 0.4s ease;
+}
+
+.profile-details img:hover {
+  transform: scale(1.05);
+}
+
+.profile-details p {
+  font-size: 18px;
+  margin: 12px 0;
+}
+
+.profile-details strong {
+  color: #555;
+}
+
+.profile-details button {
+  margin-top: 20px;
+  padding: 10px 24px;
+  font-size: 16px;
+  background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+
+/* Form */
+.profile-form label {
+  display: block;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.profile-form input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  transition: border-color 0.3s ease;
+}
+
+.profile-form input:focus {
+  border-color: #ff6b6b;
+  outline: none;
+}
+
+.profile-form button {
+  margin-right: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+ background: linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.profile-form button[type="button"] {
+  background: #95a5a6;
+}
+
+.profile-form button:hover {
+  opacity: 0.9;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* ملف editProfile.css */
+
+.error {
+  color: #e74c3c;       /* لون أحمر أنيق */
+  font-size: 0.9rem;
+  margin-top: 4px;
+  margin-left: 4px;
+}
+/* editProfile.css */
+
+.store-setting-container {
+  max-width: 700px;
+  margin: 40px auto;
+  background-color: #fdfdfd;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.store-setting-title {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.store-setting-description {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.store-setting-logo {
+  width: 120px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 2px solid #eee;
+}
+
+.store-setting-subtitle {
+  font-size: 20px;
+  color: #444;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.store-setting-category-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.store-setting-category {
+  background-color: #eef2f7;
+  padding: 6px 12px;
+  margin: 4px 0;
+  border-radius: 6px;
+  color: #333;
+}
+
+.store-setting-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s ease;
+}
+
+.store-setting-button:hover {
+  background-color: #0056b3;
+}
+
+.store-setting-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.store-setting-form-group label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.store-setting-form-group input[type="text"],
+.store-setting-form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.store-setting-form-group input[type="file"] {
+  margin-top: 8px;
+}
+
+.store-setting-button-group {
+  display: flex;
+  gap: 12px;
+}
+
+.store-setting-button.save {
+  background-color: #28a745;
+}
+
+.store-setting-button.save:hover {
+  background-color: #218838;
+}
+
+.store-setting-button.cancel {
+  background-color: #dc3545;
+}
+
+.store-setting-button.cancel:hover {
+  background-color: #c82333;
+}
+
+.error {
+  color: #d9534f;
+  font-size: 13px;
+  margin-top: 4px;
+}

@@ -3,7 +3,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import "./OrderRequests.css";
-import { div } from "framer-motion/client";
 
 const OrderRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -70,18 +69,20 @@ const OrderRequests = () => {
     if (!token) return;
 
     try {
-      await axios.post(
-        "http://127.0.0.1:8000/api/cart/add",
-        {
-          product_id: productId,
-          quantity: 1,             
-          price: 100,  
-          design_details: designDetails, 
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+     await axios.post(
+  "http://127.0.0.1:8000/api/cart/add",
+  {
+    product_id: productId,
+    quantity: 1,
+    price: 100,
+    design_details: designDetails,
+    design_request_id: designRequestId, 
+  },
+  {
+    headers: { Authorization: `Bearer ${token}` },
+  }
+);
+
 
       setCartAdded((prevState) => ({
         ...prevState,

@@ -73,7 +73,7 @@ const StoresList = () => {
         <option value="electronics">Electronics</option>
         <option value="fashion">Fashion</option>
         <option value="groceries">Groceries</option>
-        {/* أضف المزيد من الفئات حسب الحاجة */}
+    
       </select>
     
       <Link to="/admin/stores/create" className="add-store-btn">Add New Store</Link>

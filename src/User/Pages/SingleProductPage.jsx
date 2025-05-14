@@ -23,7 +23,7 @@ const SingleProductPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/owner/products/${productId}`);
+        const response = await axios.get(`http://127.0.0.1:8000/api/single-product/${productId}`);
         setProduct(response.data);
 
         const related = await axios.get(`http://127.0.0.1:8000/api/related-products/${response.data.category_id}/${response.data.store_id}/${productId}`);
@@ -233,6 +233,8 @@ const SingleProductPage = () => {
                 placeholder="Enter your custom design here..."
               ></textarea>
 
+ <div style={{ display: "flex",  }}>
+           
               <button className="send-request" onClick={() => sendDesignRequest(false)} disabled={customDesign.trim() === ""}>
                 SEND DESIGN REQUEST
               </button>
@@ -240,17 +242,25 @@ const SingleProductPage = () => {
               <button className="send-request" onClick={() => sendDesignRequest(true)}>
                 SEND SAME DESIGN
               </button>
+
+                <button onClick={toggleWishlist} className="wishlist-button">
+  <i className={inWishlist ? "fas fa-heart" : "far fa-heart"}></i>
+</button>
+            </div>
             </div>
           )}
 
           {product.request === "no" && (
+            <div style={{ display: "flex",  }}>
+             <button onClick={toggleWishlist} className="wishlist-button">
+  <i className={inWishlist ? "fas fa-heart" : "far fa-heart"}></i>
+</button>
             <button className="add-to-cart" onClick={handleAddToCart}>
               ORDER NOW
             </button>
+            </div>
           )}
-          <button onClick={toggleWishlist} className="wishlist-button">
-  {inWishlist ? "Remove from Wishlist ❤️" : "Add to Wishlist 🤍"}
-</button>
+       
 
         </div>
       </div>

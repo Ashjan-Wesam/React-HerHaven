@@ -9,6 +9,7 @@ import { Bar, Line } from "react-chartjs-2";
 import Chart from 'chart.js/auto';
 import "../../assets/css/ownerStyles/dashboard.css";
 
+
 const OwnerDashboard = () => {
   const [stats, setStats] = useState({
     products_count: 0,

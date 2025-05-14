@@ -45,47 +45,8 @@ const UserOrders = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    const result = await Swal.fire({
-      title: 'Confirm Order Cancellation',
-      text: "Are you sure you want to cancel this order?",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, cancel it!',
-      cancelButtonText: 'No, keep it'
-    });
-
-    if (!result.isConfirmed) return;
-
-    try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`http://127.0.0.1:8000/api/orders/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setOrders((prev) => prev.filter((order) => order.id !== id));
-      
-      Swal.fire(
-        'Cancelled!',
-        'Your order has been cancelled.',
-        'success'
-      );
-    } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to cancel the order. Please try again.',
-        confirmButtonText: 'OK'
-      });
-    }
-  };
-
   const handleShowDetails = async (id) => {
     try {
-      setIsLoading(true);
       const token = localStorage.getItem("token");
       const res = await axios.get(`http://127.0.0.1:8000/api/orders/${id}`, {
         headers: {
@@ -100,8 +61,6 @@ const UserOrders = () => {
         text: 'Failed to load order details. Please try again.',
         confirmButtonText: 'OK'
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -111,9 +70,9 @@ const UserOrders = () => {
 
   if (isLoading) {
     return (
-      <div className="user-orders__loading">
-        <div className="user-orders__spinner"></div>
-        <p className="user-orders__loading-text">Loading your orders...</p>
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading your orders...</p>
       </div>
     );
   }
@@ -156,14 +115,6 @@ const UserOrders = () => {
                     >
                       View Details
                     </button>
-                    {order.status === "pending" && order.payment?.method === "cod" && (
-                      <button 
-                        className="user-orders__button user-orders__button--cancel"
-                        onClick={() => handleDelete(order.id)}
-                      >
-                        Cancel
-                      </button>
-                    )}
                   </td>
                 </tr>
               ))}
@@ -202,13 +153,20 @@ const UserOrders = () => {
               {selectedOrder.order_details.map((item) => (
                 <li key={item.id} className="user-orders__modal-item">
                   <div className="user-orders__modal-item-info">
-                  <span className="user-orders__modal-item-product">
-                         Product: {item.product?.name || 'N/A'}
-                  </span>
-
+                    <span className="user-orders__modal-item-product">
+                      Product: {item.product?.name || 'N/A'}
+                    </span>
                     <span className="user-orders__modal-item-quantity">Qty: {item.quantity}</span>
                   </div>
                   <div className="user-orders__modal-item-price">{item.total_price} JD</div>
+
+                  {item.design_request && (
+                    <div className="user-orders__modal-design">
+                      <p><strong>Design Request:</strong></p>
+                      <p>Details: {item.design_request.design_details}</p>
+                      <p>Status: <span className={`user-orders__status user-orders__status--${item.design_request.status.toLowerCase()}`}>{item.design_request.status}</span></p>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>

@@ -22,7 +22,7 @@ const CategoryPage = () => {
         setIsLoading(true);
         const [storesRes, categoriesRes] = await Promise.all([
           axios.get("http://127.0.0.1:8000/api/stores"),
-          axios.get("http://127.0.0.1:8000/api/owner/categories"),
+          axios.get("http://127.0.0.1:8000/api/all-categories"),
         ]);
         setStores(storesRes.data);
         setFilteredStores(storesRes.data);
@@ -162,7 +162,14 @@ const CategoryPage = () => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="pagination">
+        <div className="owner-pagination">
+           <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            <i className="fas fa-chevron-left"></i>
+          </button>
+                    <div className='div-nums'>
           {[...Array(totalPages)].map((_, index) => (
             <button
               key={index}
@@ -172,6 +179,13 @@ const CategoryPage = () => {
               {index + 1}
             </button>
           ))}
+          </div>
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+             <i className="fas fa-chevron-right"></i>
+          </button>
         </div>
       )}
     </div>

@@ -23,7 +23,7 @@ const StoreDetail = () => {
   const [currentReviewPage, setCurrentReviewPage] = useState(1);
   const [currentProductPage, setCurrentProductPage] = useState(1);
   const reviewsPerPage = 6;
-  const productsPerPage = 8;
+  const productsPerPage = 6;
 
   // Calculate pagination for reviews
   const indexOfLastReview = currentReviewPage * reviewsPerPage;
@@ -45,8 +45,6 @@ const StoreDetail = () => {
     setCurrentProductPage(pageNumber);
   };
   
-
-  // Reset product page when filters change
   useEffect(() => {
     setCurrentProductPage(1);
   }, [search, selectedCategory, sortOption]);
@@ -167,15 +165,16 @@ const StoreDetail = () => {
     if (totalPages <= 1) return null;
   
     return (
-      <div className={`pagination ${className}`}>
+      <div className= "owner-pagination">
         <button 
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
           disabled={currentPage === 1}
-          className="pagination-arrow"
+          className="pagination-button"
         >
-          <FaAngleLeft />
+          <i className="fas fa-chevron-left"></i>
         </button>
         
+        <div className="dev-nums">
         {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
           let pageNum;
           if (totalPages <= 5) {
@@ -198,13 +197,13 @@ const StoreDetail = () => {
             </button>
           );
         })}
-        
+        </div>
         <button 
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage === totalPages}
-          className="pagination-arrow"
+          className="pagination-button"
         >
-          <FaAngleRight />
+          <i className="fas fa-chevron-right"></i>
         </button>
       </div>
     );
@@ -493,7 +492,6 @@ const StoreDetail = () => {
               )}
             </div>
 
-            {/* Products Pagination */}
             {filteredProducts.length > productsPerPage && (
               <Pagination
                 currentPage={currentProductPage}

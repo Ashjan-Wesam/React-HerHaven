@@ -7,8 +7,8 @@
 }
 
 .cart-page h2 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+  margin-bottom: 5rem;
   color: #333;
   text-align: center;
   padding-bottom: 1rem;
@@ -83,7 +83,7 @@
   font-weight: bold;
   transition: 0.3s;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 1.5rem;
 }
 
 .clear-update {
@@ -127,13 +127,14 @@
 }
 
 .checkout-section h3 {
-  font-size: 1.5rem;
+  font-size: 2rem !important;
   margin-bottom: 15px;
   color: #333;
+  font-weight: 600;
 }
 
 .checkout-section p {
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   margin: 5px 0;
   color: #444;
 }
@@ -141,8 +142,8 @@
 .checkout-btn {
   margin-top: 15px;
   padding: 12px 25px;
-  font-size: 1.1rem;
-  background: linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%) !important;
+  font-size: 1.6rem;
+  background: #444;
   color: white;
   border: none;
   border-radius: 8px;
@@ -153,6 +154,7 @@
 
 .checkout-btn:hover {
   opacity: 0.9;
+  background-color: #333;
 }
 
 .loading-spinner {
@@ -253,4 +255,59 @@
   .checkout-section p {
       font-size: 0.9rem;
   }
+}
+.empty-cart {
+    padding: 24px;
+    text-align: center;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+ 
+    margin: 0 auto;
+}
+
+.empty-cart-image {
+  margin-left: -30px;
+    width: 20rem;
+    margin-bottom: 20px;
+}
+
+.empty-cart-message {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+.empty-cart-instruction {
+    font-size: 18px;
+    color: #888888;
+}
+.cart-remove-btn{
+
+  background: linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%);
+  text-decoration: none;
+  color: white;
+  padding: 7px;
+  border-radius: 0.6rem;
+}
+
+.discount-text {
+  color: #444 !important;
+  font-weight: bold;
+  font-size: 1.5rem !important;
+  margin: 0 !important;
+}
+.discount-texts-div{
+  display: flex;
+  align-items: center !important;
+  gap: 1rem;
+}
+.discount-texts-div span{
+  color: rgb(44, 175, 44) !important;
+  font-weight: bold;
+  font-size: 1.6rem !important;
+  margin: 0;
 }
