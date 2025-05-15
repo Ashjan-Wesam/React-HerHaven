@@ -224,7 +224,6 @@ const CreateProduct = () => {
              
 
 
-            {/* السعر والكمية */}
             <div className="owner-form-row">
               <div className="owner-form-group owner-half-width">
                 <label className="owner-form-label">Price ($)</label>

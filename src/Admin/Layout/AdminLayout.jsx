@@ -17,10 +17,18 @@ import StoreDetails from "../Pages/Stores/StoreDetails";
 import OrderList from "../Pages/Orders/OrderList";
 import ViewOrder from "../Pages/Orders/ViewOrder";
 import EditOrder from "../Pages/Orders/EditOrder";
-import ReviewCards from "../Components/ReviewCards";
-import ReviewDetails from "../Pages/Reviews/ReviewDetails";
+import AdminSiteReviews from "../Pages/Reviews/AdminSiteReviews";
+import AdminStoreReviews from "../Pages/Reviews/AdminStoreReviews";
+import AdminProductReviews from "../Pages/Reviews/AdminProductReviews";
 import CategoriesPage from "../Pages/categories/CategoriesPage";
 import ProductAdminPage from "../Pages/Products/ProductAdminPage";
+import CreateProduct  from "../Pages/Products/CreateProduct";
+import EditProduct  from "../Pages/Products/EditProduct";
+import ShowProduct  from "../Pages/Products/ShowProduct";
+import DiscountList from "../Pages/Discount/DiscountList";
+import AddDiscount from "../Pages/Discount/AddDiscount";
+import EditDiscount from "../Pages/Discount/EditDiscount";
+import AdminProfile from "../Pages/AdminProfile";
 
 
 
@@ -60,15 +68,32 @@ const AdminLayout = () => {
 
               {/* Products Management */}
                <Route path="/products" element={<ProductAdminPage />} />
+               <Route path="/products/create" element={<CreateProduct />} />
+               <Route path="/products/edit/:id" element={<EditProduct />} />
+               <Route path="/products/show/:id" element={<ShowProduct />} />
 
               {/* Orders Management */}
               <Route path="/orders" element={<OrderList />} />
               <Route path="/orders/:id" element={<ViewOrder />} />
               <Route path="/orders/:id/edit" element={<EditOrder />} />
 
+              {/* Discounts Management */}
+              <Route path="/discounts" element={<DiscountList />} />
+              <Route path="/discounts/add" element={<AddDiscount />} />
+              <Route path="/discounts/edit/:id" element={<EditDiscount />} />
+
               {/* Reviews Management */}
-              <Route path="/reviews" element={<ReviewCards />} />
-              <Route path="/reviews/:type" element={<ReviewDetails />} />
+              <Route path="/reviews/sites" element={<AdminSiteReviews />} />
+              <Route path="/reviews/stores" element={<AdminStoreReviews />} />
+              <Route path="/reviews/products" element={<AdminProductReviews />} />
+
+
+              {/* Profile Management */}
+              <Route path="/profile" element={<AdminProfile />} />
+
+
+
+
 
              
 
