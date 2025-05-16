@@ -97,9 +97,9 @@ const Footer = () => {
             }}>
               {[
                 { path: '/', text: 'Home' },
-                { path: '/stores', text: 'All Stores' },
-                { path: '/categories', text: 'Categories' },
-                { path: '/blog', text: 'Fashion Blog' },
+                { path: '/shop', text: 'All Stores' },
+                { path: '/shop', text: 'Categories' },
+                { path: '/about-us', text: 'Our Story' },
                 { path: '/contact', text: 'Contact Us' }
               ].map((link) => (
                 <li key={link.path} style={{ 
@@ -115,7 +115,7 @@ const Footer = () => {
                     gap: '8px'
                   }} onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
                     onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}>
-                    <i className="fas fa-chevron-right" style={{ fontSize: '0.8rem' }}></i>
+                   
                     {link.text}
                   </Link>
                 </li>
@@ -153,7 +153,7 @@ const Footer = () => {
                 gap: '12px'
               }}>
                 <i className="fas fa-map-marker-alt" style={{ marginTop: '4px' }}></i>
-                <span>123 Fashion Avenue, New York, NY 10001</span>
+                <span>Amman , Jordan</span>
               </li>
               <li style={{
                 marginBottom: '15px',
@@ -162,7 +162,7 @@ const Footer = () => {
                 alignItems: 'center'
               }}>
                 <i className="fas fa-phone"></i>
-                <span>+1 (212) 555-1234</span>
+                <span>+(962) 78 759 5 164</span>
               </li>
               <li style={{
                 marginBottom: '15px',
@@ -171,7 +171,7 @@ const Footer = () => {
                 alignItems: 'center'
               }}>
                 <i className="fas fa-envelope"></i>
-                <span>hello@fashionboutique.com</span>
+                <span>Herhaven@gmail.com</span>
               </li>
               <li style={{
                 display: 'flex',
@@ -179,85 +179,12 @@ const Footer = () => {
                 alignItems: 'center'
               }}>
                 <i className="fas fa-clock"></i>
-                <span>Mon-Fri: 9AM - 6PM</span>
+                <span>We're Here For You At All Times</span>
               </li>
             </ul>
           </div>
 
-          {/* Newsletter */}
-          <div className="footer-section">
-            <h3 style={{
-              fontSize: '1.5rem',
-              marginBottom: '25px',
-              position: 'relative',
-              fontWeight: '600',
-              color: 'white'
-            }}>
-              <span style={{
-                position: 'absolute',
-                bottom: '-8px',
-                left: '0',
-                width: '60px',
-                height: '3px',
-                background: 'linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%)'
-              }}></span>
-              Newsletter
-            </h3>
-            <p style={{
-              lineHeight: '1.7',
-              marginBottom: '20px',
-              opacity: '0.9'
-            }}>
-              Subscribe to get updates on new stores and exclusive offers
-            </p>
-            <form style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '15px'
-            }}>
-              <input 
-                type="email" 
-                placeholder="Your email address" 
-                style={{
-                  padding: '14px 18px',
-                  border: 'none',
-                  borderRadius: '30px',
-                  fontSize: '1rem',
-                  outline: 'none',
-                  boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
-                }} 
-                required
-              />
-              <button 
-                type="submit" 
-                style={{
-                  background: 'linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%)',
-                  color: 'white',
-                  border: 'none',
-                  padding: '14px 28px',
-                  borderRadius: '30px',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s',
-                  width: 'fit-content',
-                  boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-                }} 
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%)';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.15)';
-                }} 
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%)';
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
-                }}
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
+       
         </div>
 
         {/* Copyright */}
@@ -268,24 +195,8 @@ const Footer = () => {
           opacity: '0.8',
           fontSize: '0.95rem'
         }}>
-          <p>© {new Date().getFullYear()} Fashion Boutique. All rights reserved.</p>
-          <div style={{ marginTop: '15px' }}>
-            <Link to="/privacy" style={{ 
-              color: 'white', 
-              textDecoration: 'none',
-              margin: '0 10px'
-            }}>Privacy Policy</Link>
-            <Link to="/terms" style={{ 
-              color: 'white', 
-              textDecoration: 'none',
-              margin: '0 10px'
-            }}>Terms of Service</Link>
-            <Link to="/sitemap" style={{ 
-              color: 'white', 
-              textDecoration: 'none',
-              margin: '0 10px'
-            }}>Sitemap</Link>
-          </div>
+          <p>© {new Date().getFullYear()} Her Haven. All rights reserved.</p>
+         
         </div>
       </div>
     </footer>

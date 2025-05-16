@@ -226,7 +226,7 @@ const CreateProduct = () => {
 
             <div className="owner-form-row">
               <div className="owner-form-group owner-half-width">
-                <label className="owner-form-label">Price ($)</label>
+                <label className="owner-form-label">Price (JOD)</label>
                 <div className="owner-input-with-icon">
                   <i className="fas fa-dollar-sign"></i>
                   <input

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './SiteReviews.css';
+import Loading from '../../Owner/Components/Loading';
 
 const SiteReviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -33,10 +34,7 @@ const SiteReviews = () => {
 
   if (loading) {
     return (
-      <div className="site-reviews-loading">
-        <div className="spinner"></div>
-        <p>Loading testimonials...</p>
-      </div>
+      <Loading />
     );
   }
 
@@ -62,13 +60,13 @@ const SiteReviews = () => {
           <span className="title-decoration">❞</span>
         </h2>
         <p className="reviews-subtitle">Discover what our community is saying</p>
-        
+
         {reviews.length > 0 ? (
           <>
             <div className="reviews-carousel">
               {reviews.map((review, index) => (
-                <div 
-                  key={review.id} 
+                <div
+                  key={review.id}
                   className={`review-card ${index === activeIndex ? 'active' : ''}`}
                 >
                   <div className="review-content">
@@ -76,10 +74,7 @@ const SiteReviews = () => {
                     <div className="review-meta">
                       <div className="review-rating">
                         {Array.from({ length: 5 }).map((_, i) => (
-                          <span 
-                            key={i} 
-                            className={i < review.rating ? 'filled' : ''}
-                          >
+                          <span key={i} className={i < review.rating ? 'filled' : ''}>
                             ★
                           </span>
                         ))}
@@ -101,7 +96,7 @@ const SiteReviews = () => {
             </div>
           </>
         ) : (
-          <div className="no-reviews">
+          <div className="no-reviews-message">
             <p>Be the first to share your experience!</p>
           </div>
         )}

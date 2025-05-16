@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./cart.css";
 import Swal from "sweetalert2";
 import empty from "../../userTemplate/img/empty-cart.png"
-import { div } from "framer-motion/client";
+
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);

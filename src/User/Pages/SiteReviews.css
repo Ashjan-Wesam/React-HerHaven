@@ -201,4 +201,71 @@
     }
   }
 
-  
+  /* تقليم نص الريفيو بعد 3 أسطر */
+.review-message {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 4.5em; /* تقريباً 3 أسطر */
+  line-height: 1.5em;
+  font-style: italic;
+  color: #444;
+}
+
+/* رسالة عدم وجود ريفيو */
+.no-reviews-message {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #666;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* بعض أنماط إضافية للعرض يمكن أن تكون موجودة في ملفك الأساسي */
+.site-reviews-loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.spinner {
+  border: 4px solid #eee;
+  border-top: 4px solid #aa7ad0;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto 15px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* إضافة بعض أنماط النقاط التي تظهر للتنقل بين الريفيوهات */
+.review-dots {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  border: none;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dot.active, .dot:hover {
+  background-color: #aa7ad0;
+}

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import '../../../assets/css/adminStyles/storelist.css';
 import Loading from  "../../../Owner/Components/Loading";
 import notfound from '../../../assets/img/nofound.jpg';
+import Swal from 'sweetalert2';
 
 const StoresList = () => {
   const [stores, setStores] = useState([]);
@@ -39,14 +40,30 @@ const StoresList = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    const token = localStorage.getItem('token');
-    try {
-      await axios.delete(`http://127.0.0.1:8000/api/admin/stores/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setStores(prev => prev.filter(store => store.id !== id));
-    } catch (error) {
-      console.error('Error deleting store:', error);
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "This will permanently delete the store.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    });
+
+    if (result.isConfirmed) {
+      const token = localStorage.getItem('token');
+      try {
+        await axios.delete(`http://127.0.0.1:8000/api/admin/stores/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setStores(prev => prev.filter(store => store.id !== id));
+
+        Swal.fire('Deleted!', 'The store has been deleted.', 'success');
+      } catch (error) {
+        console.error('Error deleting store:', error);
+        Swal.fire('Error', 'There was a problem deleting the store.', 'error');
+      }
     }
   };
 
@@ -106,10 +123,10 @@ const StoresList = () => {
       ) : (
         <>
           {currentStores.length === 0 ? (
-              <div style={{ margin: "auto" }} className="cat-no-products">
-                                <img src={notfound} alt="No products" className="cat-no-products-img" />
-                                <p>No stores found for the current search or filter.</p>
-                              </div>
+            <div style={{ margin: "auto" }} className="cat-no-products">
+              <img src={notfound} alt="No products" className="cat-no-products-img" />
+              <p>No stores found for the current search or filter.</p>
+            </div>
           ) : (
             <div className="card-grid">
               {currentStores.map(store => (
@@ -133,33 +150,33 @@ const StoresList = () => {
             </div>
           )}
 
-           {totalPages > 1 && (
+          {totalPages > 1 && (
             <div className="owner-pagination">
               <button
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            <i className="fas fa-chevron-left"></i>
-          </button>
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                <i className="fas fa-chevron-left"></i>
+              </button>
 
-          <div className='div-nums'>
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i}
-                  className={`page-btn ${currentPage === i + 1 ? 'active' : ''}`}
-                  onClick={() => setCurrentPage(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              ))}
+              <div className='div-nums'>
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i}
+                    className={`page-btn ${currentPage === i + 1 ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(i + 1)}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
               </div>
-          <button
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-          >
-             <i className="fas fa-chevron-right"></i>
-          </button>
-              
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+              >
+                <i className="fas fa-chevron-right"></i>
+              </button>
             </div>
           )}
         </>

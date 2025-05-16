@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import "./SingleProductPage.css";
+import Loading from "../../Owner/Components/Loading";
 
 const SingleProductPage = () => {
   const { productId } = useParams();
@@ -44,6 +45,9 @@ const SingleProductPage = () => {
           });
           const isInWishlist = wishlistCheck.data.some(item => item.product.id === response.data.id);
           setInWishlist(isInWishlist);
+
+         
+
         }
         
       } catch (error) {
@@ -53,7 +57,6 @@ const SingleProductPage = () => {
     fetchProduct();
   }, [productId]);
 
-  // حساب المراجعات للصفحة الحالية
   const indexOfLastReview = currentReviewPage * reviewsPerPage;
   const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
   const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
@@ -96,7 +99,8 @@ const SingleProductPage = () => {
       Swal.fire({ icon: "error", title: "Error", text: "Something went wrong." });
     }
   };
-  
+
+
 
   const sendDesignRequest = async (same = false) => {
     const token = localStorage.getItem("token");
@@ -178,7 +182,7 @@ const SingleProductPage = () => {
         "http://127.0.0.1:8000/api/cart/add",
         {
           product_id: product.id,
-          quantity: 1,             
+          quantity: quantity,            
           price: product.price,    
         },
         {
@@ -200,7 +204,7 @@ const SingleProductPage = () => {
     }
   };
 
-  if (!product) return <div>Loading...</div>;
+  if (!product) return <Loading />;
   
   return (
     <div className="single-product-wrapper">
@@ -211,17 +215,19 @@ const SingleProductPage = () => {
 
         <div className="product-info-section">
           <h2>{product.name}</h2>
-          <p className="product-price">${product.price}</p>
+          <p className="product-price">JOD {product.price}</p>
           <p className="product-description">{product.description || "No description available."}</p>
 
           <div className="quantity-section">
             <label>Quantity:</label>
-            <input
-              type="number"
-              min="1"
-              value={quantity}
-              onChange={(e) => setQuantity(Number(e.target.value))}
-            />
+           <input
+    type="number"
+    id="quantity"
+    min="1"
+    value={quantity}
+    onChange={(e) => setQuantity(Number(e.target.value))}
+  />
+
           </div>
 
           {product.request === "yes" && (
@@ -252,12 +258,13 @@ const SingleProductPage = () => {
 
           {product.request === "no" && (
             <div style={{ display: "flex",  }}>
-             <button onClick={toggleWishlist} className="wishlist-button">
-  <i className={inWishlist ? "fas fa-heart" : "far fa-heart"}></i>
-</button>
+           
             <button className="add-to-cart" onClick={handleAddToCart}>
               ORDER NOW
             </button>
+              <button onClick={toggleWishlist} className="wishlist-button">
+  <i className={inWishlist ? "fas fa-heart" : "far fa-heart"}></i>
+</button>
             </div>
           )}
        
@@ -373,27 +380,47 @@ const SingleProductPage = () => {
         )}
       </div>
 
-      <div className="related-products-section">
-        <h3>Related Products</h3>
-        <div className="product-grid">
-          {relatedProducts.slice(0, 4).map((p) => (
-            <div key={p.id} className="producr-card">
-              <div className="product-info">
-                <div className="product-image-container">
-                  <img src={`http://127.0.0.1:8000/${p.image_url}`} alt={p.name} className="product-image"/>
-                </div> 
-                <h3 className="product-name">{p.name}</h3>
-                <p className="product-price">JD{p.price}</p>
-                <p className="product-category">{p.category}</p>
-                <p className="product-description">{p.description}</p>
-              </div>
+   <div className="single-product-related-products-section ">
+  <h3>Related Products</h3>
+
+  {relatedProducts.length === 0 ? (
+    <p className="single-product-no-related-message">
+      No related products found.
+    </p>
+  ) : (
+    <div className="single-product-product-grid">
+      {relatedProducts.slice(0, 6).map((p) => (
+        <div key={p.id} className="single-product-card">
+          <div className="single-product-info">
+            <div className="single-product-image-container">
+              <img
+                src={`http://127.0.0.1:8000/${p.image_url}`}
+                alt={p.name}
+                className="single-product-image"
+              />
             </div>
-          ))}
+            <h3 className="single-product-name">{p.name}</h3>
+            <p className="single-product-price">JOD {p.price}</p>
+            <p className="single-product-category">{p.category}</p>
+          </div>
         </div>
-        <button className="show-more-btn" onClick={() => navigate(`/store/${product.store_id}`)}>
-          Show More
-        </button>
-      </div>
+      ))}
+    </div>
+  )}
+
+  {relatedProducts.length > 0 && (
+    <div style={{  display:"flex", justifyContent: "center" }}>
+  
+  <button
+      className="single-product-show-more-btn"
+      onClick={() => navigate(`/store/${product.store_id}`)}
+    >
+      Show More
+    </button>
+    </div>
+  )}
+</div>
+
     </div>
   );
 };

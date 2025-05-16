@@ -3,13 +3,15 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./WishlistPage.css";
+import Loading from "../../Owner/Components/Loading";
+import emptyw from "../../userTemplate/img/emptywish.png"
 
 const WishlistPage = () => {
   const [wishlist, setWishlist] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const [loading, setLoading] = useState(true); 
+  const itemsPerPage = 2;
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
@@ -19,6 +21,7 @@ const WishlistPage = () => {
   }, []);
 
   const fetchWishlist = async () => {
+    setLoading(true);
     try {
       const res = await axios.get("http://127.0.0.1:8000/api/wishlist", {
         headers: { Authorization: `Bearer ${token}` },
@@ -26,6 +29,8 @@ const WishlistPage = () => {
       setWishlist(res.data);
     } catch (err) {
       console.error("Failed to fetch wishlist", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,50 +64,94 @@ const WishlistPage = () => {
 
   return (
     <div className="wishlist-container">
-      <h2>My Wishlist</h2>
+      <h2 className="text-2xl font-bold mb-6 page-user-title">Your Wish List</h2>
 
-      <div className="wishlist-controls">
+      <div className="cat-search-container" style={{ margin: "auto" }}>
         <input
           type="text"
           placeholder="Search by name..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1); // reset page on search change
+          }}
+          className="cat-search-input"
         />
-
-        <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-          <option value="all">All Categories</option>
-          {categories.map((cat, i) => (
-            <option key={i} value={cat}>{cat}</option>
-          ))}
-        </select>
+        <i className="fas fa-search cat-search-icon"></i>
       </div>
 
+      {/* Loading */}
+      {loading && <Loading />}
+
+      {/* Empty wishlist */}
+      {!loading && wishlist.length === 0 && (
+      <div className="empty-cart">
+                 <img src={emptyw} alt="Empty Cart" className="empty-cart-image" />
+                 <h2 className="empty-cart-message">Your Wishlist is empty!</h2>
+                 <p className="empty-cart-instruction">Add something to make me happy</p>
+             </div>
+      )}
+
+      {/* No results found after filter/search */}
+      {!loading && wishlist.length > 0 && filteredWishlist.length === 0 && (
+        <p style={{ textAlign: "center", marginTop: "30px" }}>
+          No products match your search.
+        </p>
+      )}
+
+      {/* Wishlist items */}
       <div className="wishlist-grid">
-        {currentItems.map(({ product }) => (
-          <div key={product.id} className="wishlist-card">
-            <img src={`http://127.0.0.1:8000/storage/${product.image}`} alt={product.name} />
-            <h3>{product.name}</h3>
-            <p>{product.price} USD</p>
+        {!loading &&
+          currentItems.map(({ product }) => (
+            <div key={product.id} className="wishlist-card">
+              <img src={`http://127.0.0.1:8000/${product.image_url}`} alt={product.name} />
+              <h3>{product.name}</h3>
+              <p>{product.price} JOD </p>
 
-            <div className="wishlist-buttons">
-              <button onClick={() => navigate(`/products/${product.id}`)}>View</button>
-              <button onClick={() => handleDelete(product.id)} className="delete-btn">Remove</button>
+              <div className="wishlist-buttons">
+                <button
+                  onClick={() => navigate(`/products/${product.id}`)}
+                  className="show-category-btn"
+                >
+                  <i className="fas fa-eye"></i>
+                </button>
+                <button
+                  onClick={() => handleDelete(product.id)}
+                  className="delete-category-btn"
+                >
+                  <i className="fas fa-trash-alt"></i>
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
 
-      {totalPages > 1 && (
-        <div className="pagination">
-          {[...Array(totalPages)].map((_, idx) => (
-            <button
-              key={idx}
-              className={currentPage === idx + 1 ? "active" : ""}
-              onClick={() => handlePageChange(idx + 1)}
-            >
-              {idx + 1}
-            </button>
-          ))}
+      {totalPages > 1 && !loading && (
+        <div className="owner-pagination">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            <i className="fas fa-chevron-left"></i>
+          </button>
+
+          <div className="div-nums">
+            {[...Array(totalPages)].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={currentPage === i + 1 ? "active" : ""}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            <i className="fas fa-chevron-right"></i>
+          </button>
         </div>
       )}
     </div>

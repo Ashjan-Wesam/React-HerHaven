@@ -152,7 +152,7 @@ const CategoriesPage = () => {
 
     try {
       setIsLoading(true);
-      await axios.post('http://127.0.0.1:8000/api/owner/categories', {
+      await axios.post('http://127.0.0.1:8000/api/categories', {
         categories: unique.map(name => ({ name })),
         store_id: currentStoreId
       });
