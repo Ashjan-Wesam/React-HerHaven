@@ -56,7 +56,7 @@ const AdminSiteReviews = () => {
           'Review has been deleted.',
           'success'
         );
-        // لو بعد الحذف الصفحة صارت فارغة وعدد العناصر في الصفحة أقل من 1، ارجع صفحة لورا (page--)
+        
         const lastIndex = currentPage * reviewsPerPage;
         const firstIndex = lastIndex - reviewsPerPage;
         const currentReviewsCount = reviews.slice(firstIndex, lastIndex).length;
@@ -87,7 +87,7 @@ const AdminSiteReviews = () => {
 
   return (
     <div className="admin-reviews-container">
-      <h2 className="admin-title">Site Reviews</h2>
+      
       {reviews.length === 0 ? (
         <p className="admin-empty">No reviews found.</p>
       ) : (
@@ -104,7 +104,7 @@ const AdminSiteReviews = () => {
             <tbody>
               {currentReviews.map((review) => (
                 <tr key={review.id}>
-                  <td>{review.store?.name}</td>
+                  <td>{review.store?.store_name}</td>
                   <td>{review.rating}</td>
                   <td>{review.review_text}</td>
                   <td>

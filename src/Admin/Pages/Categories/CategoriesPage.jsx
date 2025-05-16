@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import '../../../assets/css/adminStyles/category.css'
+import '../../../assets/css/adminStyles/category.css';
+import notfound from '../../../assets/img/nofound.jpg';
+import Loading from '../../../Owner/Components/Loading';
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
@@ -9,10 +11,10 @@ const CategoriesPage = () => {
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
-  const [message, setMessage] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [showModal, setShowModal] = useState(false);
 
+  const itemsPerPage = 12;
   const token = localStorage.getItem('token');
 
   const fetchCategories = async () => {
@@ -35,6 +37,18 @@ const CategoriesPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validation
+    if (formData.name.trim().length < 3 || formData.name.trim().length > 100) {
+      Swal.fire('Validation Error', 'Name must be between 3 and 100 characters.', 'warning');
+      return;
+    }
+
+    if (formData.description && formData.description.length > 300) {
+      Swal.fire('Validation Error', 'Description must not exceed 300 characters.', 'warning');
+      return;
+    }
+
     try {
       if (editId) {
         await axios.put(`http://127.0.0.1:8000/api/admin/categories/${editId}`, formData, {
@@ -49,6 +63,7 @@ const CategoriesPage = () => {
       }
       setFormData({ name: '', description: '' });
       setEditId(null);
+      setShowModal(false);
       fetchCategories();
     } catch (err) {
       Swal.fire('Error!', 'Something went wrong.', 'error');
@@ -58,6 +73,7 @@ const CategoriesPage = () => {
   const handleEdit = (cat) => {
     setEditId(cat.id);
     setFormData({ name: cat.name, description: cat.description || '' });
+    setShowModal(true);
   };
 
   const handleDelete = async (id) => {
@@ -95,50 +111,28 @@ const CategoriesPage = () => {
 
   return (
     <div className="categories-container">
-
-      <input
-        type="text"
-        placeholder="Search categories..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="search-input"
-      />
-
-      <form className="category-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Category Name"
-          value={formData.name}
-          maxLength={100}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          required
-        />
-        <textarea
-          placeholder="Description (optional)"
-          value={formData.description}
-          maxLength={300}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-        />
-        <button type="submit">{editId ? 'Update' : 'Create'} Category</button>
-        {editId && (
-          <button
-            type="button"
-            onClick={() => {
-              setEditId(null);
-              setFormData({ name: '', description: '' });
-            }}
-          >
-            Cancel
-          </button>
-        )}
-      </form>
+      <div className="cat-header" style={{ marginBottom: "2rem" }}>
+        <div className="cat-search-container">
+          <input
+            type="text"
+            placeholder="Search categories..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="cat-search-input"
+          />
+          <i className="fas fa-search cat-search-icon"></i>
+        </div>
+        <button className="add-user-btn" onClick={() => setShowModal(true)}>
+          <i className="fas fa-plus"></i> Add Category
+        </button>
+      </div>
 
       {loading ? (
-        <p>Loading categories...</p>
+        <Loading />
       ) : (
         <>
-          <table className="categories-table">
-            <thead>
+          <table className="admin-table">
+            <thead className="admin-thead">
               <tr>
                 <th>Name</th>
                 <th>Description</th>
@@ -146,31 +140,101 @@ const CategoriesPage = () => {
               </tr>
             </thead>
             <tbody>
-              {paginatedCategories.map((cat) => (
-                <tr key={cat.id}>
-                  <td>{cat.name}</td>
-                  <td>{cat.description}</td>
-                  <td>
-                    <button onClick={() => handleEdit(cat)}>Edit</button>
-                    <button onClick={() => handleDelete(cat.id)} className="danger">Delete</button>
+              {paginatedCategories.length > 0 ? (
+                paginatedCategories.map((cat) => (
+                  <tr key={cat.id}>
+                    <td>{cat.name}</td>
+                    <td>{cat.description}</td>
+                    <td style={{ display: "flex", gap: "0.5rem", justifyContent: "center", alignItems: "center" }}>
+                      <button onClick={() => handleEdit(cat)} className="edit-category-btn">
+                        <i className="fas fa-edit"></i>
+                      </button>
+                      <button onClick={() => handleDelete(cat.id)} className="delete-category-btn">
+                        <i className="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" style={{ textAlign: 'center', padding: '1rem', fontStyle: 'italic', color: '#888' }}>
+                    No categories found.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
 
-          <div className="pagination">
-            {Array.from({ length: totalPages }, (_, index) => (
+          {totalPages > 1 && (
+            <div className="owner-pagination">
               <button
-                key={index}
-                className={currentPage === index + 1 ? 'active' : ''}
-                onClick={() => setCurrentPage(index + 1)}
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
               >
-                {index + 1}
+                <i className="fas fa-chevron-left"></i>
               </button>
-            ))}
-          </div>
+
+              <div className='div-nums'>
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={currentPage === i + 1 ? 'active' : ''}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+              >
+                <i className="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          )}
         </>
+      )}
+
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>{editId ? 'Edit Category' : 'Add Category'}</h3>
+            <form className="category-form" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Category Name"
+                value={formData.name}
+                maxLength={100}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+              <textarea
+                placeholder="Description (optional)"
+                value={formData.description}
+                maxLength={300}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              />
+              <div className="modal-buttons">
+                <button type="submit" className='editBtn'>
+                  {editId ? 'Update' : 'Create'}
+                </button>
+                <button
+                  type="button"
+                  className='cancelBtn'
+                  onClick={() => {
+                    setEditId(null);
+                    setFormData({ name: '', description: '' });
+                    setShowModal(false);
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

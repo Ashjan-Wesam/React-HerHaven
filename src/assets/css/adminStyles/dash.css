@@ -1,0 +1,50 @@
+.admin-card-dash{
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+.admin-card-dash .card-footer{
+
+    
+   font-size: 1.5rem;
+ 
+}
+.admin-card-dash h3 , .Admin-chart-header{
+
+   font-size: 2rem !important;
+   font-weight: 600 !important;
+   color: #444 !important;
+    
+}
+.admin-stat-card{
+
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    background-color: White !important;
+}
+
+.card-header-admin h3{
+
+    
+   font-size: 2rem !important;
+   font-weight: 600 !important;
+   color: #444 !important;
+
+}
+
+.content-card-admin{
+
+    margin-top: 4rem;
+}
+.chart-card-admin{
+
+    background: none !important;
+
+}
+.order-id{
+
+    display: flex;
+    gap: 1rem;
+}

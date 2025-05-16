@@ -41,12 +41,9 @@ const UserEdit = () => {
       setLogo(files[0]);
     }
   };
-
-  // تحقق من صحة النموذج
   const validateForm = () => {
     const newErrors = {};
 
-    // التحقق من الحقول المطلوبة
     if (!form.full_name || form.full_name.trim() === '') newErrors.full_name = 'Full name is required';
     if (!form.email || form.email.trim() === '') newErrors.email = 'Email is required';
     if (!form.phone_number || form.phone_number.trim() === '') newErrors.phone_number = 'Phone number is required';

@@ -16,7 +16,6 @@ import StoreEdit from "../Pages/Stores/StoreEdit";
 import StoreDetails from "../Pages/Stores/StoreDetails";
 import OrderList from "../Pages/Orders/OrderList";
 import ViewOrder from "../Pages/Orders/ViewOrder";
-import EditOrder from "../Pages/Orders/EditOrder";
 import AdminSiteReviews from "../Pages/Reviews/AdminSiteReviews";
 import AdminStoreReviews from "../Pages/Reviews/AdminStoreReviews";
 import AdminProductReviews from "../Pages/Reviews/AdminProductReviews";
@@ -75,7 +74,6 @@ const AdminLayout = () => {
               {/* Orders Management */}
               <Route path="/orders" element={<OrderList />} />
               <Route path="/orders/:id" element={<ViewOrder />} />
-              <Route path="/orders/:id/edit" element={<EditOrder />} />
 
               {/* Discounts Management */}
               <Route path="/discounts" element={<DiscountList />} />

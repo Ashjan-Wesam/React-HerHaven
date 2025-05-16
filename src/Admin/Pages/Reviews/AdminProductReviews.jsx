@@ -62,7 +62,6 @@ const AdminProductReviews = () => {
 
   return (
     <div className="admin-reviews-container">
-      <h2 className="admin-title">Product Reviews</h2>
 
       {reviews.length === 0 ? (
         <p className="admin-no-reviews">No reviews found.</p>
@@ -81,7 +80,7 @@ const AdminProductReviews = () => {
             <tbody className="admin-tbody">
               {currentReviews.map((review) => (
                 <tr className="admin-tr" key={review.id}>
-                  <td className="admin-td">{review.user?.name}</td>
+                  <td className="admin-td">{review.user?.full_name}</td>
                   <td className="admin-td">{review.product?.name}</td>
                   <td className="admin-td">{review.rating}</td>
                   <td className="admin-td">{review.review_text}</td>

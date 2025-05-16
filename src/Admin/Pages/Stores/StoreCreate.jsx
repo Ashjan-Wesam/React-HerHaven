@@ -99,10 +99,10 @@ const StoreCreate = () => {
 
   return (
     <div className="create-store-container">
-      <h2 className="page-title">Add New Store and Owner</h2>
+     
       <form onSubmit={handleSubmit} className="form-container">
         <div className="card-section">
-          <h3 className="section-title">Owner Info</h3>
+          <h3 style={{ fontSize: "3rem", marginBottom: "2rem" }}>Owner Info</h3>
           <input name="full_name" placeholder="Full Name" value={form.full_name} onChange={handleChange} />
           <input name="email" placeholder="Email" value={form.email} onChange={handleChange} type="email" />
           <input name="phone_number" placeholder="Phone Number" value={form.phone_number} onChange={handleChange} />
@@ -122,7 +122,7 @@ const StoreCreate = () => {
         </div>
 
         <div className="card-section">
-          <h3 className="section-title">Store Info</h3>
+          <h3  style={{ fontSize: "3rem", marginBottom: "2rem" }}>Store Info</h3>
           <input name="store_name" placeholder="Store Name" value={form.store_name} onChange={handleChange} />
           <input name="description" placeholder="Description" value={form.description} onChange={handleChange} />
           <input 
@@ -150,7 +150,7 @@ const StoreCreate = () => {
           </div>
         </div>
 
-        <button type="submit" className="submit-btn">Save</button>
+        <button type="submit" className="editBtn">Save</button>
       </form>
     </div>
   );
