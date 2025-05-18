@@ -63,12 +63,14 @@ const UserOrders = () => {
 
     // Search by product name
     if (searchTerm.trim()) {
-      filtered = filtered.filter(order =>
-        order.order_details?.some(detail =>
-          detail.product?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
-    }
+    const term = searchTerm.toLowerCase();
+    filtered = filtered.filter(order =>
+      order.order_details?.some(detail =>
+        detail.product?.name?.toLowerCase().includes(term) ||
+        detail.product?.store?.store_name?.toLowerCase().includes(term)
+      )
+    );
+  }
 
     // Filter by status
     if (statusFilter !== "All") {
@@ -102,6 +104,11 @@ const UserOrders = () => {
     setSelectedOrder(null);
   };
 
+  useEffect(() => {
+  if (selectedOrder) {
+    console.log("Selected Order:", selectedOrder);
+  }
+}, [selectedOrder]);
   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
   const paginatedOrders = filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
@@ -142,15 +149,17 @@ const UserOrders = () => {
         <>
           <div className="user-orders__table-container">
             <table className="user-orders__table">
-              <thead className="orderr-thead">
-                <tr>
-                  <th>#</th>
-                  <th>Total Price</th>
-                  <th>Status</th>
-                  <th>Payment</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
+            <thead className="orderr-thead">
+  <tr>
+    <th>#</th>
+    <th>Total Price</th>
+    <th>Status</th>
+    <th>Payment</th>
+    <th>Store</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+
               <tbody>
                 {paginatedOrders.map((order, index) => (
                   <tr key={order.id}>
@@ -163,10 +172,16 @@ const UserOrders = () => {
                     </td>
                     <td>{order.payment?.method || 'N/A'}</td>
                     <td>
-                      <button className="user-orders__button user-orders__button--view" onClick={() => handleShowDetails(order.id)}>
-                        View Details
-                      </button>
-                    </td>
+  {
+    order.order_details?.[0]?.product?.store?.store_name || 'N/A'
+  }
+</td>
+<td>
+  <button className="user-orders__button user-orders__button--view" onClick={() => handleShowDetails(order.id)}>
+    View Details
+  </button>
+</td>
+
                   </tr>
                 ))}
               </tbody>
@@ -216,20 +231,22 @@ const UserOrders = () => {
             </div>
 
             <h4>Order Items</h4>
-            <ul>
-              {selectedOrder.order_details.map((item) => (
-                <li key={item.id} className="user-orders__modal-item">
-                  <p>Product: {item.product?.name || 'N/A'} (x{item.quantity})</p>
-                  <p>Total: {item.total_price} JD</p>
-                  {item.design_request && (
-                    <div className="user-orders__modal-design">
-                      <p><strong>Design Request:</strong> {item.design_request.design_details}</p>
-                      <p>Status: <span className={`user-orders__status user-orders__status--${item.design_request.status.toLowerCase()}`}>{item.design_request.status}</span></p>
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
+         <ul>
+  {selectedOrder.order_details.map((item) => (
+    <li key={item.id} className="user-orders__modal-item">
+      <p>Product: {item.product?.name || 'N/A'} (x{item.quantity})</p>
+      <p><strong>Store:</strong> {item.product?.store?.store_name || 'N/A'}</p>
+      <p>Total: {item.total_price} JOD</p>
+      {item.design_request && (
+        <div className="user-orders__modal-design">
+          <p><strong>Design Request:</strong> {item.design_request.design_details}</p>
+          <p>Status: <span className={`user-orders__status user-orders__status--${item.design_request.status.toLowerCase()}`}>{item.design_request.status}</span></p>
+        </div>
+      )}
+    </li>
+  ))}
+</ul>
+
           </div>
         </div>
       )}

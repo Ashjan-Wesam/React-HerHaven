@@ -16,7 +16,7 @@ const BestStores = () => {
 
   const fetchStores = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/stores");
+      const res = await axios.get("http://127.0.0.1:8000/api/high-rating");
       setStores(res.data);
     } catch (error) {
       console.error("Error fetching stores", error);
@@ -130,8 +130,8 @@ const BestStores = () => {
                     position: 'relative'
                   }}>
                     <img 
-                      src={`http://127.0.0.1:8000/storage/logo/${store.logo_url}`} 
-                      alt={store.store_name}
+                      src={`http://127.0.0.1:8000/storage/logo/${store.logo}`} 
+                      alt={store.name}
                       style={{
                         width: '100%',
                         height: '100%',
@@ -149,10 +149,14 @@ const BestStores = () => {
                       color: '#fff',
                       padding: '5px 15px',
                       borderRadius: '20px',
-                      fontSize: '0.8rem',
-                      fontWeight: '600'
+                      fontSize: '1.8rem',
+                      fontWeight: '600',
+                      display: "flex",
+                      gap: "7px",
+                      alignItems: "center"
                     }}>
-                      {store.categories?.[0]?.name || "General"}
+                      <span style={{ color: "yellow" }}>&#9733;</span> 
+                      {store.average_rating || "General"}
                     </div>
                   </div>
                   <div className="store-content" style={{
@@ -162,11 +166,11 @@ const BestStores = () => {
                     flexDirection: 'column'
                   }}>
                     <h3 style={{
-                      color: '#5e35b1',
+                      color: '#444',
                       marginBottom: '10px',
-                      fontSize: '1.3rem',
+                      fontSize: '1.9rem',
                       fontWeight: '600'
-                    }}>{store.store_name}</h3>
+                    }}>{store.name}</h3>
                     <div style={{ marginTop: 'auto' }}>
                       <a 
                         href={`/store/${store.id}`} 
@@ -230,11 +234,7 @@ const BestStores = () => {
           boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
         }}></div>
         
-        {/* Pagination */}
-        {/* <div className="swiper-pagination" style={{
-          position: 'relative',
-          marginTop: '30px'
-        }}></div> */}
+     
       </div>
 
       <style jsx>{`

@@ -87,7 +87,7 @@ const StoreDetail = () => {
       
       filtered = filtered.filter(product => 
         product.name.toLowerCase().includes(search.toLowerCase()) &&
-        (!selectedCategory || product.category?.toLowerCase() === selectedCategory.toLowerCase())
+        (!selectedCategory || product.category?.name?.toLowerCase() === selectedCategory.toLowerCase())
       );
       if (sortOption === "price-asc") filtered.sort((a, b) => a.price - b.price);
       else if (sortOption === "price-desc") filtered.sort((a, b) => b.price - a.price);
@@ -453,7 +453,7 @@ const StoreDetail = () => {
                     <div className="product-info">
                       <h3 className="product-name">{product.name}</h3>
                       <p className="product-price">${product.price}</p>
-                      <p className="product-category">{product.category}</p>
+                      <p className="product-category">{product.category?.name}</p>
                       <p className="product-description">{product.description}</p>
                       <div className="product-footer">
                       <div className="product-rating">

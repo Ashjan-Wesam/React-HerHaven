@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "./CategoryPage.css";
 import noStore from "../../userTemplate/img/no-store.jpg"
+import heroImage2 from "../../userTemplate/img/download (44).jpg";
+
 
 const CategoryPage = () => {
   const [stores, setStores] = useState([]);

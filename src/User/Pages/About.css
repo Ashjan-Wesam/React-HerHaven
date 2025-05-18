@@ -5,8 +5,8 @@
   line-height: 1.8;
   max-width: 1400px;
   margin: 0 auto;
-  background: rgba(203, 203, 210, 0);
   box-shadow: none;
+  background: none !important;
 }
 
 .section-header {
@@ -16,7 +16,7 @@
 
 .section-header h2 {
   font-size: 3.5rem;
-  color: rgb(170,122,208) !;
+  color: rgb(170,122,208) ;
   margin-bottom: 15px;
 }
 
@@ -103,7 +103,6 @@
 /* Mission Section */
 .mission-section {
   padding: 100px 5%;
-  background-color: #f9f5ff;
 }
 
 .mission-cards {
@@ -134,10 +133,12 @@
 }
 
 .mission-card h3 {
-  font-size: 1.5rem;
+  font-size: 1.9rem !important;
   margin-bottom: 15px;
-  color: #6a1b9a;
+  color: #444;
+  font-weight: 600;
 }
+
 
 /* Story Section */
 .story-section {
@@ -158,7 +159,7 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: linear-gradient(to bottom, #9c27b0, #e91e63);
+  background: linear-gradient(to bottom, #444, #fff);
 }
 
 .timeline-item {
@@ -170,10 +171,10 @@
   position: absolute;
   left: -90px;
   top: 0;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  background: #9c27b0;
+  background: #444;
   color: white;
   display: flex;
   align-items: center;
@@ -191,7 +192,7 @@
 }
 
 .timeline-content h3 {
-  color: #9c27b0;
+  color: rgb(170,122,208);
   margin-top: 0;
   margin-bottom: 15px;
 }
@@ -237,7 +238,7 @@
 /* CTA Section */
 .cta-section {
   padding: 100px 5%;
-  background: linear-gradient(135deg, #9c27b0, #e91e63);
+  background:linear-gradient(to right, rgb(240, 249, 255) 0%, rgb(170, 122, 208) 0%, rgb(208, 122, 205) 100%);
   color: white;
   text-align: center;
 }
@@ -365,3 +366,4 @@
     grid-template-columns: 1fr;
   }
 }
+

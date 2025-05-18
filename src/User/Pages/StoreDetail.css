@@ -74,9 +74,9 @@
 }
 
 .store-logo-img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 100%;
   border: 3px solid var(--white);
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -88,11 +88,11 @@
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
 
-.store-logo-img {
+/* .store-logo-img {
   width: 30%;
   height: 30%;
   object-fit: cover;
-}
+} */
 
 .store-name {
   font-family: 'Playfair Display', serif;

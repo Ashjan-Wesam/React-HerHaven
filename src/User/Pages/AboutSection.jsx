@@ -10,13 +10,13 @@ const AboutSection = () => {
       <div className="decor-circle"></div>
       <div className="about-con">
         <div className="about-text">
-          <h2 className="fade-in-up">Who We Are</h2>
+          <h2 className="fade-in-up">Why Her Haven?</h2>
           <p className="fade-in-up">
           "Our platform is more than a store — it's a celebration of women-led projects and dreams. Join us in supporting passionate women entrepreneurs and discover unique creations that make a difference."
 
 
           </p>
-          <button className="about-btn fade-in-up" onClick={() => navigate("/about")}>
+          <button className="about-btn fade-in-up" onClick={() => navigate("/about-us")}>
             Explore Our Story
           </button>
         </div>
