@@ -227,3 +227,7 @@
   font-size: 13px;
   margin-top: 4px;
 }
+.password-form input{
+
+  border: 1px solid #444;
+}

@@ -22,11 +22,13 @@ const CreateProduct = () => {
   const [storeError, setStoreError] = useState('');
   const [categoryError, setCategoryError] = useState('');
   const [loading, setLoading] = useState(false);
+
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
+  // جلب الستورز عند أول تحميل المكون
   useEffect(() => {
-    const fetchStoresAndCategories = async () => {
+    const fetchStores = async () => {
       try {
         const storeRes = await axios.get('http://127.0.0.1:8000/api/stores', {
           headers: { Authorization: `Bearer ${token}` },
@@ -38,37 +40,87 @@ const CreateProduct = () => {
         } else {
           setStoreError('⚠️ No stores found.');
         }
-
-        const catRes = await axios.get('http://127.0.0.1:8000/api/categories', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (Array.isArray(catRes.data) && catRes.data.length > 0) {
-          setCategories(catRes.data);
-          setCategoryError('');
-        } else {
-          setCategoryError('⚠️ No categories found.');
-        }
       } catch (err) {
-        console.error('Error fetching data:', err);
+        console.error('Error fetching stores:', err);
         setStoreError('Failed to fetch stores.');
-        setCategoryError('Failed to fetch categories.');
       }
     };
 
-    fetchStoresAndCategories();
+    fetchStores();
   }, [token]);
 
+  // جلب الكاتيجوريز بناءً على store_id المختار مع تمرير التوكن
+  useEffect(() => {
+  const fetchStores = async () => {
+    try {
+      const storeRes = await axios.get('http://127.0.0.1:8000/api/stores', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (Array.isArray(storeRes.data.data) && storeRes.data.data.length > 0) {
+        setStores(storeRes.data.data);
+        setStoreError('');
+      } else {
+        setStoreError('⚠️ No stores found.');
+      }
+    } catch (err) {
+      console.error('Error fetching stores:', err);
+      setStoreError('Failed to fetch stores.');
+    }
+  };
+
+  fetchStores();
+}, [token]);
+
+useEffect(() => {
+  if (!form.store_id) {
+    setCategories([]);
+    setCategoryError('Please select a store to load categories.');
+    return;
+  }
+
+  const fetchCategoriesByStore = async () => {
+    try {
+      const catRes = await axios.get(
+        `http://127.0.0.1:8000/api/store-categories/${form.store_id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (Array.isArray(catRes.data.data) && catRes.data.data.length > 0) {
+        setCategories(catRes.data.data);
+        setCategoryError('');
+      } else {
+        setCategories([]);
+        setCategoryError('⚠️ No categories found for this store.');
+      }
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+      setCategories([]);
+      setCategoryError('Failed to fetch categories.');
+    }
+  };
+
+  fetchCategoriesByStore();
+}, [form.store_id, token]);
+
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === 'store_id') {
+      // عند تغيير الستور نفرغ الكاتيجوري المحدد
+      setForm((prev) => ({ ...prev, store_id: value, category_id: '' }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
-  // Handle file input change separately
   const handleFileChange = (e) => {
-    setForm({ ...form, image_file: e.target.files[0] });
+    setForm((prev) => ({ ...prev, image_file: e.target.files[0] }));
   };
 
-  // Frontend validation
   const validateForm = () => {
     if (!form.name.trim()) {
       Swal.fire('Error', 'Product name is required', 'error');
@@ -78,7 +130,11 @@ const CreateProduct = () => {
       Swal.fire('Error', 'Price must be a number greater than zero', 'error');
       return false;
     }
-    if (!form.stock_quantity || isNaN(form.stock_quantity) || Number(form.stock_quantity) < 0) {
+    if (
+      !form.stock_quantity ||
+      isNaN(form.stock_quantity) ||
+      Number(form.stock_quantity) < 0
+    ) {
       Swal.fire('Error', 'Stock quantity must be zero or more', 'error');
       return false;
     }
@@ -111,7 +167,7 @@ const CreateProduct = () => {
       formData.append('request', form.request);
 
       if (form.image_file) {
-        formData.append('image_url', form.image_file); 
+        formData.append('image_url', form.image_file);
       }
 
       await axios.post('http://127.0.0.1:8000/api/admin/products', formData, {
@@ -139,7 +195,7 @@ const CreateProduct = () => {
       {storeError && <p className="admin-error-msg">{storeError}</p>}
       {categoryError && <p className="admin-error-msg">{categoryError}</p>}
 
-      <form onSubmit={handleSubmit} className="admin-form">
+      <form onSubmit={handleSubmit} className="admin-form" encType="multipart/form-data">
         <input
           name="name"
           value={form.name}
@@ -201,6 +257,7 @@ const CreateProduct = () => {
           onChange={handleChange}
           className="admin-select"
           required
+          disabled={!form.store_id || categories.length === 0}
         >
           <option value="">Select Category</option>
           {categories.map((cat) => (
@@ -229,7 +286,7 @@ const CreateProduct = () => {
         </select>
 
         <button type="submit" className="admin-submit-btn" disabled={loading}>
-          {loading ? 'Loading' : 'Create Product'}
+          {loading ? 'Loading...' : 'Create Product'}
         </button>
       </form>
     </div>

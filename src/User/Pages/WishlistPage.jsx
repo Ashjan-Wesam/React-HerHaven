@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./WishlistPage.css";
 import Loading from "../../Owner/Components/Loading";
-import emptyw from "../../userTemplate/img/emptywish.png"
+import emptyw from "../../userTemplate/img/emptywish.png";
 
 const WishlistPage = () => {
   const [wishlist, setWishlist] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const itemsPerPage = 2;
   const navigate = useNavigate();
 
@@ -46,14 +46,9 @@ const WishlistPage = () => {
     }
   };
 
-  const filteredWishlist = wishlist.filter((item) => {
-    const nameMatch = item.product.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const categoryMatch =
-      selectedCategory === "all" || item.product.category?.name === selectedCategory;
-    return nameMatch && categoryMatch;
-  });
-
-  const categories = [...new Set(wishlist.map((item) => item.product.category?.name).filter(Boolean))];
+  const filteredWishlist = wishlist.filter((item) =>
+    item.product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -73,41 +68,36 @@ const WishlistPage = () => {
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
-            setCurrentPage(1); // reset page on search change
+            setCurrentPage(1);
           }}
           className="cat-search-input"
         />
         <i className="fas fa-search cat-search-icon"></i>
       </div>
 
-      {/* Loading */}
       {loading && <Loading />}
 
-      {/* Empty wishlist */}
       {!loading && wishlist.length === 0 && (
-      <div className="empty-cart">
-                 <img src={emptyw} alt="Empty Cart" className="empty-cart-image" />
-                 <h2 className="empty-cart-message">Your Wishlist is empty!</h2>
-                 <p className="empty-cart-instruction">Add something to make me happy</p>
-             </div>
+        <div className="empty-cart">
+          <img src={emptyw} alt="Empty Cart" className="empty-cart-image" />
+          <h2 className="empty-cart-message">Your Wishlist is empty!</h2>
+          <p className="empty-cart-instruction">Add something to make me happy</p>
+        </div>
       )}
 
-      {/* No results found after filter/search */}
       {!loading && wishlist.length > 0 && filteredWishlist.length === 0 && (
         <p style={{ textAlign: "center", marginTop: "30px" }}>
           No products match your search.
         </p>
       )}
 
-      {/* Wishlist items */}
       <div className="wishlist-grid">
         {!loading &&
           currentItems.map(({ product }) => (
             <div key={product.id} className="wishlist-card">
               <img src={`http://127.0.0.1:8000/${product.image_url}`} alt={product.name} />
               <h3>{product.name}</h3>
-              <p>{product.price} JOD </p>
-
+              <p>{product.price} JOD</p>
               <div className="wishlist-buttons">
                 <button
                   onClick={() => navigate(`/products/${product.id}`)}
@@ -146,6 +136,7 @@ const WishlistPage = () => {
               </button>
             ))}
           </div>
+
           <button
             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}

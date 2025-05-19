@@ -26,7 +26,7 @@ const ProductReviews = () => {
 
   return (
     <div className="reviews-page">
-      <h2>📦 Product Reviews</h2>
+      
       <table className="review-table">
         <thead>
           <tr>
@@ -40,7 +40,7 @@ const ProductReviews = () => {
           {productReviews.length > 0 ? (
             productReviews.map((rev) => (
               <tr key={rev.id}>
-                <td>{rev.user?.name}</td>
+                <td>{rev.user?.full_name}</td>
                 <td>{rev.product?.name}</td>
                 <td className="rating">{rev.rating} ⭐</td>
                 <td>{rev.review_text}</td>

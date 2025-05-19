@@ -143,7 +143,7 @@ const ProductSection = () => {
                   <div className="ps-product-details">
                     <h3 className="ps-product-title">{product.name}</h3>
                     <p className="ps-store-name">{product.store?.name}</p>
-                    <div className="ps-price-tag">${product.price}</div>
+                    <div className="ps-price-tag">JOD {product.price}</div>
                     <button
                       className="ps-add-to-cart"
                       onClick={() => navigate(`/products/${product.id}`)}

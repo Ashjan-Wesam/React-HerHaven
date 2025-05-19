@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "../../../assets/css/ownerStyles/Reviews.css";
+import Loading from "../../Components/Loading";
 
 const StoreReviews = () => {
   const [storeReviews, setStoreReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const reviewsPerPage = 6;
+  const reviewsPerPage = 20;
 
   useEffect(() => {
     const fetchStoreReviews = async () => {
@@ -50,10 +51,10 @@ const StoreReviews = () => {
 
   return (
     <div className="store-review-container">
-      <h2 className="store-review-title">🛍️ Store Reviews</h2>
+      
 
       {loading ? (
-        <div className="store-review-loader">Loading reviews...</div>
+        <Loading />
       ) : (
         <>
           <div className="store-review-grid">
@@ -63,7 +64,7 @@ const StoreReviews = () => {
                   <div className="store-review-user">
                     {rev.user?.profile_picture ? (
                       <img
-                        src={`http://127.0.0.1:8000/storage/${rev.user.profile_picture}`}
+                        src={`http://127.0.0.1:8000/storage/profile/${rev.user.profile_picture}`}
                         alt="User"
                         className="store-review-user-img"
                       />
@@ -81,25 +82,33 @@ const StoreReviews = () => {
             )}
           </div>
 
-          {totalPages > 1 && (
-            <div className="store-review-pagination">
-              <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
-                ⬅ Prev
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i + 1}
-                  onClick={() => setCurrentPage(i + 1)}
-                  className={currentPage === i + 1 ? "active" : ""}
-                >
-                  {i + 1}
-                </button>
-              ))}
-              <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
-                Next ➡
-              </button>
-            </div>
-          )}
+            {totalPages > 1 && (
+        <div className="owner-pagination">
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            <i className="fas fa-chevron-left"></i>
+          </button>
+
+          <div className='div-nums'>
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={currentPage === i + 1 ? 'active' : ''}
+            >
+              {i + 1}
+            </button>
+          ))}</div>
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+             <i className="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      )}
         </>
       )}
     </div>

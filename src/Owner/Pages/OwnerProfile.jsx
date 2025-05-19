@@ -182,7 +182,7 @@ const OwnerProfile = () => {
     if (!verifyResponse.data.success) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        current_password: "كلمة المرور الحالية غير صحيحة.",
+        current_password: "Current Password is incorrect",
       }));
       return;
     }
@@ -196,7 +196,7 @@ const OwnerProfile = () => {
       }
     );
 
-    Swal.fire("تم تحديث كلمة المرور بنجاح!", "", "success");
+    Swal.fire("The password updated successfully", "", "success");
     setChangePasswordMode(false);
     setPasswordForm({
       current_password: "",
@@ -209,7 +209,7 @@ const OwnerProfile = () => {
       new_password_confirmation: "",
     });
   } catch (error) {
-    Swal.fire("فشل في تحديث كلمة المرور", "", "error");
+    Swal.fire("The password updated Failed", "", "error");
     console.error("Failed to update password", error);
   }
 };
@@ -218,7 +218,7 @@ const OwnerProfile = () => {
 
   return (
     <div className="owner-profile">
-      <h2>My Profile</h2>
+     
 
       {editMode ? (
         <form onSubmit={handleUpdateProfile} className="profile-form">
@@ -310,13 +310,14 @@ const OwnerProfile = () => {
           <p><strong>Address:</strong> {profile.shipping_address}</p>
           <p><strong>Joined At:</strong> {new Date(profile.created_at).toLocaleDateString()}</p>
 
+<div style={{  display: "flex", justifyContent: "center", alignItems:"center", gap: "0.5rem" }}>
           <button onClick={() => setEditMode(true)}>Edit Profile</button>
           <button onClick={() => setChangePasswordMode(true)}>Change Password</button>
-        </div>
+        </div></div>
       )}
 
       {changePasswordMode && (
-        <form onSubmit={handleChangePassword} className="password-form">
+        <form onSubmit={handleChangePassword} className="password-form" style={{  marginTop: "2rem" }}>
           <h3>Change Password</h3>
 
           <label>
@@ -326,6 +327,7 @@ const OwnerProfile = () => {
               name="current_password"
               value={passwordForm.current_password}
               onChange={(e) => setPasswordForm({ ...passwordForm, current_password: e.target.value })}
+              className="user-input"
             />
             {errors.current_password && <p className="error">{errors.current_password}</p>}
           </label>
@@ -354,6 +356,7 @@ const OwnerProfile = () => {
 
           <button type="submit">Change Password</button>
           <button
+            className="add-user-btn"
             type="button"
             onClick={() => setChangePasswordMode(false)}
           >

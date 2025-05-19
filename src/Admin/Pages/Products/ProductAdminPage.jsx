@@ -14,7 +14,7 @@ const ProductAdminPage = () => {
   const [filters, setFilters] = useState({ store_id: '', category_id: '', search: '' });
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 12;
 
   const token = localStorage.getItem('token');
 

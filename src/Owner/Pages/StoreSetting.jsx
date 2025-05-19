@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import "../../assets/css/ownerStyles/editProfile.css";
+import Loading from "../Components/Loading";
 
 const StoreSetting = () => {
   const [store, setStore] = useState(null);
@@ -35,7 +36,6 @@ const StoreSetting = () => {
     }
   };
 
-  // ✅ Use useEffect to fetch data on page load
   useEffect(() => {
     fetchStore();
   }, []);
@@ -64,34 +64,49 @@ const StoreSetting = () => {
   };
 
   const validateForm = () => {
-    const errors = {};
+    const validationErrors = {};
     let valid = true;
 
-    if (!form.store_name) {
-      errors.store_name = "Store name is required.";
+    if (!form.store_name.trim()) {
+      validationErrors.store_name = "Store name is required.";
       valid = false;
     }
 
-    if (!form.description) {
-      errors.description = "Description is required.";
+    if (!form.description.trim()) {
+      validationErrors.description = "Description is required.";
+      valid = false;
+    } else if (form.description.length > 500) {
+      validationErrors.description = "Description cannot exceed 500 characters.";
       valid = false;
     }
 
     if (storeLogo) {
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
       if (!allowedTypes.includes(storeLogo.type)) {
-        errors.logo = "Only JPG, JPEG, or PNG files are allowed.";
+        validationErrors.logo = "Only JPG, JPEG, or PNG files are allowed.";
         valid = false;
       }
     }
 
-    setErrors(errors);
+    setErrors(validationErrors);
     return valid;
   };
 
   const handleUpdateStore = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+
+    const confirmed = await Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to update the store information?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#aaa',
+      confirmButtonText: 'Yes, update it!',
+    });
+
+    if (!confirmed.isConfirmed) return;
 
     try {
       const token = localStorage.getItem("token");
@@ -103,7 +118,7 @@ const StoreSetting = () => {
       }
 
       await axios.post(
-        `http://127.0.0.1:8000/api/owner/stores/${store.id}/update`,
+        `http://127.0.0.1:8000/api/owner/stores-info/${store.id}/update`,
         formData,
         {
           headers: {
@@ -122,7 +137,7 @@ const StoreSetting = () => {
     }
   };
 
-  if (!store) return <div>Loading...</div>;
+  if (!store) return <Loading />;
 
   return (
     <div className="store-setting-container">
@@ -144,7 +159,7 @@ const StoreSetting = () => {
             ))}
           </ul>
 
-          <button className="store-setting-button" onClick={() => setEditMode(true)}>Edit Information</button>
+          <button className="store-setting-button add-user-btn" onClick={() => setEditMode(true)}>Edit Information</button>
         </div>
       ) : (
         <form onSubmit={handleUpdateStore} className="store-setting-form">
@@ -164,7 +179,9 @@ const StoreSetting = () => {
               name="description"
               value={form.description}
               onChange={handleChange}
+              maxLength={500}
             />
+            <small>{form.description.length}/500 characters</small>
             {errors.description && <p className="error">{errors.description}</p>}
           </div>
           <div className="store-setting-form-group">
@@ -182,8 +199,8 @@ const StoreSetting = () => {
             {errors.logo && <p className="error">{errors.logo}</p>}
           </div>
           <div className="store-setting-button-group">
-            <button type="submit" className="store-setting-button save">Save</button>
-            <button type="button" className="store-setting-button cancel" onClick={() => setEditMode(false)}>Cancel</button>
+            <button type="submit" className="store-setting-button" style={{ backgroundColor: "#444" }}>Save</button>
+            <button type="button" style={{ backgroundColor: "#444" }} className="store-setting-button" onClick={() => setEditMode(false)}>Cancel</button>
           </div>
         </form>
       )}
