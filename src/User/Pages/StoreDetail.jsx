@@ -283,8 +283,8 @@ const StoreDetail = () => {
                     <div className="rev-card-con">
                       <div className="rev-card-info">
                         {rev.user?.profile_picture ? (
-                          <img 
-                            src={rev.user.profile_picture} 
+                          <img  
+                            src={`http://127.0.0.1:8000/storage/profile/${rev.user.profile_picture}`}
                             alt={rev.user.full_name} 
                             style={{ width: "100%", height: "100%", objectFit: "cover" }}
                           />

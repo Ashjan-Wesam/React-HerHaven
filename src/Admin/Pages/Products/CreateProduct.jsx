@@ -49,7 +49,6 @@ const CreateProduct = () => {
     fetchStores();
   }, [token]);
 
-  // جلب الكاتيجوريز بناءً على store_id المختار مع تمرير التوكن
   useEffect(() => {
   const fetchStores = async () => {
     try {

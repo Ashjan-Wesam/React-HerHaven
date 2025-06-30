@@ -97,7 +97,7 @@ const AdminLayout = () => {
 
           </Routes>
 
-        <footer className="footer">
+        <footer className="footer" style={{ marginTop: "20rem" }}>
           <div className="container-fluid"> 
                <Footer />
           </div>

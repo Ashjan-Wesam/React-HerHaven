@@ -152,7 +152,7 @@ const OrderList = () => {
               <td>{order.id}</td>
               <td>{order.user?.full_name}</td>
               <td>{order.store?.store_name}</td>
-              <td>${order.total_price}</td>
+              <td>JOD{order.total_price}</td>
               <td>
                 {editingOrderId === order.id ? (
                   <select value={editStatus} onChange={(e) => setEditStatus(e.target.value)}>

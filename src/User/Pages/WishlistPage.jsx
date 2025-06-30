@@ -11,7 +11,7 @@ const WishlistPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const itemsPerPage = 2;
+  const itemsPerPage = 12;
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");

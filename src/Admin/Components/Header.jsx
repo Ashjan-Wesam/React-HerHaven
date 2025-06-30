@@ -12,7 +12,7 @@ const Header = () => {
   };
 
   const goToProfile = () => {
-    navigate('/admin/edit-profile');
+    navigate('/admin/profile');
   };
     const getPageTitle = (path) => {
 

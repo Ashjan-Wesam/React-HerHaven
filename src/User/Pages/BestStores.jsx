@@ -42,11 +42,11 @@ const BestStores = () => {
         }}>
           <h2 style={{
             fontSize: '3.5rem',
-            color: 'rgb(65, 65, 65);',
             marginBottom: '10px',
             fontWeight: '700',
             position: 'relative',
-            display: 'inline-block'
+            display: 'inline-block',
+            color: "#444"
           }}>
             Best Stores
             <span style={{
@@ -57,7 +57,8 @@ const BestStores = () => {
               width: '80px',
               height: '3px',
               background: 'linear-gradient(to right, #f0f9ff 0%, #aa7ad0 0%, #d07acd 100%)',
-              borderRadius: '3px'
+              borderRadius: '3px',
+              
             }}></span>
           </h2>
           <p style={{

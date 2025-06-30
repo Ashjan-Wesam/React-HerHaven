@@ -66,8 +66,8 @@ const DiscountsPage = () => {
   const endDate = new Date(d.end_date);
 
   const matchesSearch =
-    d.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    d.discount_percentage.toString().includes(searchTerm);
+    (d.description?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+    d.discount_percentage?.toString().includes(searchTerm);
 
   let matchesPercentage = true;
   if (filterOption === "above50") matchesPercentage = d.discount_percentage > 50;

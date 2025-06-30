@@ -158,7 +158,7 @@ const SingleProductPage = () => {
         });
   
         if (result.isConfirmed) {
-          return navigate("/cart");
+          return navigate("/customer/checkout");
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           await axios.delete("http://127.0.0.1:8000/api/cart/clear", {
             headers: { Authorization: `Bearer ${token}` },

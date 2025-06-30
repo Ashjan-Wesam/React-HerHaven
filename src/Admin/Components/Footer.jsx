@@ -2,7 +2,7 @@
 
 const Footer = () => {
   return (
-    <footer className="footer">
+    <footer className="footer" style={{  display: "flex", justifyContent: "center" }}>
       <div className="container-fluid">
         <p className="copyright pull-right">
           &copy; <script>document.write(new Date().getFullYear())</script>{" "}
